@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { MapPin, Link as LinkIcon, Youtube, Instagram, FileDown, RefreshCw, Pencil, Check, X } from "lucide-react";
+import { MapPin, Youtube, Instagram, FileDown, RefreshCw, Pencil, Check, X } from "lucide-react";
 import { updateYouTubeMetrics, updateProfileAvatar } from "@/lib/actions";
 
 interface ProfileHeaderProps {
@@ -46,9 +46,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
         };
     }, [isEditingAvatar]);
 
-    const handlePrint = () => {
-        window.print();
-    };
+    const handlePrint = () => window.print();
 
     const handleSync = async () => {
         const youtubeSocial = socials.find(s => s.platform === "YouTube");
@@ -86,29 +84,58 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
         }
     };
 
+    const socialButtonStyle: React.CSSProperties = {
+        padding: "var(--space-3) var(--space-4)",
+        borderRadius: "var(--radius-md)",
+        display: "flex",
+        alignItems: "center",
+        gap: "var(--space-2)",
+        fontSize: "var(--text-sm)",
+        fontWeight: 500,
+        background: "var(--card)",
+        border: "1px solid var(--border)",
+        color: "var(--foreground)",
+        cursor: "pointer",
+        transition: "all var(--transition-base)",
+        textDecoration: "none",
+    };
+
+    const actionButtonStyle: React.CSSProperties = {
+        ...socialButtonStyle,
+        background: "var(--secondary)",
+        border: "none",
+    };
+
     return (
         <div
             style={{
                 display: "flex",
                 flexDirection: "column",
-                gap: "2rem",
+                gap: "var(--space-6)",
                 alignItems: "center",
                 textAlign: "center",
-                padding: "3rem 0",
+                padding: "var(--space-8) 0",
+                animation: "fadeInUp 0.5s ease forwards",
             }}
         >
             {/* Avatar Section */}
             <div
                 ref={avatarContainerRef}
-                style={{ position: "relative", display: "flex", flexDirection: "column", alignItems: "center", gap: "1rem" }}
+                style={{ 
+                    position: "relative", 
+                    display: "flex", 
+                    flexDirection: "column", 
+                    alignItems: "center", 
+                    gap: "var(--space-4)" 
+                }}
             >
                 <div
                     className="avatar-container no-print"
                     style={{
                         position: "relative",
-                        width: "140px",
-                        height: "140px",
-                        borderRadius: "50%",
+                        width: "120px",
+                        height: "120px",
+                        borderRadius: "var(--radius-full)",
                         cursor: "pointer",
                     }}
                     onClick={!isEditingAvatar ? handleEditAvatarClick : undefined}
@@ -117,10 +144,10 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                         style={{
                             width: "100%",
                             height: "100%",
-                            borderRadius: "50%",
+                            borderRadius: "var(--radius-full)",
                             overflow: "hidden",
-                            border: "6px solid var(--card)",
-                            boxShadow: "0 10px 30px -10px rgba(0,0,0,0.1)",
+                            border: "4px solid var(--card)",
+                            boxShadow: "var(--shadow-lg)",
                         }}
                     >
                         <img
@@ -137,18 +164,18 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                                 position: "absolute",
                                 inset: 0,
                                 background: "rgba(0,0,0,0.5)",
-                                borderRadius: "50%",
+                                borderRadius: "var(--radius-full)",
                                 display: "flex",
                                 alignItems: "center",
                                 justifyContent: "center",
                                 opacity: 0,
-                                transition: "opacity 0.2s",
+                                transition: "opacity var(--transition-base)",
                                 color: "white",
                             }}
                             onMouseEnter={(e) => (e.currentTarget.style.opacity = "1")}
                             onMouseLeave={(e) => (e.currentTarget.style.opacity = "0")}
                         >
-                            <Pencil size={24} />
+                            <Pencil size={20} />
                         </div>
                     )}
                 </div>
@@ -158,12 +185,11 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                     className="print-avatar"
                     style={{
                         display: "none",
-                        width: "140px",
-                        height: "140px",
-                        borderRadius: "50%",
+                        width: "120px",
+                        height: "120px",
+                        borderRadius: "var(--radius-full)",
                         overflow: "hidden",
-                        border: "6px solid #fff",
-                        marginBottom: "1rem"
+                        border: "4px solid var(--border)",
                     }}
                 >
                     <img
@@ -181,17 +207,18 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                             position: "absolute",
                             top: "100%",
                             left: "50%",
-                            transform: "translateX(-50%) translateY(10px)",
+                            transform: "translateX(-50%) translateY(8px)",
                             zIndex: 50,
                             background: "var(--card)",
-                            padding: "0.75rem",
+                            padding: "var(--space-3)",
                             display: "flex",
-                            gap: "0.5rem",
+                            gap: "var(--space-2)",
                             alignItems: "center",
-                            borderRadius: "1rem",
-                            boxShadow: "0 10px 40px -10px rgba(0,0,0,0.2)",
+                            borderRadius: "var(--radius-lg)",
+                            boxShadow: "var(--shadow-xl)",
                             border: "1px solid var(--border)",
-                            minWidth: "300px"
+                            minWidth: "320px",
+                            animation: "fadeInScale 0.2s ease forwards",
                         }}
                     >
                         <input
@@ -206,13 +233,13 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                             }}
                             style={{
                                 flex: 1,
-                                background: "var(--background)",
+                                background: "var(--secondary)",
                                 border: "none",
-                                borderRadius: "0.5rem",
-                                padding: "0.5rem",
+                                borderRadius: "var(--radius-sm)",
+                                padding: "var(--space-2) var(--space-3)",
                                 outline: "none",
-                                fontSize: "0.875rem",
-                                color: "var(--foreground)"
+                                fontSize: "var(--text-sm)",
+                                color: "var(--foreground)",
                             }}
                         />
                         <button
@@ -222,31 +249,35 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                                 background: "var(--primary)",
                                 color: "white",
                                 border: "none",
-                                borderRadius: "0.5rem",
+                                borderRadius: "var(--radius-sm)",
                                 width: "32px",
                                 height: "32px",
                                 display: "flex",
                                 alignItems: "center",
                                 justifyContent: "center",
                                 cursor: "pointer",
-                                transition: "all 0.2s"
+                                transition: "all var(--transition-base)",
                             }}
                         >
-                            {isSavingAvatar ? <RefreshCw size={14} className="animate-spin" /> : <Check size={16} />}
+                            {isSavingAvatar ? (
+                                <RefreshCw size={14} className="animate-spin" />
+                            ) : (
+                                <Check size={16} />
+                            )}
                         </button>
                         <button
                             onClick={() => setIsEditingAvatar(false)}
                             style={{
-                                background: "#eee",
-                                color: "#666",
+                                background: "var(--secondary)",
+                                color: "var(--muted-foreground)",
                                 border: "none",
-                                borderRadius: "0.5rem",
+                                borderRadius: "var(--radius-sm)",
                                 width: "32px",
                                 height: "32px",
                                 display: "flex",
                                 alignItems: "center",
                                 justifyContent: "center",
-                                cursor: "pointer"
+                                cursor: "pointer",
                             }}
                         >
                             <X size={16} />
@@ -256,32 +287,52 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
             </div>
 
             {/* Info */}
-            <div>
-                <h1 style={{ fontSize: "3rem", marginBottom: "0.75rem", color: "var(--foreground)", letterSpacing: "-0.04em" }}>{name}</h1>
+            <div style={{ maxWidth: "640px" }}>
+                <h1 style={{ 
+                    fontSize: "clamp(var(--text-3xl), 5vw, var(--text-5xl))",
+                    marginBottom: "var(--space-3)", 
+                    color: "var(--foreground)", 
+                    letterSpacing: "var(--tracking-tight)",
+                    fontWeight: 700,
+                }}>
+                    {name}
+                </h1>
+                
                 <div
                     style={{
                         display: "flex",
-                        gap: "1.25rem",
+                        gap: "var(--space-4)",
                         justifyContent: "center",
+                        alignItems: "center",
                         color: "var(--muted-foreground)",
-                        fontSize: "0.9375rem",
-                        marginBottom: "1.5rem",
+                        fontSize: "var(--text-sm)",
+                        marginBottom: "var(--space-4)",
                         fontWeight: 500,
+                        flexWrap: "wrap",
                     }}
                 >
-                    <span style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
+                    <span style={{ display: "flex", alignItems: "center", gap: "var(--space-1)" }}>
                         <MapPin size={16} /> {location}
                     </span>
-                    <span style={{ color: "var(--border)" }}>|</span>
-                    <span style={{ color: "var(--primary)", fontWeight: 600 }}>{niche}</span>
+                    <span style={{ color: "var(--border)" }}>•</span>
+                    <span 
+                        style={{ 
+                            color: "var(--primary)", 
+                            fontWeight: 600,
+                            background: "var(--primary-light)",
+                            padding: "var(--space-1) var(--space-3)",
+                            borderRadius: "var(--radius-full)",
+                        }}
+                    >
+                        {niche}
+                    </span>
                 </div>
+                
                 <p
                     style={{
-                        maxWidth: "640px",
-                        margin: "0 auto",
-                        lineHeight: "1.8",
+                        lineHeight: "var(--leading-relaxed)",
                         color: "var(--muted-foreground)",
-                        fontSize: "1.125rem",
+                        fontSize: "var(--text-lg)",
                     }}
                 >
                     {bio}
@@ -289,30 +340,35 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
             </div>
 
             {/* Socials & Actions */}
-            <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap", justifyContent: "center" }}>
+            <div style={{ 
+                display: "flex", 
+                gap: "var(--space-3)", 
+                flexWrap: "wrap", 
+                justifyContent: "center",
+                marginTop: "var(--space-2)",
+            }}>
                 {socials.map((social) => (
                     <a
                         key={social.platform}
                         href={social.url}
-                        className="glass-panel"
-                        style={{
-                            padding: "0.75rem 1.5rem",
-                            borderRadius: "var(--radius)",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "0.6rem",
-                            fontSize: "0.875rem",
-                            fontWeight: 600,
-                            background: "var(--card)",
-                            border: "none",
-                            boxShadow: "0 4px 12px rgba(0,0,0,0.03)",
-                            color: "var(--foreground)"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={socialButtonStyle}
+                        onMouseEnter={(e) => {
+                            e.currentTarget.style.borderColor = "var(--primary)";
+                            e.currentTarget.style.transform = "translateY(-1px)";
+                        }}
+                        onMouseLeave={(e) => {
+                            e.currentTarget.style.borderColor = "var(--border)";
+                            e.currentTarget.style.transform = "translateY(0)";
                         }}
                     >
                         {social.platform === "Instagram" && (
                             <Instagram size={18} style={{ color: "#E1306C" }} />
                         )}
-                        {social.platform === "TikTok" && <span>TT</span>}
+                        {social.platform === "TikTok" && (
+                            <span style={{ fontWeight: 700 }}>TT</span>
+                        )}
                         {social.platform === "YouTube" && (
                             <Youtube size={18} style={{ color: "#FF0000" }} />
                         )}
@@ -322,20 +378,15 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
 
                 <button
                     onClick={handlePrint}
-                    className="glass-panel no-print"
-                    style={{
-                        padding: "0.75rem 1.5rem",
-                        borderRadius: "var(--radius)",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "0.6rem",
-                        fontSize: "0.875rem",
-                        fontWeight: 600,
-                        cursor: "pointer",
-                        background: "var(--background)",
-                        color: "var(--foreground)",
-                        border: "1px solid var(--border)",
-                        boxShadow: "0 4px 12px rgba(0,0,0,0.03)",
+                    className="no-print"
+                    style={actionButtonStyle}
+                    onMouseEnter={(e) => {
+                        e.currentTarget.style.background = "var(--border)";
+                        e.currentTarget.style.transform = "translateY(-1px)";
+                    }}
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.background = "var(--secondary)";
+                        e.currentTarget.style.transform = "translateY(0)";
                     }}
                 >
                     <FileDown size={18} /> Salvar em PDF
@@ -344,24 +395,33 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                 <button
                     onClick={handleSync}
                     disabled={isSyncing}
-                    className="glass-panel no-print"
+                    className="no-print"
                     style={{
-                        padding: "0.75rem 1.5rem",
-                        borderRadius: "var(--radius)",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "0.6rem",
-                        fontSize: "0.875rem",
-                        fontWeight: 600,
-                        cursor: isSyncing ? "not-allowed" : "pointer",
-                        background: isSyncing ? "var(--secondary)" : "rgba(67, 97, 238, 0.1)",
+                        ...actionButtonStyle,
+                        background: "var(--primary-light)",
                         color: "var(--primary)",
-                        border: "none",
-                        boxShadow: "none",
-                        opacity: isSyncing ? 0.7 : 1
+                        opacity: isSyncing ? 0.7 : 1,
+                        cursor: isSyncing ? "not-allowed" : "pointer",
+                    }}
+                    onMouseEnter={(e) => {
+                        if (!isSyncing) {
+                            e.currentTarget.style.background = "var(--primary)";
+                            e.currentTarget.style.color = "white";
+                            e.currentTarget.style.transform = "translateY(-1px)";
+                        }
+                    }}
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.background = "var(--primary-light)";
+                        e.currentTarget.style.color = "var(--primary)";
+                        e.currentTarget.style.transform = "translateY(0)";
                     }}
                 >
-                    <RefreshCw size={18} className={isSyncing ? "animate-spin" : ""} />
+                    <RefreshCw 
+                        size={18} 
+                        style={{ 
+                            animation: isSyncing ? "spin 1s linear infinite" : "none" 
+                        }} 
+                    />
                     {isSyncing ? "Sincronizando..." : "Atualizar Dados"}
                 </button>
             </div>

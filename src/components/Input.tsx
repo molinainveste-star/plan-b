@@ -1,48 +1,99 @@
-import React from "react";
+import React, { useState } from "react";
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-    label: string;
+    label?: string;
     error?: string;
+    hint?: string;
+    icon?: React.ReactNode;
 }
 
-export const Input: React.FC<InputProps> = ({ label, error, className, ...props }) => {
+export const Input: React.FC<InputProps> = ({ 
+    label, 
+    error, 
+    hint,
+    icon,
+    className, 
+    ...props 
+}) => {
+    const [isFocused, setIsFocused] = useState(false);
+
+    const containerStyles: React.CSSProperties = {
+        display: "flex",
+        flexDirection: "column",
+        gap: "var(--space-2)",
+        width: "100%",
+    };
+
+    const labelStyles: React.CSSProperties = {
+        fontSize: "var(--text-sm)",
+        fontWeight: 500,
+        color: "var(--foreground)",
+        letterSpacing: "0.01em",
+    };
+
+    const inputWrapperStyles: React.CSSProperties = {
+        position: "relative",
+        display: "flex",
+        alignItems: "center",
+    };
+
+    const inputStyles: React.CSSProperties = {
+        width: "100%",
+        padding: icon ? "0.875rem 1rem 0.875rem 2.75rem" : "0.875rem 1rem",
+        fontSize: "var(--text-base)",
+        fontFamily: "inherit",
+        color: "var(--foreground)",
+        backgroundColor: "var(--background)",
+        border: `1px solid ${error ? "var(--error)" : isFocused ? "var(--primary)" : "var(--border)"}`,
+        borderRadius: "var(--radius-md)",
+        outline: "none",
+        transition: "all var(--transition-base)",
+        boxShadow: isFocused ? "0 0 0 3px rgba(67, 97, 238, 0.1)" : "none",
+    };
+
+    const iconStyles: React.CSSProperties = {
+        position: "absolute",
+        left: "1rem",
+        color: isFocused ? "var(--primary)" : "var(--muted-foreground)",
+        transition: "color var(--transition-base)",
+        pointerEvents: "none",
+        display: "flex",
+        alignItems: "center",
+    };
+
+    const hintStyles: React.CSSProperties = {
+        fontSize: "var(--text-xs)",
+        color: "var(--muted-foreground)",
+    };
+
+    const errorStyles: React.CSSProperties = {
+        fontSize: "var(--text-xs)",
+        color: "var(--error)",
+        fontWeight: 500,
+    };
+
     return (
-        <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem", width: "100%" }}>
-            <label
-                style={{
-                    fontSize: "0.875rem",
-                    fontWeight: 600,
-                    color: "var(--foreground)",
-                    letterSpacing: "0.02em",
-                }}
-            >
-                {label}
-            </label>
-            <input
-                style={{
-                    padding: "1rem 1.25rem",
-                    borderRadius: "1rem",
-                    backgroundColor: "var(--background)",
-                    border: "1px solid var(--border)",
-                    color: "var(--foreground)",
-                    fontSize: "1rem",
-                    outline: "none",
-                    transition: "all 0.3s ease",
-                    width: "100%",
-                }}
-                onFocus={(e) => {
-                    e.target.style.borderColor = "var(--ring)";
-                    e.target.style.boxShadow = "0 0 0 4px rgba(0, 0, 0, 0.03)";
-                }}
-                onBlur={(e) => {
-                    e.target.style.borderColor = "var(--border)";
-                    e.target.style.boxShadow = "none";
-                }}
-                {...props}
-            />
-            {error && (
-                <span style={{ fontSize: "0.75rem", color: "#ef4444", fontWeight: 500 }}>{error}</span>
-            )}
+        <div style={containerStyles}>
+            {label && <label style={labelStyles}>{label}</label>}
+            
+            <div style={inputWrapperStyles}>
+                {icon && <span style={iconStyles}>{icon}</span>}
+                <input
+                    style={inputStyles}
+                    onFocus={(e) => {
+                        setIsFocused(true);
+                        props.onFocus?.(e);
+                    }}
+                    onBlur={(e) => {
+                        setIsFocused(false);
+                        props.onBlur?.(e);
+                    }}
+                    {...props}
+                />
+            </div>
+
+            {hint && !error && <span style={hintStyles}>{hint}</span>}
+            {error && <span style={errorStyles}>{error}</span>}
         </div>
     );
 };

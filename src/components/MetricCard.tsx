@@ -1,5 +1,7 @@
+"use client";
+
 import React from "react";
-import { Users, Activity, Eye, Heart, Youtube, Video, BarChart3, Calendar } from "lucide-react";
+import { Users, Activity, Eye, Heart, Youtube, Video, BarChart3, Calendar, TrendingUp, TrendingDown, Minus } from "lucide-react";
 
 interface MetricCardProps {
     label: string;
@@ -7,9 +9,10 @@ interface MetricCardProps {
     trend: string;
     trendDirection: "up" | "down" | "neutral";
     icon: string;
+    delay?: number;
 }
 
-const iconMap: Record<string, any> = {
+const iconMap: Record<string, React.ComponentType<{ size?: number; strokeWidth?: number }>> = {
     users: Users,
     activity: Activity,
     eye: Eye,
@@ -27,25 +30,45 @@ export const MetricCard: React.FC<MetricCardProps> = ({
     trend,
     trendDirection,
     icon,
+    delay = 0,
 }) => {
-    // Normalize icon name and fallback to chart if not found
     const iconKey = icon?.toLowerCase() || "chart";
     const Icon = iconMap[iconKey] || BarChart3;
+
+    const TrendIcon = trendDirection === "up" ? TrendingUp : trendDirection === "down" ? TrendingDown : Minus;
+
+    const trendColors = {
+        up: {
+            color: "var(--success)",
+            bg: "var(--success-light)",
+        },
+        down: {
+            color: "var(--error)",
+            bg: "rgba(239, 68, 68, 0.1)",
+        },
+        neutral: {
+            color: "var(--muted-foreground)",
+            bg: "var(--secondary)",
+        },
+    };
 
     return (
         <div
             className="glass-panel"
             style={{
-                padding: "2rem",
-                borderRadius: "var(--radius)",
+                padding: "var(--space-6)",
+                borderRadius: "var(--radius-lg)",
                 display: "flex",
                 flexDirection: "column",
-                gap: "1rem",
+                gap: "var(--space-4)",
                 position: "relative",
                 overflow: "hidden",
-                // Remove redundant inline styles handled by class
+                animation: `fadeInUp 0.4s ease forwards`,
+                animationDelay: `${delay}ms`,
+                opacity: 0,
             }}
         >
+            {/* Header Row */}
             <div
                 style={{
                     display: "flex",
@@ -53,61 +76,82 @@ export const MetricCard: React.FC<MetricCardProps> = ({
                     alignItems: "flex-start",
                 }}
             >
-                <div>
+                <div style={{ flex: 1 }}>
+                    {/* Label */}
                     <div style={{
                         color: "var(--muted-foreground)",
-                        fontSize: "0.875rem",
-                        marginBottom: "0.5rem",
-                        fontWeight: 600,
+                        fontSize: "var(--text-sm)",
+                        fontWeight: 500,
+                        marginBottom: "var(--space-2)",
                         textTransform: "uppercase",
-                        letterSpacing: "0.05em"
+                        letterSpacing: "0.04em",
                     }}>
                         {label}
                     </div>
+                    
+                    {/* Value */}
                     <div style={{
-                        fontSize: "3rem",
-                        fontWeight: 800,
-                        letterSpacing: "-0.04em",
-                        color: "var(--primary)",
-                        lineHeight: 1
+                        fontSize: "var(--text-4xl)",
+                        fontWeight: 700,
+                        letterSpacing: "var(--tracking-tight)",
+                        color: "var(--foreground)",
+                        lineHeight: 1,
+                        fontFamily: "var(--font-heading)",
                     }}>
                         {value}
                     </div>
                 </div>
 
+                {/* Icon */}
                 <div
                     style={{
-                        padding: "1rem",
-                        borderRadius: "1.25rem",
-                        background: "rgba(67, 97, 238, 0.05)",
+                        padding: "var(--space-3)",
+                        borderRadius: "var(--radius-md)",
+                        background: "var(--primary-light)",
                         color: "var(--primary)",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
+                        flexShrink: 0,
                     }}
                 >
-                    <Icon size={28} strokeWidth={2.5} />
+                    <Icon size={24} strokeWidth={2} />
                 </div>
             </div>
 
-            <div style={{ marginTop: "0.5rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            {/* Trend Badge */}
+            <div style={{ display: "flex", alignItems: "center" }}>
                 <div
                     style={{
-                        fontSize: "0.80rem",
-                        color: trendDirection === "up" ? "#10b981" : "var(--muted-foreground)",
-                        background: trendDirection === "up" ? "rgba(16, 185, 129, 0.1)" : "var(--secondary)",
-                        padding: "0.35rem 0.75rem",
-                        borderRadius: "2rem",
-                        fontWeight: 700,
-                        letterSpacing: "0.02em",
-                        display: "flex",
+                        display: "inline-flex",
                         alignItems: "center",
-                        gap: "0.25rem"
+                        gap: "var(--space-1)",
+                        fontSize: "var(--text-sm)",
+                        color: trendColors[trendDirection].color,
+                        background: trendColors[trendDirection].bg,
+                        padding: "var(--space-1) var(--space-3)",
+                        borderRadius: "var(--radius-full)",
+                        fontWeight: 600,
                     }}
                 >
-                    {trendDirection === "up" && "↗"} {trend}
+                    <TrendIcon size={14} strokeWidth={2.5} />
+                    <span>{trend}</span>
                 </div>
             </div>
+
+            {/* Decorative gradient line */}
+            <div
+                style={{
+                    position: "absolute",
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    height: "3px",
+                    background: "var(--gradient-accent)",
+                    opacity: 0.6,
+                    borderRadius: "0 0 var(--radius-lg) var(--radius-lg)",
+                }}
+            />
         </div>
     );
 };

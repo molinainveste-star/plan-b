@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Sparkles, Save, Edit3, X } from "lucide-react";
+import { Sparkles, Save, Edit3, X, Loader2 } from "lucide-react";
 import { updateProfileStory, refineStoryWithAI } from "@/lib/actions";
 
 interface EditableStoryProps {
@@ -18,7 +18,13 @@ interface EditableStoryProps {
     };
 }
 
-export function EditableStory({ slug, initialStory, initialPitch, isPlaceholder = false, context }: EditableStoryProps) {
+export function EditableStory({ 
+    slug, 
+    initialStory, 
+    initialPitch, 
+    isPlaceholder = false, 
+    context 
+}: EditableStoryProps) {
     const [isEditing, setIsEditing] = useState(false);
     const [story, setStory] = useState(initialStory);
     const [pitch, setPitch] = useState(initialPitch);
@@ -34,14 +40,12 @@ export function EditableStory({ slug, initialStory, initialPitch, isPlaceholder 
                 setIsRefining(true);
 
                 try {
-                    // 1. Generate Content
                     const refined = await refineStoryWithAI(story, pitch, context);
 
                     if (refined && refined.story && refined.pitch) {
                         setStory(refined.story);
                         setPitch(refined.pitch);
 
-                        // 2. Save immediately
                         console.log("💾 Auto-saving generated story...");
                         setIsSaving(true);
                         await updateProfileStory(slug, refined.story, refined.pitch);
@@ -57,7 +61,7 @@ export function EditableStory({ slug, initialStory, initialPitch, isPlaceholder 
         };
 
         autoGenerate();
-    }, [isPlaceholder, slug, context]); // Removed story/pitch dependencies to avoid loops
+    }, [isPlaceholder, slug, context]);
 
     const handleSave = async () => {
         setIsSaving(true);
@@ -90,82 +94,128 @@ export function EditableStory({ slug, initialStory, initialPitch, isPlaceholder 
 
     if (!isEditing) {
         return (
-            <div className="group relative" style={{ position: "relative" }}>
+            <div style={{ position: "relative" }}>
+                {/* Edit Button */}
                 <button
                     onClick={() => setIsEditing(true)}
                     style={{
                         position: "absolute",
-                        top: "-3rem",
+                        top: "-2.5rem",
                         right: "0",
-                        padding: "0.75rem",
-                        background: "rgba(255, 255, 255, 0.05)",
-                        border: "1px solid rgba(255, 255, 255, 0.1)",
-                        borderRadius: "50%",
+                        padding: "var(--space-3)",
+                        background: "var(--secondary)",
+                        border: "1px solid var(--border)",
+                        borderRadius: "var(--radius-full)",
                         cursor: "pointer",
-                        transition: "all 0.2s ease",
+                        transition: "all var(--transition-base)",
                         color: "var(--muted-foreground)",
                         display: "flex",
                         alignItems: "center",
-                        justifyContent: "center"
+                        justifyContent: "center",
                     }}
-                    className="hover-trigger no-print"
+                    className="no-print"
                     title="Editar Minha História"
+                    onMouseEnter={(e) => {
+                        e.currentTarget.style.borderColor = "var(--primary)";
+                        e.currentTarget.style.color = "var(--primary)";
+                    }}
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.borderColor = "var(--border)";
+                        e.currentTarget.style.color = "var(--muted-foreground)";
+                    }}
                 >
-                    <Edit3 size={18} />
+                    <Edit3 size={16} />
                 </button>
 
                 {isRefining ? (
-                    <div style={{ padding: "4rem", textAlign: "center", color: "var(--muted-foreground)" }}>
-                        <Sparkles className="animate-spin" style={{ margin: "0 auto 1rem", opacity: 0.5 }} size={32} />
-                        <p>A IA está a escrever a tua história estratégica...</p>
+                    <div style={{ 
+                        padding: "var(--space-12)", 
+                        textAlign: "center", 
+                        color: "var(--muted-foreground)",
+                    }}>
+                        <Loader2 
+                            size={32} 
+                            style={{ 
+                                margin: "0 auto var(--space-4)", 
+                                opacity: 0.5,
+                                animation: "spin 1s linear infinite",
+                            }} 
+                        />
+                        <p style={{ fontSize: "var(--text-sm)" }}>
+                            A IA está escrevendo sua história estratégica...
+                        </p>
                     </div>
                 ) : (
                     <>
+                        {/* Story Content */}
                         <div
                             style={{
                                 color: "var(--foreground)",
-                                fontSize: "1.25rem",
-                                lineHeight: "1.9",
-                                marginBottom: "3rem",
-                                opacity: 0.9,
-                                fontWeight: 400
+                                fontSize: "var(--text-lg)",
+                                lineHeight: "var(--leading-relaxed)",
+                                marginBottom: "var(--space-8)",
                             }}
                         >
                             {story.split("\n").filter(line => line.trim()).map((line, i) => (
-                                <p key={i} style={{ marginBottom: "1.5rem" }} dangerouslySetInnerHTML={{ __html: line.replace(/\*\*(.*?)\*\*/g, '<strong style="color: var(--primary); font-weight: 700;">$1</strong>') }} />
+                                <p 
+                                    key={i} 
+                                    style={{ marginBottom: "var(--space-4)" }} 
+                                    dangerouslySetInnerHTML={{ 
+                                        __html: line.replace(
+                                            /\*\*(.*?)\*\*/g, 
+                                            '<strong style="color: var(--primary); font-weight: 600;">$1</strong>'
+                                        ) 
+                                    }} 
+                                />
                             ))}
                         </div>
 
+                        {/* Pitch Section */}
                         <div
                             style={{
-                                marginTop: "2rem",
-                                padding: "1.5rem 0",
+                                marginTop: "var(--space-6)",
+                                padding: "var(--space-6) 0",
                                 borderTop: "1px solid var(--border)",
-                                borderBottom: "1px solid var(--border)"
                             }}
                         >
                             <h4 style={{
-                                marginBottom: "1.5rem",
-                                fontSize: "1.5rem",
-                                fontWeight: 700,
+                                marginBottom: "var(--space-6)",
+                                fontSize: "var(--text-xl)",
+                                fontWeight: 600,
                                 color: "var(--foreground)",
                                 display: "flex",
                                 alignItems: "center",
-                                gap: "0.75rem",
-                                letterSpacing: "-0.02em"
+                                gap: "var(--space-3)",
                             }}>
-                                <span style={{ width: "24px", height: "3px", background: "var(--primary)", borderRadius: "2px" }}></span>
+                                <span style={{ 
+                                    width: "20px", 
+                                    height: "3px", 
+                                    background: "var(--primary)", 
+                                    borderRadius: "var(--radius-full)",
+                                }} />
                                 Por que investir nesta parceria?
                             </h4>
-                            <div style={{ color: "var(--muted-foreground)", fontSize: "1.1rem", lineHeight: "1.8" }}>
+                            <div style={{ 
+                                color: "var(--muted-foreground)", 
+                                fontSize: "var(--text-base)", 
+                                lineHeight: "var(--leading-relaxed)",
+                            }}>
                                 {pitch.split("\n").filter(line => line.trim()).map((line, i) => {
                                     const isListItem = line.trim().match(/^\d\./);
                                     return (
-                                        <p key={i} style={{
-                                            marginBottom: "1rem",
-                                            paddingLeft: isListItem ? "1.5rem" : "0",
-                                            // borderLeft: isListItem ? "2px solid rgba(74, 74, 74, 0.3)" : "none" 
-                                        }} dangerouslySetInnerHTML={{ __html: line.replace(/\*\*(.*?)\*\*/g, '<strong style="color: var(--foreground); font-weight: 600;">$1</strong>') }} />
+                                        <p 
+                                            key={i} 
+                                            style={{
+                                                marginBottom: "var(--space-3)",
+                                                paddingLeft: isListItem ? "var(--space-4)" : "0",
+                                            }} 
+                                            dangerouslySetInnerHTML={{ 
+                                                __html: line.replace(
+                                                    /\*\*(.*?)\*\*/g, 
+                                                    '<strong style="color: var(--foreground); font-weight: 600;">$1</strong>'
+                                                ) 
+                                            }} 
+                                        />
                                     );
                                 })}
                             </div>
@@ -176,53 +226,101 @@ export function EditableStory({ slug, initialStory, initialPitch, isPlaceholder 
         );
     }
 
+    // Editing Mode
     return (
-        <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
-            {/* Print-only version of the content */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)" }}>
+            {/* Print-only version */}
             <div className="print-story-content" style={{ display: "none" }}>
-                <div style={{ marginBottom: "2rem" }}>
-                    <h4 style={{ fontSize: "1.5rem", fontWeight: "bold", marginBottom: "1rem", color: "#000" }}>Minha História</h4>
+                <div style={{ marginBottom: "var(--space-6)" }}>
+                    <h4 style={{ 
+                        fontSize: "var(--text-xl)", 
+                        fontWeight: 600, 
+                        marginBottom: "var(--space-4)", 
+                        color: "#000",
+                    }}>
+                        Minha História
+                    </h4>
                     <div style={{ whiteSpace: "pre-wrap" }}>{story}</div>
                 </div>
                 <div>
-                    <h4 style={{ fontSize: "1.5rem", fontWeight: "bold", marginBottom: "1rem", color: "#000" }}>Pitch de Investimento</h4>
+                    <h4 style={{ 
+                        fontSize: "var(--text-xl)", 
+                        fontWeight: 600, 
+                        marginBottom: "var(--space-4)", 
+                        color: "#000",
+                    }}>
+                        Pitch de Investimento
+                    </h4>
                     <div style={{ whiteSpace: "pre-wrap" }}>{pitch}</div>
                 </div>
             </div>
 
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }} className="no-print">
+            {/* Toolbar */}
+            <div 
+                style={{ 
+                    display: "flex", 
+                    alignItems: "center", 
+                    justifyContent: "space-between",
+                    flexWrap: "wrap",
+                    gap: "var(--space-4)",
+                }} 
+                className="no-print"
+            >
                 <button
                     onClick={handleAIEnhance}
                     disabled={isRefining}
-                    className="no-print"
                     style={{
                         display: "flex",
                         alignItems: "center",
-                        gap: "0.75rem",
-                        padding: "0.75rem 1.25rem",
-                        background: "var(--secondary)",
-                        border: "1px solid var(--border)",
+                        gap: "var(--space-2)",
+                        padding: "var(--space-3) var(--space-4)",
+                        background: "var(--primary-light)",
+                        border: "1px solid transparent",
                         color: "var(--primary)",
-                        borderRadius: "1rem",
+                        borderRadius: "var(--radius-md)",
                         cursor: isRefining ? "not-allowed" : "pointer",
                         fontWeight: 600,
-                        fontSize: "0.875rem",
-                        transition: "all 0.2s",
-                        opacity: isRefining ? 0.7 : 1
+                        fontSize: "var(--text-sm)",
+                        transition: "all var(--transition-base)",
+                        opacity: isRefining ? 0.7 : 1,
+                    }}
+                    onMouseEnter={(e) => {
+                        if (!isRefining) {
+                            e.currentTarget.style.background = "var(--primary)";
+                            e.currentTarget.style.color = "white";
+                        }
+                    }}
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.background = "var(--primary-light)";
+                        e.currentTarget.style.color = "var(--primary)";
                     }}
                 >
-                    <Sparkles size={16} className={isRefining ? "animate-spin" : ""} />
+                    <Sparkles 
+                        size={16} 
+                        style={{ 
+                            animation: isRefining ? "spin 1s linear infinite" : "none" 
+                        }} 
+                    />
                     {isRefining ? "Refinando..." : "Incrementar com IA"}
                 </button>
-                <div style={{ display: "flex", gap: "1rem" }}>
+                
+                <div style={{ display: "flex", gap: "var(--space-3)" }}>
                     <button
                         onClick={() => setIsEditing(false)}
                         style={{
-                            padding: "0.75rem",
+                            padding: "var(--space-3)",
                             background: "transparent",
                             border: "none",
                             color: "var(--muted-foreground)",
-                            cursor: "pointer"
+                            cursor: "pointer",
+                            borderRadius: "var(--radius-md)",
+                            transition: "all var(--transition-base)",
+                        }}
+                        onMouseEnter={(e) => {
+                            e.currentTarget.style.background = "var(--secondary)";
+                        }}
+                        onMouseLeave={(e) => {
+                            e.currentTarget.style.background = "transparent";
                         }}
                     >
                         <X size={20} />
@@ -233,25 +331,62 @@ export function EditableStory({ slug, initialStory, initialPitch, isPlaceholder 
                         style={{
                             display: "flex",
                             alignItems: "center",
-                            gap: "0.75rem",
-                            padding: "0.75rem 1.75rem",
+                            gap: "var(--space-2)",
+                            padding: "var(--space-3) var(--space-5)",
                             background: "var(--primary)",
                             color: "white",
                             border: "none",
-                            borderRadius: "1rem",
+                            borderRadius: "var(--radius-md)",
                             cursor: isSaving ? "not-allowed" : "pointer",
-                            fontWeight: 700,
-                            boxShadow: "0 10px 20px -5px rgba(67, 97, 238, 0.4)"
+                            fontWeight: 600,
+                            fontSize: "var(--text-sm)",
+                            boxShadow: "var(--shadow-primary)",
+                            transition: "all var(--transition-base)",
+                        }}
+                        onMouseEnter={(e) => {
+                            if (!isSaving) {
+                                e.currentTarget.style.transform = "translateY(-1px)";
+                                e.currentTarget.style.boxShadow = "var(--shadow-primary-lg)";
+                            }
+                        }}
+                        onMouseLeave={(e) => {
+                            e.currentTarget.style.transform = "translateY(0)";
+                            e.currentTarget.style.boxShadow = "var(--shadow-primary)";
                         }}
                     >
-                        {isSaving ? "Salvando..." : <><Save size={16} /> Salvar Alterações</>}
+                        {isSaving ? (
+                            <>
+                                <Loader2 size={16} style={{ animation: "spin 1s linear infinite" }} />
+                                Salvando...
+                            </>
+                        ) : (
+                            <>
+                                <Save size={16} /> Salvar
+                            </>
+                        )}
                     </button>
                 </div>
             </div>
 
-            <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }} className="no-print">
+            {/* Text Areas */}
+            <div 
+                style={{ 
+                    display: "flex", 
+                    flexDirection: "column", 
+                    gap: "var(--space-5)" 
+                }} 
+                className="no-print"
+            >
                 <div>
-                    <label style={{ display: "block", fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase", color: "var(--muted-foreground)", letterSpacing: "0.1em", marginBottom: "0.75rem" }}>
+                    <label style={{ 
+                        display: "block", 
+                        fontSize: "var(--text-xs)", 
+                        fontWeight: 600, 
+                        textTransform: "uppercase", 
+                        color: "var(--muted-foreground)", 
+                        letterSpacing: "0.08em", 
+                        marginBottom: "var(--space-3)",
+                    }}>
                         Minha História
                     </label>
                     <textarea
@@ -259,23 +394,38 @@ export function EditableStory({ slug, initialStory, initialPitch, isPlaceholder 
                         onChange={(e) => setStory(e.target.value)}
                         style={{
                             width: "100%",
-                            height: "20rem",
+                            height: "18rem",
                             background: "var(--secondary)",
                             border: "1px solid var(--border)",
-                            borderRadius: "1.5rem",
-                            padding: "1.5rem",
+                            borderRadius: "var(--radius-lg)",
+                            padding: "var(--space-5)",
                             color: "var(--foreground)",
-                            fontSize: "1.1rem",
-                            lineHeight: "1.6",
+                            fontSize: "var(--text-base)",
+                            lineHeight: "var(--leading-relaxed)",
                             resize: "none",
                             outline: "none",
-                            fontFamily: "inherit"
+                            fontFamily: "inherit",
+                            transition: "border-color var(--transition-base)",
+                        }}
+                        onFocus={(e) => {
+                            e.currentTarget.style.borderColor = "var(--primary)";
+                        }}
+                        onBlur={(e) => {
+                            e.currentTarget.style.borderColor = "var(--border)";
                         }}
                     />
                 </div>
 
                 <div>
-                    <label style={{ display: "block", fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase", color: "var(--muted-foreground)", letterSpacing: "0.1em", marginBottom: "0.75rem" }}>
+                    <label style={{ 
+                        display: "block", 
+                        fontSize: "var(--text-xs)", 
+                        fontWeight: 600, 
+                        textTransform: "uppercase", 
+                        color: "var(--muted-foreground)", 
+                        letterSpacing: "0.08em", 
+                        marginBottom: "var(--space-3)",
+                    }}>
                         Pitch de Investimento
                     </label>
                     <textarea
@@ -286,14 +436,21 @@ export function EditableStory({ slug, initialStory, initialPitch, isPlaceholder 
                             height: "12rem",
                             background: "var(--secondary)",
                             border: "1px solid var(--border)",
-                            borderRadius: "1.5rem",
-                            padding: "1.5rem",
+                            borderRadius: "var(--radius-lg)",
+                            padding: "var(--space-5)",
                             color: "var(--foreground)",
-                            fontSize: "1.1rem",
-                            lineHeight: "1.6",
+                            fontSize: "var(--text-base)",
+                            lineHeight: "var(--leading-relaxed)",
                             resize: "none",
                             outline: "none",
-                            fontFamily: "inherit"
+                            fontFamily: "inherit",
+                            transition: "border-color var(--transition-base)",
+                        }}
+                        onFocus={(e) => {
+                            e.currentTarget.style.borderColor = "var(--primary)";
+                        }}
+                        onBlur={(e) => {
+                            e.currentTarget.style.borderColor = "var(--border)";
                         }}
                     />
                 </div>
