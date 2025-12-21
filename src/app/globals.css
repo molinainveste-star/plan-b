@@ -1,0 +1,254 @@
+:root {
+  /* Clean & Crisp Theme */
+  --background: #FFFFFF;
+  /* Pure White */
+  --foreground: #1A1A1A;
+  /* Darker, higher contrast */
+
+  --card: #FFFFFF;
+  --card-foreground: #1A1A1A;
+
+  /* Royal Blue Electric */
+  --primary: #4361EE;
+  --primary-foreground: #FFFFFF;
+  --primary-rgb: 67, 97, 238;
+
+  --secondary: #F8F9FA;
+  --secondary-foreground: #4361EE;
+
+  --muted: #FAFAFA;
+  --muted-foreground: #64748B;
+
+  --accent: #F1F5F9;
+  --accent-foreground: #4361EE;
+
+  --border: #E2E8F0;
+  --input: #FFFFFF;
+  --ring: #4361EE;
+
+  --radius: 1.5rem;
+
+  /* Crisp Gradients */
+  --gradient-primary: linear-gradient(135deg, #4361EE 0%, #3A0CA3 100%);
+  --gradient-soft: linear-gradient(to bottom, #FFFFFF, #F8F9FA);
+  --primary-gradient: linear-gradient(135deg, #4361EE 0%, #4CC9F0 100%);
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: var(--font-inter), sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-outfit), sans-serif;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--primary);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+a:hover {
+  color: var(--primary);
+  opacity: 0.8;
+}
+
+/* Utilities */
+.glass-panel {
+  background: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 10px 40px -10px rgba(67, 97, 238, 0.1);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.glass-panel:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 50px -10px rgba(67, 97, 238, 0.2);
+  border-color: rgba(67, 97, 238, 0.2);
+}
+
+.text-gradient {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Custom Scrollbar for Calm Aesthetic */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--secondary);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
+@media print {
+  @page {
+    margin: 0;
+    size: auto;
+  }
+
+  /* Reset body but KEEP COLORS */
+  body {
+    background: var(--background) !important;
+    /* Keep the light subtle gray or user theme */
+    color: var(--foreground) !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  /* Hide Scrollbars */
+  ::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hide interactive elements/non-essential */
+  button,
+  .no-print,
+  [role="button"],
+  [aria-label="Incrementar com IA"],
+  .ai-enhance-button,
+  nav,
+  header,
+  .ia-insight-badge {
+    display: none !important;
+  }
+
+  /* Expand Layout */
+  main {
+    padding: 2rem !important;
+    /* Add some padding for the PDF page */
+    margin: 0 auto !important;
+    width: 100% !important;
+    max-width: 1200px !important;
+    min-height: auto !important;
+  }
+
+  /* Adjust Grid for Print */
+  div[style*="grid"] {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    /* Force 3 columns for metrics */
+    gap: 1.5rem !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* Metric Cards & Panels - Keep the design! */
+  .glass-panel {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important;
+    /* Subtle shadow for print */
+    border: 1px solid #e5e5e5 !important;
+    background: white !important;
+    /* Cards should be white on the gray bg */
+    break-inside: avoid;
+    page-break-inside: avoid;
+    color: var(--foreground) !important;
+    padding: 1.5rem !important;
+    margin-bottom: 1.5rem !important;
+    border-radius: 1rem !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Allow text colors */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: var(--primary) !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Text gradient support in print (best effort) */
+  .text-gradient {
+    -webkit-text-fill-color: var(--primary) !important;
+    /* Fallback to solid color as gradients often fail in print */
+    color: var(--primary) !important;
+  }
+
+  /* Force specific textarea overrides */
+  textarea {
+    display: none !important;
+  }
+
+  /* Show static text in print */
+  .print-story-content {
+    display: block !important;
+    font-size: 11pt;
+    line-height: 1.6;
+    color: var(--foreground);
+    text-align: justify;
+  }
+
+  /* Ensure images/avatars print */
+  img {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Show the NEW print-only thumbnails */
+  .print-thumbnails {
+    display: block !important;
+    margin-top: 1rem !important;
+    margin-bottom: 1rem !important;
+    break-inside: avoid;
+  }
+
+  /* Reduce gaps for print compactness */
+  .glass-panel {
+    margin-top: 1.5rem !important;
+    margin-bottom: 1.5rem !important;
+    padding: 1.5rem !important;
+  }
+
+  /* Handle Avatar Switching for Print */
+  .print-avatar {
+    display: block !important;
+    margin: 0 auto 1rem auto !important;
+    border: 4px solid var(--border) !important;
+  }
+}
