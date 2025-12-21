@@ -15,17 +15,16 @@ export const CallToAction: React.FC = () => {
                 display: "flex",
                 gap: "var(--space-3)",
                 padding: "var(--space-3)",
-                background: "rgba(255, 255, 255, 0.95)",
-                backdropFilter: "blur(16px)",
+                background: "rgba(13, 17, 23, 0.9)",
+                backdropFilter: "blur(20px)",
                 borderRadius: "var(--radius-full)",
-                boxShadow: "var(--shadow-xl), 0 0 0 1px rgba(0,0,0,0.04)",
+                boxShadow: "var(--shadow-xl), 0 0 0 1px var(--border)",
                 animation: "fadeInUp 0.5s ease forwards",
-                animationDelay: "300ms",
+                animationDelay: "0.5s",
                 opacity: 0,
             }}
             className="no-print"
         >
-            {/* WhatsApp Button */}
             <button 
                 style={{
                     background: "#25D366",
@@ -40,32 +39,31 @@ export const CallToAction: React.FC = () => {
                     gap: "var(--space-2)",
                     cursor: "pointer",
                     whiteSpace: "nowrap",
-                    boxShadow: "0 4px 14px rgba(37, 211, 102, 0.3)",
+                    boxShadow: "0 0 20px rgba(37, 211, 102, 0.4)",
                     transition: "all var(--transition-base)",
                 }}
                 onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = "translateY(-2px)";
-                    e.currentTarget.style.boxShadow = "0 8px 20px rgba(37, 211, 102, 0.4)";
+                    e.currentTarget.style.transform = "translateY(-2px) scale(1.02)";
+                    e.currentTarget.style.boxShadow = "0 0 30px rgba(37, 211, 102, 0.6)";
                 }}
                 onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = "translateY(0)";
-                    e.currentTarget.style.boxShadow = "0 4px 14px rgba(37, 211, 102, 0.3)";
+                    e.currentTarget.style.transform = "translateY(0) scale(1)";
+                    e.currentTarget.style.boxShadow = "0 0 20px rgba(37, 211, 102, 0.4)";
                 }}
             >
                 <MessageCircle size={20} />
                 Negociar via WhatsApp
             </button>
 
-            {/* PDF Button */}
             <button 
                 style={{
-                    background: "var(--secondary)",
+                    background: "var(--background-tertiary)",
                     color: "var(--foreground)",
                     border: "1px solid var(--border)",
                     borderRadius: "var(--radius-full)",
                     padding: "var(--space-3) var(--space-5)",
                     fontSize: "var(--text-sm)",
-                    fontWeight: 500,
+                    fontWeight: 600,
                     display: "flex",
                     alignItems: "center",
                     gap: "var(--space-2)",
@@ -76,17 +74,17 @@ export const CallToAction: React.FC = () => {
                 onClick={() => window.print()}
                 onMouseEnter={(e) => {
                     e.currentTarget.style.transform = "translateY(-2px)";
-                    e.currentTarget.style.background = "var(--border)";
-                    e.currentTarget.style.borderColor = "transparent";
+                    e.currentTarget.style.borderColor = "var(--primary)";
+                    e.currentTarget.style.boxShadow = "var(--shadow-glow)";
                 }}
                 onMouseLeave={(e) => {
                     e.currentTarget.style.transform = "translateY(0)";
-                    e.currentTarget.style.background = "var(--secondary)";
                     e.currentTarget.style.borderColor = "var(--border)";
+                    e.currentTarget.style.boxShadow = "none";
                 }}
             >
                 <Download size={18} />
-                Baixar PDF
+                PDF
             </button>
         </div>
     );

@@ -10,20 +10,15 @@ import { ConnectYouTube } from "@/components/ConnectYouTube";
 import { getProfileBySlug } from "@/lib/data";
 import { getMediaKit } from "@/lib/mockData";
 import { generateAIStory } from "@/lib/ai";
-import { BadgeCheck } from "lucide-react";
+import { BadgeCheck, Sparkles } from "lucide-react";
 
 export default async function MediaKitPage({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params;
-    console.log(`🔍 Accessing profile page for slug: '${slug}'`);
-
     let profile = await getProfileBySlug(slug);
-    console.log(`👤 Profile result for '${slug}':`, profile ? "Found" : "Not Found");
 
     if (!profile) {
-        console.warn(`⚠️ Profile not found in DB for slug: '${slug}'. Using Mock Data fallbacks.`);
         const mockKit = getMediaKit(slug);
-
-        const mockProfile = {
+        profile = {
             username: slug,
             full_name: mockKit.name,
             bio: mockKit.bio,
@@ -46,17 +41,6 @@ export default async function MediaKitPage({ params }: { params: Promise<{ slug:
             demographics: null,
             pricing_packages: []
         };
-
-        profile = mockProfile;
-    }
-
-    if (profile) {
-        console.log(`🔍 Profile Data for '${slug}':`, JSON.stringify({
-            username: profile.username,
-            metrics_count: profile.metrics?.length,
-            has_story: !!profile.custom_story,
-            metrics_raw: profile.metrics
-        }, null, 2));
     }
 
     const metrics = profile.metrics
@@ -83,7 +67,6 @@ export default async function MediaKitPage({ params }: { params: Promise<{ slug:
     const finalStory = profile.custom_story || defaultStory;
     const finalPitch = profile.custom_pitch || defaultPitch;
 
-    // Demographics Data
     let ageData = [
         { label: "18-24", value: 35 },
         { label: "25-34", value: 45 },
@@ -95,27 +78,19 @@ export default async function MediaKitPage({ params }: { params: Promise<{ slug:
 
     if (profile.demographics && profile.is_verified) {
         const d = profile.demographics;
-
-        if (d.age && d.age.length > 0) {
+        if (d.age?.length) {
             ageData = d.age.map((item: any) => ({
                 label: item.label.replace("age", ""),
                 value: parseFloat(item.value).toFixed(1)
             })).sort((a: any, b: any) => b.value - a.value);
         }
-
         if (d.gender) {
             const male = d.gender.find((g: any) => g.label.toLowerCase().includes("male"))?.value || 0;
             const female = d.gender.find((g: any) => g.label.toLowerCase().includes("female"))?.value || 0;
             const total = male + female;
-            if (total > 0) {
-                genderData = {
-                    male: Math.round((male / total) * 100),
-                    female: Math.round((female / total) * 100)
-                };
-            }
+            if (total > 0) genderData = { male: Math.round((male / total) * 100), female: Math.round((female / total) * 100) };
         }
-
-        if (d.country && d.country.length > 0) {
+        if (d.country?.length) {
             countryData = d.country.map((c: any) => `${c.label} ${parseFloat(c.value).toFixed(0)}%`);
         }
     }
@@ -124,10 +99,37 @@ export default async function MediaKitPage({ params }: { params: Promise<{ slug:
         <main style={{ 
             minHeight: "100vh", 
             padding: "var(--space-12) var(--space-4)", 
-            background: "var(--gradient-surface)", 
+            background: "var(--background)", 
             paddingBottom: "var(--space-24)",
+            position: "relative",
+            overflow: "hidden",
         }}>
-            <div style={{ maxWidth: "1000px", margin: "0 auto" }}>
+            {/* Background Effects */}
+            <div style={{
+                position: "fixed",
+                top: "-20%",
+                left: "-10%",
+                width: "600px",
+                height: "600px",
+                background: "radial-gradient(circle, rgba(0, 212, 255, 0.1) 0%, transparent 60%)",
+                filter: "blur(80px)",
+                pointerEvents: "none",
+                zIndex: 0,
+            }} />
+            <div style={{
+                position: "fixed",
+                bottom: "-20%",
+                right: "-10%",
+                width: "500px",
+                height: "500px",
+                background: "radial-gradient(circle, rgba(124, 58, 237, 0.08) 0%, transparent 60%)",
+                filter: "blur(60px)",
+                pointerEvents: "none",
+                zIndex: 0,
+            }} />
+            <div className="bg-grid" style={{ position: "fixed", inset: 0, opacity: 0.3, pointerEvents: "none", zIndex: 0 }} />
+
+            <div style={{ maxWidth: "1000px", margin: "0 auto", position: "relative", zIndex: 1 }}>
                 <ProfileHeader
                     slug={profile.username}
                     name={profile.full_name}
@@ -138,34 +140,24 @@ export default async function MediaKitPage({ params }: { params: Promise<{ slug:
                     socials={socialLinks}
                 />
 
-                {/* Section Header: Channel Stats */}
+                {/* Stats Section Header */}
                 <div style={{ 
                     display: "flex", 
                     alignItems: "center", 
                     gap: "var(--space-3)", 
-                    marginTop: "var(--space-12)", 
+                    marginTop: "var(--space-16)", 
                     marginBottom: "var(--space-6)",
                 }}>
                     <h3 style={{ 
-                        fontSize: "var(--text-xl)", 
-                        fontWeight: 600, 
+                        fontSize: "var(--text-2xl)", 
+                        fontWeight: 700, 
                         color: "var(--foreground)",
                         margin: 0,
                     }}>
-                        Estatísticas do Canal
+                        Estatísticas do <span className="text-gradient">Canal</span>
                     </h3>
                     {profile.is_verified && (
-                        <div style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "var(--space-1)",
-                            background: "var(--success-light)",
-                            color: "var(--success)",
-                            padding: "var(--space-1) var(--space-3)",
-                            borderRadius: "var(--radius-full)",
-                            fontSize: "var(--text-xs)",
-                            fontWeight: 600,
-                        }}>
+                        <div className="badge badge-success">
                             <BadgeCheck size={14} />
                             Verificado
                         </div>
@@ -173,129 +165,63 @@ export default async function MediaKitPage({ params }: { params: Promise<{ slug:
                 </div>
 
                 {/* Metrics Grid */}
-                <div
-                    style={{
-                        display: "grid",
-                        gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-                        gap: "var(--space-6)",
-                    }}
-                >
+                <div style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+                    gap: "var(--space-6)",
+                }}>
                     {metrics.length > 0 ? (
                         metrics.map((metric: any, index: number) => (
-                            <MetricCard key={index} {...metric} delay={index * 50} />
+                            <MetricCard key={index} {...metric} delay={index * 100} />
                         ))
                     ) : (
                         <>
-                            <MetricCard
-                                label="Total de Seguidores"
-                                value="22.1K"
-                                trend="+12% este mês"
-                                trendDirection="up"
-                                icon="users"
-                                delay={0}
-                            />
-                            <MetricCard
-                                label="Engajamento Médio"
-                                value="4.8%"
-                                trend="Média do setor: 2.1%"
-                                trendDirection="neutral"
-                                icon="activity"
-                                delay={50}
-                            />
-                            <MetricCard
-                                label="Alcance Mensal"
-                                value="145K"
-                                trend="+5% este mês"
-                                trendDirection="up"
-                                icon="eye"
-                                delay={100}
-                            />
+                            <MetricCard label="Total de Seguidores" value="22.1K" trend="+12% este mês" trendDirection="up" icon="users" delay={0} />
+                            <MetricCard label="Engajamento Médio" value="4.8%" trend="Acima da média" trendDirection="neutral" icon="activity" delay={100} />
+                            <MetricCard label="Alcance Mensal" value="145K" trend="+5% este mês" trendDirection="up" icon="eye" delay={200} />
                         </>
                     )}
                 </div>
 
-                {/* Video Performance Chart */}
+                {/* Video Performance */}
                 {videoData.length > 0 && (
-                    <div style={{ marginTop: "var(--space-10)" }}>
+                    <div style={{ marginTop: "var(--space-12)" }}>
                         <VideoChart data={videoData} />
                     </div>
                 )}
 
-                {/* Recent Video Thumbnails */}
+                {/* Recent Videos */}
                 {videoData.length > 0 && (
-                    <div 
-                        className="print-thumbnails" 
-                        style={{ 
-                            marginTop: "var(--space-8)", 
-                            marginBottom: "var(--space-8)",
-                            animation: "fadeInUp 0.4s ease forwards",
-                            animationDelay: "200ms",
-                            opacity: 0,
-                        }}
-                    >
-                        <h4 style={{ 
-                            fontSize: "var(--text-lg)", 
-                            fontWeight: 600, 
-                            marginBottom: "var(--space-4)", 
-                            color: "var(--foreground)",
-                        }}>
-                            Destaques Recentes
+                    <div style={{ marginTop: "var(--space-10)", animation: "fadeInUp 0.5s ease forwards", animationDelay: "250ms", opacity: 0 }}>
+                        <h4 style={{ fontSize: "var(--text-xl)", fontWeight: 700, marginBottom: "var(--space-6)", color: "var(--foreground)" }}>
+                            Destaques <span className="text-gradient">Recentes</span>
                         </h4>
-                        <div style={{
-                            display: "grid",
-                            gridTemplateColumns: "repeat(3, 1fr)",
-                            gap: "var(--space-4)",
-                        }}>
-                            {videoData.slice(0, 9).map((video: any) => (
-                                <div key={video.video_id} style={{ breakInside: "avoid" }}>
-                                    <a
-                                        href={`https://www.youtube.com/watch?v=${video.video_id}`}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        style={{ display: "block", textDecoration: "none" }}
-                                    >
-                                        <div style={{
-                                            width: "100%",
-                                            aspectRatio: "16/9",
-                                            borderRadius: "var(--radius-md)",
-                                            overflow: "hidden",
-                                            marginBottom: "var(--space-2)",
-                                            border: "1px solid var(--border)",
-                                            background: "var(--secondary)",
-                                            boxShadow: "var(--shadow-sm)",
-                                            transition: "all var(--transition-base)",
-                                        }}>
-                                            <img
-                                                src={`https://img.youtube.com/vi/${video.video_id}/mqdefault.jpg`}
-                                                alt={video.title}
-                                                style={{ 
-                                                    width: "100%", 
-                                                    height: "100%", 
-                                                    objectFit: "cover",
-                                                }}
-                                            />
-                                        </div>
-                                        <p style={{
-                                            fontSize: "var(--text-sm)",
-                                            fontWeight: 500,
-                                            lineHeight: "var(--leading-snug)",
-                                            color: "var(--foreground)",
-                                            display: "-webkit-box",
-                                            WebkitLineClamp: 2,
-                                            WebkitBoxOrient: "vertical",
-                                            overflow: "hidden",
-                                        }}>
+                        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "var(--space-4)" }}>
+                            {videoData.slice(0, 6).map((video: any) => (
+                                <a
+                                    key={video.video_id}
+                                    href={`https://www.youtube.com/watch?v=${video.video_id}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="glass-panel"
+                                    style={{ display: "block", textDecoration: "none", overflow: "hidden", borderRadius: "var(--radius-lg)" }}
+                                >
+                                    <div style={{ aspectRatio: "16/9", overflow: "hidden" }}>
+                                        <img
+                                            src={`https://img.youtube.com/vi/${video.video_id}/mqdefault.jpg`}
+                                            alt={video.title}
+                                            style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform var(--transition-slow)" }}
+                                        />
+                                    </div>
+                                    <div style={{ padding: "var(--space-3)" }}>
+                                        <p style={{ fontSize: "var(--text-sm)", fontWeight: 600, color: "var(--foreground)", lineHeight: "1.3", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
                                             {video.title}
                                         </p>
-                                    </a>
-                                    <p style={{ 
-                                        fontSize: "var(--text-xs)", 
-                                        color: "var(--muted-foreground)", 
-                                        marginTop: "var(--space-1)",
-                                    }}>
-                                        {new Intl.NumberFormat('pt-BR', { notation: "compact" }).format(video.view_count)} views
-                                    </p>
-                                </div>
+                                        <p style={{ fontSize: "var(--text-xs)", color: "var(--foreground-muted)", marginTop: "var(--space-1)" }}>
+                                            {new Intl.NumberFormat('pt-BR', { notation: "compact" }).format(video.view_count)} views
+                                        </p>
+                                    </div>
+                                </a>
                             ))}
                         </div>
                     </div>
@@ -305,44 +231,40 @@ export default async function MediaKitPage({ params }: { params: Promise<{ slug:
                 <div
                     className="glass-panel"
                     style={{
-                        marginTop: "var(--space-12)",
+                        marginTop: "var(--space-16)",
                         padding: "var(--space-10)",
-                        borderRadius: "var(--radius-xl)",
+                        borderRadius: "var(--radius-2xl)",
                         position: "relative",
                         overflow: "hidden",
-                        animation: "fadeInUp 0.4s ease forwards",
-                        animationDelay: "250ms",
+                        animation: "fadeInUp 0.5s ease forwards",
+                        animationDelay: "300ms",
                         opacity: 0,
                     }}
                 >
-                    {/* AI Badge */}
+                    <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: "var(--gradient-accent)" }} />
+                    
                     <div style={{ position: "absolute", top: "var(--space-6)", right: "var(--space-8)" }}>
-                        <span 
-                            className="ia-insight-badge" 
-                            style={{
-                                padding: "var(--space-2) var(--space-4)",
-                                background: "var(--gradient-accent)",
-                                borderRadius: "var(--radius-full)",
-                                fontSize: "var(--text-xs)",
-                                fontWeight: 600,
-                                textTransform: "uppercase",
-                                letterSpacing: "0.08em",
-                                color: "white",
-                                boxShadow: "var(--shadow-primary)",
-                            }}
-                        >
+                        <span style={{
+                            padding: "var(--space-2) var(--space-4)",
+                            background: "var(--gradient-accent)",
+                            borderRadius: "var(--radius-full)",
+                            fontSize: "var(--text-xs)",
+                            fontWeight: 700,
+                            textTransform: "uppercase",
+                            letterSpacing: "0.08em",
+                            color: "white",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "var(--space-1)",
+                            boxShadow: "var(--shadow-glow-accent)",
+                        }}>
+                            <Sparkles size={12} />
                             IA Insight
                         </span>
                     </div>
 
-                    <h3 style={{
-                        marginBottom: "var(--space-8)",
-                        fontSize: "var(--text-3xl)",
-                        fontWeight: 700,
-                        letterSpacing: "var(--tracking-tight)",
-                        color: "var(--foreground)",
-                    }}>
-                        Minha História
+                    <h3 style={{ marginBottom: "var(--space-8)", fontSize: "var(--text-3xl)", fontWeight: 800, color: "var(--foreground)" }}>
+                        Minha <span className="text-gradient-accent">História</span>
                     </h3>
 
                     <EditableStory
@@ -350,109 +272,48 @@ export default async function MediaKitPage({ params }: { params: Promise<{ slug:
                         initialStory={finalStory}
                         initialPitch={finalPitch}
                         isPlaceholder={!profile.custom_story}
-                        context={{
-                            name: profile.full_name,
-                            bio: profile.bio,
-                            niche: profile.niche,
-                            metrics: metrics,
-                            videos: videoData
-                        }}
+                        context={{ name: profile.full_name, bio: profile.bio, niche: profile.niche, metrics, videos: videoData }}
                     />
                 </div>
 
-                {/* Demographics Section */}
+                {/* Demographics */}
                 <div
                     className="glass-panel"
                     style={{
-                        marginTop: "var(--space-10)",
+                        marginTop: "var(--space-12)",
                         padding: "var(--space-8)",
-                        borderRadius: "var(--radius-xl)",
-                        animation: "fadeInUp 0.4s ease forwards",
-                        animationDelay: "300ms",
+                        borderRadius: "var(--radius-2xl)",
+                        animation: "fadeInUp 0.5s ease forwards",
+                        animationDelay: "350ms",
                         opacity: 0,
                     }}
                 >
-                    <div style={{ 
-                        display: "flex", 
-                        alignItems: "center", 
-                        justifyContent: "space-between", 
-                        marginBottom: "var(--space-8)", 
-                        flexWrap: "wrap", 
-                        gap: "var(--space-4)",
-                    }}>
-                        <h3 style={{ 
-                            fontSize: "var(--text-xl)", 
-                            fontWeight: 600, 
-                            color: "var(--foreground)", 
-                            margin: 0,
-                        }}>
-                            Demografia da Audiência
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "var(--space-8)", flexWrap: "wrap", gap: "var(--space-4)" }}>
+                        <h3 style={{ fontSize: "var(--text-xl)", fontWeight: 700, color: "var(--foreground)", margin: 0 }}>
+                            Demografia da <span className="text-gradient">Audiência</span>
                         </h3>
                         {profile.is_verified ? (
-                            <div style={{
-                                display: "flex",
-                                alignItems: "center",
-                                gap: "var(--space-2)",
-                                background: "var(--success-light)",
-                                color: "var(--success)",
-                                padding: "var(--space-2) var(--space-4)",
-                                borderRadius: "var(--radius-full)",
-                                fontSize: "var(--text-sm)",
-                                fontWeight: 600,
-                                border: "1px solid rgba(16, 185, 129, 0.2)",
-                            }}>
-                                <BadgeCheck size={16} />
-                                Dados verificados via YouTube API
+                            <div className="badge badge-success">
+                                <BadgeCheck size={14} />
+                                Dados verificados
                             </div>
                         ) : (
                             <ConnectYouTube slug={profile.username} />
                         )}
                     </div>
                     
-                    <div
-                        style={{
-                            display: "grid",
-                            gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-                            gap: "var(--space-10)",
-                        }}
-                    >
-                        {/* Age Distribution */}
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "var(--space-10)" }}>
+                        {/* Age */}
                         <div>
-                            <p style={{
-                                color: "var(--muted-foreground)",
-                                fontSize: "var(--text-sm)",
-                                marginBottom: "var(--space-4)",
-                                fontWeight: 600,
-                                textTransform: "uppercase",
-                                letterSpacing: "0.05em",
-                            }}>
-                                Faixa Etária
-                            </p>
+                            <p style={{ color: "var(--foreground-muted)", fontSize: "var(--text-sm)", marginBottom: "var(--space-4)", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em" }}>Faixa Etária</p>
                             {ageData.map((item: any) => (
                                 <div key={item.label} style={{ marginBottom: "var(--space-4)" }}>
-                                    <div style={{
-                                        display: "flex",
-                                        justifyContent: "space-between",
-                                        fontSize: "var(--text-sm)",
-                                        marginBottom: "var(--space-2)",
-                                        fontWeight: 500,
-                                    }}>
-                                        <span style={{ color: "var(--foreground)" }}>{item.label}</span>
-                                        <span style={{ color: "var(--primary)", fontWeight: 600 }}>{item.value}%</span>
+                                    <div style={{ display: "flex", justifyContent: "space-between", fontSize: "var(--text-sm)", marginBottom: "var(--space-2)" }}>
+                                        <span style={{ color: "var(--foreground-secondary)" }}>{item.label}</span>
+                                        <span style={{ color: "var(--primary)", fontWeight: 700 }}>{item.value}%</span>
                                     </div>
-                                    <div style={{
-                                        height: "6px",
-                                        background: "var(--secondary)",
-                                        borderRadius: "var(--radius-full)",
-                                        overflow: "hidden",
-                                    }}>
-                                        <div style={{
-                                            width: `${item.value}%`,
-                                            height: "100%",
-                                            background: "var(--gradient-accent)",
-                                            borderRadius: "var(--radius-full)",
-                                            transition: "width 0.5s ease",
-                                        }} />
+                                    <div style={{ height: "6px", background: "var(--background-tertiary)", borderRadius: "var(--radius-full)", overflow: "hidden" }}>
+                                        <div style={{ width: `${item.value}%`, height: "100%", background: "var(--gradient-primary)", borderRadius: "var(--radius-full)" }} />
                                     </div>
                                 </div>
                             ))}
@@ -460,101 +321,22 @@ export default async function MediaKitPage({ params }: { params: Promise<{ slug:
 
                         {/* Gender & Location */}
                         <div>
-                            <p style={{
-                                color: "var(--muted-foreground)",
-                                fontSize: "var(--text-sm)",
-                                marginBottom: "var(--space-4)",
-                                fontWeight: 600,
-                                textTransform: "uppercase",
-                                letterSpacing: "0.05em",
-                            }}>
-                                Gênero
-                            </p>
+                            <p style={{ color: "var(--foreground-muted)", fontSize: "var(--text-sm)", marginBottom: "var(--space-4)", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em" }}>Gênero</p>
                             <div style={{ display: "flex", gap: "var(--space-4)" }}>
-                                <div
-                                    className="glass-panel"
-                                    style={{
-                                        flex: 1,
-                                        padding: "var(--space-5)",
-                                        textAlign: "center",
-                                        borderRadius: "var(--radius-lg)",
-                                        background: "var(--secondary)",
-                                        border: "none",
-                                    }}
-                                >
-                                    <div style={{
-                                        fontSize: "var(--text-3xl)",
-                                        fontWeight: 700,
-                                        color: "var(--primary)",
-                                    }}>
-                                        {genderData.female}%
-                                    </div>
-                                    <div style={{
-                                        fontSize: "var(--text-xs)",
-                                        color: "var(--muted-foreground)",
-                                        marginTop: "var(--space-1)",
-                                        fontWeight: 600,
-                                        textTransform: "uppercase",
-                                        letterSpacing: "0.05em",
-                                    }}>
-                                        Feminino
-                                    </div>
+                                <div style={{ flex: 1, padding: "var(--space-5)", textAlign: "center", borderRadius: "var(--radius-xl)", background: "var(--background-tertiary)", border: "1px solid var(--border)" }}>
+                                    <div className="text-gradient" style={{ fontSize: "var(--text-3xl)", fontWeight: 800 }}>{genderData.female}%</div>
+                                    <div style={{ fontSize: "var(--text-xs)", color: "var(--foreground-muted)", marginTop: "var(--space-1)", fontWeight: 600, textTransform: "uppercase" }}>Feminino</div>
                                 </div>
-                                <div
-                                    className="glass-panel"
-                                    style={{
-                                        flex: 1,
-                                        padding: "var(--space-5)",
-                                        textAlign: "center",
-                                        borderRadius: "var(--radius-lg)",
-                                        background: "var(--secondary)",
-                                        border: "none",
-                                    }}
-                                >
-                                    <div style={{ 
-                                        fontSize: "var(--text-3xl)", 
-                                        fontWeight: 700, 
-                                        color: "var(--foreground)",
-                                    }}>
-                                        {genderData.male}%
-                                    </div>
-                                    <div style={{
-                                        fontSize: "var(--text-xs)",
-                                        color: "var(--muted-foreground)",
-                                        marginTop: "var(--space-1)",
-                                        fontWeight: 600,
-                                        textTransform: "uppercase",
-                                        letterSpacing: "0.05em",
-                                    }}>
-                                        Masculino
-                                    </div>
+                                <div style={{ flex: 1, padding: "var(--space-5)", textAlign: "center", borderRadius: "var(--radius-xl)", background: "var(--background-tertiary)", border: "1px solid var(--border)" }}>
+                                    <div style={{ fontSize: "var(--text-3xl)", fontWeight: 800, color: "var(--foreground)" }}>{genderData.male}%</div>
+                                    <div style={{ fontSize: "var(--text-xs)", color: "var(--foreground-muted)", marginTop: "var(--space-1)", fontWeight: 600, textTransform: "uppercase" }}>Masculino</div>
                                 </div>
                             </div>
 
-                            <p style={{
-                                color: "var(--muted-foreground)",
-                                fontSize: "var(--text-sm)",
-                                marginTop: "var(--space-8)",
-                                marginBottom: "var(--space-4)",
-                                fontWeight: 600,
-                                textTransform: "uppercase",
-                                letterSpacing: "0.05em",
-                            }}>
-                                Principais Localizações
-                            </p>
+                            <p style={{ color: "var(--foreground-muted)", fontSize: "var(--text-sm)", marginTop: "var(--space-8)", marginBottom: "var(--space-4)", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em" }}>Localização</p>
                             <div style={{ display: "flex", flexWrap: "wrap", gap: "var(--space-2)" }}>
                                 {countryData.map((loc: any) => (
-                                    <span
-                                        key={loc}
-                                        style={{
-                                            padding: "var(--space-2) var(--space-4)",
-                                            borderRadius: "var(--radius-full)",
-                                            background: "var(--secondary)",
-                                            fontSize: "var(--text-sm)",
-                                            fontWeight: 500,
-                                            color: "var(--foreground)",
-                                        }}
-                                    >
+                                    <span key={loc} style={{ padding: "var(--space-2) var(--space-4)", borderRadius: "var(--radius-full)", background: "var(--background-tertiary)", fontSize: "var(--text-sm)", fontWeight: 500, color: "var(--foreground-secondary)", border: "1px solid var(--border)" }}>
                                         {loc}
                                     </span>
                                 ))}
@@ -563,19 +345,8 @@ export default async function MediaKitPage({ params }: { params: Promise<{ slug:
                     </div>
                 </div>
 
-                {/* Sales Section: Pricing & Cases */}
-                <PricingTable
-                    slug={profile.username}
-                    initialPackages={profile.pricing_packages}
-                    isOwner={true}
-                />
-                <CaseStudies
-                    slug={profile.username}
-                    initialCases={profile.brand_cases || []}
-                    isOwner={true}
-                    isPro={true}
-                />
-
+                <PricingTable slug={profile.username} initialPackages={profile.pricing_packages} isOwner={true} />
+                <CaseStudies slug={profile.username} initialCases={profile.brand_cases || []} isOwner={true} isPro={true} />
                 <CallToAction />
             </div>
         </main>

@@ -47,13 +47,26 @@ export const VideoChart: React.FC<VideoChartProps> = ({ data }) => {
             className="glass-panel" 
             style={{
                 padding: "var(--space-8)",
-                borderRadius: "var(--radius-lg)",
-                animation: "fadeInUp 0.4s ease forwards",
-                animationDelay: "150ms",
+                borderRadius: "var(--radius-xl)",
+                animation: "fadeInUp 0.5s ease forwards",
+                animationDelay: "200ms",
                 opacity: 0,
+                position: "relative",
+                overflow: "hidden",
             }}
         >
-            {/* Header */}
+            {/* Top gradient line */}
+            <div
+                style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    height: "2px",
+                    background: "var(--gradient-primary)",
+                }}
+            />
+
             <div style={{ 
                 display: "flex", 
                 justifyContent: "space-between", 
@@ -64,37 +77,36 @@ export const VideoChart: React.FC<VideoChartProps> = ({ data }) => {
             }}>
                 <h3 style={{ 
                     fontSize: "var(--text-xl)", 
-                    fontWeight: 600, 
+                    fontWeight: 700, 
                     color: "var(--foreground)",
                     margin: 0,
                 }}>
                     Performance & Engajamento
                 </h3>
                 
-                {/* Legend */}
                 <div style={{ display: "flex", gap: "var(--space-6)", fontSize: "var(--text-sm)" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)" }}>
                         <div style={{ 
-                            width: 10, 
-                            height: 10, 
+                            width: 12, 
+                            height: 12, 
                             borderRadius: "var(--radius-sm)", 
                             background: "var(--primary)",
+                            boxShadow: "0 0 10px var(--primary-glow)",
                         }} />
-                        <span style={{ color: "var(--muted-foreground)" }}>Visualizações</span>
+                        <span style={{ color: "var(--foreground-muted)" }}>Views</span>
                     </div>
                     <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)" }}>
                         <div style={{ 
-                            width: 10, 
-                            height: 10, 
+                            width: 12, 
+                            height: 12, 
                             borderRadius: "var(--radius-full)", 
                             background: "var(--success)",
                         }} />
-                        <span style={{ color: "var(--muted-foreground)" }}>Engajamento (%)</span>
+                        <span style={{ color: "var(--foreground-muted)" }}>Engajamento</span>
                     </div>
                 </div>
             </div>
 
-            {/* Chart */}
             <div style={{ width: "100%", height: 320 }}>
                 <ResponsiveContainer width="100%" height="100%">
                     <ComposedChart 
@@ -103,14 +115,14 @@ export const VideoChart: React.FC<VideoChartProps> = ({ data }) => {
                     >
                         <defs>
                             <linearGradient id="colorViews" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="5%" stopColor="var(--primary)" stopOpacity={0.15} />
-                                <stop offset="95%" stopColor="var(--primary)" stopOpacity={0} />
+                                <stop offset="5%" stopColor="#00D4FF" stopOpacity={0.3} />
+                                <stop offset="95%" stopColor="#00D4FF" stopOpacity={0} />
                             </linearGradient>
                         </defs>
 
                         <XAxis
                             dataKey="name"
-                            stroke="var(--muted-foreground)"
+                            stroke="#8B949E"
                             fontSize={12}
                             tickLine={false}
                             axisLine={false}
@@ -118,7 +130,7 @@ export const VideoChart: React.FC<VideoChartProps> = ({ data }) => {
                         />
                         <YAxis
                             yAxisId="left"
-                            stroke="var(--muted-foreground)"
+                            stroke="#8B949E"
                             fontSize={12}
                             tickFormatter={(value) => {
                                 if (value >= 1000000) return `${(value / 1000000).toFixed(1)}M`;
@@ -131,7 +143,7 @@ export const VideoChart: React.FC<VideoChartProps> = ({ data }) => {
                         <YAxis
                             yAxisId="right"
                             orientation="right"
-                            stroke="var(--success)"
+                            stroke="#10B981"
                             fontSize={12}
                             tickFormatter={(value) => `${value}%`}
                             tickLine={false}
@@ -144,10 +156,10 @@ export const VideoChart: React.FC<VideoChartProps> = ({ data }) => {
                                     const data = payload[0].payload;
                                     return (
                                         <div style={{
-                                            background: "var(--card)",
+                                            background: "rgba(22, 27, 34, 0.95)",
                                             backdropFilter: "blur(12px)",
                                             padding: "var(--space-4)",
-                                            borderRadius: "var(--radius-md)",
+                                            borderRadius: "var(--radius-lg)",
                                             boxShadow: "var(--shadow-lg)",
                                             border: "1px solid var(--border)",
                                             fontSize: "var(--text-sm)",
@@ -158,12 +170,12 @@ export const VideoChart: React.FC<VideoChartProps> = ({ data }) => {
                                                 marginBottom: "var(--space-2)", 
                                                 maxWidth: "200px", 
                                                 color: "var(--foreground)",
-                                                lineHeight: "var(--leading-snug)",
+                                                lineHeight: "1.3",
                                             }}>
                                                 {data.title}
                                             </p>
                                             <p style={{ 
-                                                color: "var(--muted-foreground)", 
+                                                color: "var(--foreground-muted)", 
                                                 fontSize: "var(--text-xs)", 
                                                 marginBottom: "var(--space-3)",
                                             }}>
@@ -179,12 +191,12 @@ export const VideoChart: React.FC<VideoChartProps> = ({ data }) => {
                                                     <div style={{ 
                                                         color: "var(--primary)", 
                                                         fontWeight: 700,
-                                                        fontSize: "var(--text-base)",
+                                                        fontSize: "var(--text-lg)",
                                                     }}>
                                                         {new Intl.NumberFormat("pt-BR", { notation: "compact" }).format(data.views)}
                                                     </div>
                                                     <div style={{ 
-                                                        color: "var(--muted-foreground)", 
+                                                        color: "var(--foreground-muted)", 
                                                         fontSize: "var(--text-xs)",
                                                     }}>
                                                         Views
@@ -194,15 +206,15 @@ export const VideoChart: React.FC<VideoChartProps> = ({ data }) => {
                                                     <div style={{ 
                                                         color: "var(--success)", 
                                                         fontWeight: 700,
-                                                        fontSize: "var(--text-base)",
+                                                        fontSize: "var(--text-lg)",
                                                     }}>
                                                         {data.engagement}%
                                                     </div>
                                                     <div style={{ 
-                                                        color: "var(--muted-foreground)", 
+                                                        color: "var(--foreground-muted)", 
                                                         fontSize: "var(--text-xs)",
                                                     }}>
-                                                        Engajamento
+                                                        Engaj.
                                                     </div>
                                                 </div>
                                             </div>
@@ -217,7 +229,7 @@ export const VideoChart: React.FC<VideoChartProps> = ({ data }) => {
                             yAxisId="left"
                             type="monotone"
                             dataKey="views"
-                            stroke="var(--primary)"
+                            stroke="#00D4FF"
                             strokeWidth={2}
                             fillOpacity={1}
                             fill="url(#colorViews)"
@@ -227,10 +239,10 @@ export const VideoChart: React.FC<VideoChartProps> = ({ data }) => {
                             yAxisId="right"
                             type="monotone"
                             dataKey="engagement"
-                            stroke="var(--success)"
+                            stroke="#10B981"
                             strokeWidth={2}
-                            dot={{ r: 4, fill: "var(--success)", strokeWidth: 0 }}
-                            activeDot={{ r: 6, stroke: "var(--card)", strokeWidth: 2 }}
+                            dot={{ r: 4, fill: "#10B981", strokeWidth: 0 }}
+                            activeDot={{ r: 6, stroke: "#0D1117", strokeWidth: 2 }}
                             animationDuration={1200}
                         />
                     </ComposedChart>

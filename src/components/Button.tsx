@@ -1,7 +1,7 @@
 import React from "react";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-    variant?: "primary" | "secondary" | "ghost" | "outline" | "success";
+    variant?: "primary" | "secondary" | "ghost" | "outline" | "glow";
     size?: "sm" | "md" | "lg";
     fullWidth?: boolean;
     loading?: boolean;
@@ -29,30 +29,30 @@ export const Button: React.FC<ButtonProps> = ({
             borderRadius: "var(--radius-md)",
         },
         md: {
-            padding: "0.75rem 1.5rem",
+            padding: "0.875rem 1.75rem",
             fontSize: "var(--text-sm)",
             gap: "0.5rem",
-            borderRadius: "var(--radius-md)",
+            borderRadius: "var(--radius-lg)",
         },
         lg: {
-            padding: "1rem 2rem",
+            padding: "1rem 2.5rem",
             fontSize: "var(--text-base)",
             gap: "0.625rem",
-            borderRadius: "var(--radius-lg)",
+            borderRadius: "var(--radius-xl)",
         },
     };
 
     const variants: Record<string, React.CSSProperties> = {
         primary: {
-            background: "var(--primary)",
-            color: "var(--primary-foreground)",
+            background: "var(--gradient-primary)",
+            color: "white",
             border: "none",
-            boxShadow: "var(--shadow-primary)",
+            boxShadow: "var(--shadow-glow)",
         },
         secondary: {
-            background: "var(--secondary)",
+            background: "var(--background-tertiary)",
             color: "var(--foreground)",
-            border: "none",
+            border: "1px solid var(--border)",
         },
         ghost: {
             background: "transparent",
@@ -64,11 +64,11 @@ export const Button: React.FC<ButtonProps> = ({
             color: "var(--primary)",
             border: "1px solid var(--primary)",
         },
-        success: {
-            background: "var(--success)",
-            color: "white",
+        glow: {
+            background: "var(--primary)",
+            color: "var(--background)",
             border: "none",
-            boxShadow: "0 4px 14px rgba(16, 185, 129, 0.25)",
+            boxShadow: "var(--shadow-glow-lg)",
         },
     };
 
@@ -88,8 +88,10 @@ export const Button: React.FC<ButtonProps> = ({
         outline: "none",
         width: fullWidth ? "100%" : "auto",
         opacity: disabled ? 0.5 : 1,
-        letterSpacing: "0.01em",
+        letterSpacing: "0.02em",
         whiteSpace: "nowrap",
+        position: "relative",
+        overflow: "hidden",
         ...variants[variant],
         ...style,
     };
@@ -97,34 +99,33 @@ export const Button: React.FC<ButtonProps> = ({
     const handleMouseEnter = (e: React.MouseEvent<HTMLButtonElement>) => {
         if (disabled || loading) return;
         
-        e.currentTarget.style.transform = "translateY(-1px)";
+        e.currentTarget.style.transform = "translateY(-2px) scale(1.02)";
         
-        if (variant === "primary") {
-            e.currentTarget.style.background = "var(--primary-hover)";
-            e.currentTarget.style.boxShadow = "var(--shadow-primary-lg)";
-        } else if (variant === "ghost") {
-            e.currentTarget.style.background = "var(--secondary)";
-            e.currentTarget.style.borderColor = "transparent";
+        if (variant === "primary" || variant === "glow") {
+            e.currentTarget.style.boxShadow = "var(--shadow-glow-lg)";
+        } else if (variant === "ghost" || variant === "secondary") {
+            e.currentTarget.style.background = "var(--background-elevated)";
+            e.currentTarget.style.borderColor = "var(--primary)";
         } else if (variant === "outline") {
             e.currentTarget.style.background = "var(--primary-light)";
-        } else if (variant === "secondary") {
-            e.currentTarget.style.background = "var(--border)";
         }
     };
 
     const handleMouseLeave = (e: React.MouseEvent<HTMLButtonElement>) => {
-        e.currentTarget.style.transform = "translateY(0)";
+        e.currentTarget.style.transform = "translateY(0) scale(1)";
         
         if (variant === "primary") {
-            e.currentTarget.style.background = "var(--primary)";
-            e.currentTarget.style.boxShadow = "var(--shadow-primary)";
+            e.currentTarget.style.boxShadow = "var(--shadow-glow)";
+        } else if (variant === "glow") {
+            e.currentTarget.style.boxShadow = "var(--shadow-glow-lg)";
         } else if (variant === "ghost") {
             e.currentTarget.style.background = "transparent";
             e.currentTarget.style.borderColor = "var(--border)";
+        } else if (variant === "secondary") {
+            e.currentTarget.style.background = "var(--background-tertiary)";
+            e.currentTarget.style.borderColor = "var(--border)";
         } else if (variant === "outline") {
             e.currentTarget.style.background = "transparent";
-        } else if (variant === "secondary") {
-            e.currentTarget.style.background = "var(--secondary)";
         }
     };
 
@@ -139,8 +140,8 @@ export const Button: React.FC<ButtonProps> = ({
             {loading ? (
                 <>
                     <svg
-                        width="16"
-                        height="16"
+                        width="18"
+                        height="18"
                         viewBox="0 0 24 24"
                         fill="none"
                         style={{ animation: "spin 1s linear infinite" }}

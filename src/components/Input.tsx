@@ -12,74 +12,57 @@ export const Input: React.FC<InputProps> = ({
     error, 
     hint,
     icon,
-    className, 
     ...props 
 }) => {
     const [isFocused, setIsFocused] = useState(false);
 
-    const containerStyles: React.CSSProperties = {
-        display: "flex",
-        flexDirection: "column",
-        gap: "var(--space-2)",
-        width: "100%",
-    };
-
-    const labelStyles: React.CSSProperties = {
-        fontSize: "var(--text-sm)",
-        fontWeight: 500,
-        color: "var(--foreground)",
-        letterSpacing: "0.01em",
-    };
-
-    const inputWrapperStyles: React.CSSProperties = {
-        position: "relative",
-        display: "flex",
-        alignItems: "center",
-    };
-
-    const inputStyles: React.CSSProperties = {
-        width: "100%",
-        padding: icon ? "0.875rem 1rem 0.875rem 2.75rem" : "0.875rem 1rem",
-        fontSize: "var(--text-base)",
-        fontFamily: "inherit",
-        color: "var(--foreground)",
-        backgroundColor: "var(--background)",
-        border: `1px solid ${error ? "var(--error)" : isFocused ? "var(--primary)" : "var(--border)"}`,
-        borderRadius: "var(--radius-md)",
-        outline: "none",
-        transition: "all var(--transition-base)",
-        boxShadow: isFocused ? "0 0 0 3px rgba(67, 97, 238, 0.1)" : "none",
-    };
-
-    const iconStyles: React.CSSProperties = {
-        position: "absolute",
-        left: "1rem",
-        color: isFocused ? "var(--primary)" : "var(--muted-foreground)",
-        transition: "color var(--transition-base)",
-        pointerEvents: "none",
-        display: "flex",
-        alignItems: "center",
-    };
-
-    const hintStyles: React.CSSProperties = {
-        fontSize: "var(--text-xs)",
-        color: "var(--muted-foreground)",
-    };
-
-    const errorStyles: React.CSSProperties = {
-        fontSize: "var(--text-xs)",
-        color: "var(--error)",
-        fontWeight: 500,
-    };
-
     return (
-        <div style={containerStyles}>
-            {label && <label style={labelStyles}>{label}</label>}
+        <div style={{ 
+            display: "flex", 
+            flexDirection: "column", 
+            gap: "var(--space-2)", 
+            width: "100%",
+        }}>
+            {label && (
+                <label style={{
+                    fontSize: "var(--text-sm)",
+                    fontWeight: 600,
+                    color: "var(--foreground-secondary)",
+                }}>
+                    {label}
+                </label>
+            )}
             
-            <div style={inputWrapperStyles}>
-                {icon && <span style={iconStyles}>{icon}</span>}
+            <div style={{ position: "relative" }}>
+                {icon && (
+                    <span style={{
+                        position: "absolute",
+                        left: "var(--space-4)",
+                        top: "50%",
+                        transform: "translateY(-50%)",
+                        color: isFocused ? "var(--primary)" : "var(--foreground-muted)",
+                        transition: "color var(--transition-base)",
+                        display: "flex",
+                        alignItems: "center",
+                        pointerEvents: "none",
+                    }}>
+                        {icon}
+                    </span>
+                )}
                 <input
-                    style={inputStyles}
+                    style={{
+                        width: "100%",
+                        padding: icon ? "0.875rem 1rem 0.875rem 3rem" : "0.875rem 1rem",
+                        fontSize: "var(--text-base)",
+                        fontFamily: "inherit",
+                        color: "var(--foreground)",
+                        backgroundColor: "var(--background-secondary)",
+                        border: `1px solid ${error ? "var(--error)" : isFocused ? "var(--primary)" : "var(--border)"}`,
+                        borderRadius: "var(--radius-lg)",
+                        outline: "none",
+                        transition: "all var(--transition-base)",
+                        boxShadow: isFocused ? "0 0 0 3px var(--primary-light), var(--shadow-glow)" : "none",
+                    }}
                     onFocus={(e) => {
                         setIsFocused(true);
                         props.onFocus?.(e);
@@ -92,8 +75,23 @@ export const Input: React.FC<InputProps> = ({
                 />
             </div>
 
-            {hint && !error && <span style={hintStyles}>{hint}</span>}
-            {error && <span style={errorStyles}>{error}</span>}
+            {hint && !error && (
+                <span style={{ 
+                    fontSize: "var(--text-xs)", 
+                    color: "var(--foreground-muted)",
+                }}>
+                    {hint}
+                </span>
+            )}
+            {error && (
+                <span style={{ 
+                    fontSize: "var(--text-xs)", 
+                    color: "var(--error)",
+                    fontWeight: 500,
+                }}>
+                    {error}
+                </span>
+            )}
         </div>
     );
 };

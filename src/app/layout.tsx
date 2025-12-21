@@ -1,22 +1,26 @@
 import type { Metadata } from "next";
-import { Outfit, Inter } from "next/font/google";
+import { Space_Grotesk, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 
-const outfit = Outfit({
+// Fonte para títulos - Bold e Impactante
+const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
-  variable: "--font-outfit",
+  variable: "--font-heading",
   display: "swap",
+  weight: ["500", "600", "700"],
 });
 
-const inter = Inter({
+// Fonte para corpo - Clean e Moderna
+const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-body",
   display: "swap",
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
-  title: "PubliScore | Professional Media Kits",
-  description: "Automate your Media Kit with real-time metrics.",
+  title: "PubliScore | Media Kits Profissionais",
+  description: "Gere Media Kits automatizados com métricas do YouTube e narrativas por IA.",
 };
 
 export default function RootLayout({
@@ -26,7 +30,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR" suppressHydrationWarning>
-      <body className={`${outfit.variable} ${inter.variable}`}>
+      <body className={`${spaceGrotesk.variable} ${jakarta.variable}`} style={{
+        fontFamily: "var(--font-body), system-ui, sans-serif",
+      }}>
         {children}
       </body>
     </html>

@@ -5,18 +5,13 @@ import { useRouter } from "next/navigation";
 import { Input } from "@/components/Input";
 import { Button } from "@/components/Button";
 import { createProfile } from "@/lib/actions";
-import { User, Mail, Youtube, Link } from "lucide-react";
+import { User, Mail, Youtube, Link, Sparkles, Zap, BarChart3 } from "lucide-react";
 
 export default function Home() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [formData, setFormData] = useState<{
-    name: string;
-    email: string;
-    slug: string;
-    youtubeChannelId?: string;
-  }>({
+  const [formData, setFormData] = useState({
     name: "",
     email: "",
     slug: "",
@@ -36,7 +31,6 @@ export default function Home() {
 
     try {
       const result = await createProfile(formData);
-
       if (result.success) {
         router.push(`/${result.slug}`);
       } else {
@@ -58,37 +52,42 @@ export default function Home() {
         alignItems: "center",
         justifyContent: "center",
         padding: "var(--space-6)",
-        background: "var(--gradient-surface)",
+        background: "var(--background)",
         position: "relative",
         overflow: "hidden",
       }}
     >
-      {/* Background Decoration */}
+      {/* Background Effects */}
       <div
         style={{
           position: "absolute",
-          top: "-20%",
-          right: "-10%",
-          width: "600px",
-          height: "600px",
-          background: "var(--gradient-primary-soft)",
-          borderRadius: "50%",
-          filter: "blur(80px)",
-          opacity: 0.5,
+          top: "-30%",
+          left: "-20%",
+          width: "800px",
+          height: "800px",
+          background: "radial-gradient(circle, rgba(0, 212, 255, 0.15) 0%, transparent 60%)",
+          filter: "blur(60px)",
           pointerEvents: "none",
         }}
       />
       <div
         style={{
           position: "absolute",
-          bottom: "-20%",
-          left: "-10%",
-          width: "500px",
-          height: "500px",
-          background: "rgba(76, 201, 240, 0.1)",
-          borderRadius: "50%",
+          bottom: "-30%",
+          right: "-20%",
+          width: "700px",
+          height: "700px",
+          background: "radial-gradient(circle, rgba(124, 58, 237, 0.12) 0%, transparent 60%)",
           filter: "blur(60px)",
-          opacity: 0.5,
+          pointerEvents: "none",
+        }}
+      />
+      <div
+        className="bg-grid"
+        style={{
+          position: "absolute",
+          inset: 0,
+          opacity: 0.4,
           pointerEvents: "none",
         }}
       />
@@ -96,24 +95,50 @@ export default function Home() {
       <main
         style={{
           width: "100%",
-          maxWidth: "440px",
+          maxWidth: "500px",
           display: "flex",
           flexDirection: "column",
-          gap: "var(--space-8)",
+          gap: "var(--space-10)",
           position: "relative",
           zIndex: 1,
-          animation: "fadeInUp 0.5s ease forwards",
         }}
       >
         {/* Hero Section */}
-        <div style={{ textAlign: "center", marginBottom: "var(--space-2)" }}>
+        <div 
+          style={{ 
+            textAlign: "center",
+            animation: "fadeInUp 0.6s ease forwards",
+          }}
+        >
+          <div
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "var(--space-2)",
+              padding: "var(--space-2) var(--space-4)",
+              background: "var(--primary-light)",
+              borderRadius: "var(--radius-full)",
+              marginBottom: "var(--space-6)",
+              border: "1px solid rgba(0, 212, 255, 0.2)",
+            }}
+          >
+            <Sparkles size={14} style={{ color: "var(--primary)" }} />
+            <span style={{ 
+              fontSize: "var(--text-sm)", 
+              color: "var(--primary)",
+              fontWeight: 600,
+            }}>
+              Powered by AI
+            </span>
+          </div>
+
           <h1
             className="text-gradient"
             style={{
-              fontSize: "clamp(var(--text-4xl), 8vw, var(--text-5xl))",
-              fontWeight: 700,
-              marginBottom: "var(--space-3)",
-              letterSpacing: "var(--tracking-tight)",
+              fontSize: "clamp(3rem, 10vw, 4.5rem)",
+              fontWeight: 800,
+              marginBottom: "var(--space-4)",
+              letterSpacing: "-0.03em",
               lineHeight: 1,
             }}
           >
@@ -121,25 +146,67 @@ export default function Home() {
           </h1>
           <p 
             style={{ 
-              color: "var(--muted-foreground)", 
-              fontSize: "var(--text-lg)", 
+              color: "var(--foreground-muted)", 
+              fontSize: "var(--text-xl)", 
               fontWeight: 500,
+              maxWidth: "400px",
+              margin: "0 auto",
               lineHeight: "var(--leading-relaxed)",
             }}
           >
-            Media Kits Profissionais para Criadores
+            Media Kits <span style={{ color: "var(--primary)" }}>Profissionais</span> para Criadores de Conteúdo
           </p>
+        </div>
+
+        {/* Features Pills */}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            gap: "var(--space-3)",
+            flexWrap: "wrap",
+            animation: "fadeInUp 0.6s ease forwards",
+            animationDelay: "0.1s",
+            opacity: 0,
+          }}
+        >
+          {[
+            { icon: <Youtube size={14} />, text: "Sync YouTube" },
+            { icon: <Zap size={14} />, text: "IA Narrativa" },
+            { icon: <BarChart3 size={14} />, text: "Métricas Live" },
+          ].map((item, i) => (
+            <div
+              key={i}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "var(--space-2)",
+                padding: "var(--space-2) var(--space-4)",
+                background: "var(--background-secondary)",
+                borderRadius: "var(--radius-full)",
+                border: "1px solid var(--border)",
+                fontSize: "var(--text-sm)",
+                color: "var(--foreground-secondary)",
+              }}
+            >
+              {item.icon}
+              {item.text}
+            </div>
+          ))}
         </div>
 
         {/* Form Card */}
         <div
           className="glass-panel"
           style={{
-            padding: "var(--space-8)",
-            borderRadius: "var(--radius-xl)",
+            padding: "var(--space-10)",
+            borderRadius: "var(--radius-2xl)",
             display: "flex",
             flexDirection: "column",
-            gap: "var(--space-6)",
+            gap: "var(--space-8)",
+            animation: "fadeInUp 0.6s ease forwards",
+            animationDelay: "0.2s",
+            opacity: 0,
           }}
         >
           <div style={{ textAlign: "center" }}>
@@ -148,19 +215,18 @@ export default function Home() {
                 fontSize: "var(--text-2xl)", 
                 marginBottom: "var(--space-2)", 
                 color: "var(--foreground)",
-                fontWeight: 600,
+                fontWeight: 700,
               }}
             >
-              Começar Agora
+              Criar Meu Media Kit
             </h2>
             <p 
               style={{ 
-                color: "var(--muted-foreground)", 
+                color: "var(--foreground-muted)", 
                 fontSize: "var(--text-sm)",
-                lineHeight: "var(--leading-relaxed)",
               }}
             >
-              Crie sua URL única e comece a rastrear suas métricas.
+              Comece grátis em menos de 1 minuto
             </p>
           </div>
 
@@ -170,7 +236,7 @@ export default function Home() {
           >
             <Input
               label="Nome Completo"
-              placeholder="ex: Jane Doe"
+              placeholder="Como você quer ser chamado"
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               required
@@ -178,52 +244,54 @@ export default function Home() {
             />
 
             <Input
-              label="Endereço de E-mail"
+              label="E-mail"
               type="email"
-              placeholder="jane@exemplo.com"
+              placeholder="seu@email.com"
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               icon={<Mail size={18} />}
             />
 
             <Input
-              label="ID do Canal do YouTube (Opcional)"
-              placeholder="ex: UC... ou @handle"
-              value={formData.youtubeChannelId || ""}
+              label="Canal do YouTube (opcional)"
+              placeholder="@seucanal ou UC..."
+              value={formData.youtubeChannelId}
               onChange={(e) => setFormData({ ...formData, youtubeChannelId: e.target.value })}
               icon={<Youtube size={18} />}
-              hint="Conecte seu canal para sincronizar métricas automaticamente"
             />
 
             <div>
               <Input
-                label="Sua URL Única (Slug)"
-                placeholder="janedoe"
+                label="Sua URL Única"
+                placeholder="seuNome"
                 value={formData.slug}
                 onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
                 required
                 icon={<Link size={18} />}
               />
-              <p
+              <div
                 style={{
-                  fontSize: "var(--text-xs)",
-                  color: "var(--muted-foreground)",
                   marginTop: "var(--space-2)",
-                  fontWeight: 500,
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "var(--space-1)",
+                  padding: "var(--space-2) var(--space-3)",
+                  background: "var(--background-tertiary)",
+                  borderRadius: "var(--radius-md)",
+                  display: "inline-block",
                 }}
               >
                 <span style={{ 
-                  background: "var(--primary-light)", 
-                  padding: "var(--space-1) var(--space-2)",
-                  borderRadius: "var(--radius-sm)",
-                  color: "var(--primary)",
+                  fontSize: "var(--text-sm)", 
+                  color: "var(--foreground-muted)",
                 }}>
-                  publiscore.com/{formData.slug || "seu-nome"}
+                  publiscore.com/
                 </span>
-              </p>
+                <span style={{ 
+                  fontSize: "var(--text-sm)", 
+                  color: "var(--primary)",
+                  fontWeight: 600,
+                }}>
+                  {formData.slug || "seu-nome"}
+                </span>
+              </div>
             </div>
 
             {error && (
@@ -232,10 +300,10 @@ export default function Home() {
                   color: "var(--error)", 
                   fontSize: "var(--text-sm)", 
                   textAlign: "center",
-                  background: "rgba(239, 68, 68, 0.1)",
+                  background: "var(--error-light)",
                   padding: "var(--space-3)",
                   borderRadius: "var(--radius-md)",
-                  fontWeight: 500,
+                  border: "1px solid rgba(239, 68, 68, 0.3)",
                 }}
               >
                 {error}
@@ -246,10 +314,11 @@ export default function Home() {
               type="submit" 
               fullWidth 
               size="lg"
+              variant="glow"
               loading={isLoading}
               style={{ marginTop: "var(--space-2)" }}
             >
-              {isLoading ? "Criando..." : "Criar Media Kit"}
+              {isLoading ? "Criando..." : "Criar Media Kit Grátis"}
             </Button>
           </form>
         </div>
@@ -258,11 +327,12 @@ export default function Home() {
         <p
           style={{
             textAlign: "center",
-            fontSize: "var(--text-xs)",
-            color: "var(--muted-foreground)",
+            fontSize: "var(--text-sm)",
+            color: "var(--foreground-muted)",
+            opacity: 0.6,
           }}
         >
-          © {new Date().getFullYear()} PubliScore. Todos os direitos reservados.
+          © {new Date().getFullYear()} PubliScore • Feito para Criadores
         </p>
       </main>
     </div>

@@ -34,22 +34,12 @@ export const MetricCard: React.FC<MetricCardProps> = ({
 }) => {
     const iconKey = icon?.toLowerCase() || "chart";
     const Icon = iconMap[iconKey] || BarChart3;
-
     const TrendIcon = trendDirection === "up" ? TrendingUp : trendDirection === "down" ? TrendingDown : Minus;
 
     const trendColors = {
-        up: {
-            color: "var(--success)",
-            bg: "var(--success-light)",
-        },
-        down: {
-            color: "var(--error)",
-            bg: "rgba(239, 68, 68, 0.1)",
-        },
-        neutral: {
-            color: "var(--muted-foreground)",
-            bg: "var(--secondary)",
-        },
+        up: { color: "var(--success)", bg: "var(--success-light)" },
+        down: { color: "var(--error)", bg: "var(--error-light)" },
+        neutral: { color: "var(--foreground-muted)", bg: "var(--background-tertiary)" },
     };
 
     return (
@@ -57,69 +47,72 @@ export const MetricCard: React.FC<MetricCardProps> = ({
             className="glass-panel"
             style={{
                 padding: "var(--space-6)",
-                borderRadius: "var(--radius-lg)",
+                borderRadius: "var(--radius-xl)",
                 display: "flex",
                 flexDirection: "column",
                 gap: "var(--space-4)",
                 position: "relative",
                 overflow: "hidden",
-                animation: `fadeInUp 0.4s ease forwards`,
+                animation: `fadeInUp 0.5s ease forwards`,
                 animationDelay: `${delay}ms`,
                 opacity: 0,
             }}
         >
-            {/* Header Row */}
+            {/* Glow effect on hover */}
             <div
                 style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "flex-start",
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    height: "2px",
+                    background: "var(--gradient-primary)",
+                    opacity: 0.8,
                 }}
-            >
+            />
+
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
                 <div style={{ flex: 1 }}>
-                    {/* Label */}
                     <div style={{
-                        color: "var(--muted-foreground)",
+                        color: "var(--foreground-muted)",
                         fontSize: "var(--text-sm)",
                         fontWeight: 500,
                         marginBottom: "var(--space-2)",
                         textTransform: "uppercase",
-                        letterSpacing: "0.04em",
+                        letterSpacing: "0.05em",
                     }}>
                         {label}
                     </div>
                     
-                    {/* Value */}
-                    <div style={{
-                        fontSize: "var(--text-4xl)",
-                        fontWeight: 700,
-                        letterSpacing: "var(--tracking-tight)",
-                        color: "var(--foreground)",
-                        lineHeight: 1,
-                        fontFamily: "var(--font-heading)",
-                    }}>
+                    <div 
+                        className="text-gradient"
+                        style={{
+                            fontSize: "var(--text-4xl)",
+                            fontWeight: 800,
+                            letterSpacing: "-0.02em",
+                            lineHeight: 1,
+                        }}
+                    >
                         {value}
                     </div>
                 </div>
 
-                {/* Icon */}
                 <div
                     style={{
                         padding: "var(--space-3)",
-                        borderRadius: "var(--radius-md)",
+                        borderRadius: "var(--radius-lg)",
                         background: "var(--primary-light)",
                         color: "var(--primary)",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        flexShrink: 0,
+                        boxShadow: "var(--shadow-glow)",
                     }}
                 >
                     <Icon size={24} strokeWidth={2} />
                 </div>
             </div>
 
-            {/* Trend Badge */}
             <div style={{ display: "flex", alignItems: "center" }}>
                 <div
                     style={{
@@ -138,20 +131,6 @@ export const MetricCard: React.FC<MetricCardProps> = ({
                     <span>{trend}</span>
                 </div>
             </div>
-
-            {/* Decorative gradient line */}
-            <div
-                style={{
-                    position: "absolute",
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    height: "3px",
-                    background: "var(--gradient-accent)",
-                    opacity: 0.6,
-                    borderRadius: "0 0 var(--radius-lg) var(--radius-lg)",
-                }}
-            />
         </div>
     );
 };
