@@ -1,9 +1,21 @@
 "use client";
 
-import React from "react";
-import { MessageCircle, Download } from "lucide-react";
+import React, { useState } from "react";
+import { MessageCircle, Download, Loader2 } from "lucide-react";
+import { generatePdf } from "@/lib/generatePdf";
 
 export const CallToAction: React.FC = () => {
+    const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
+
+    const handleDownloadPdf = async () => {
+        setIsGeneratingPdf(true);
+        try {
+            await generatePdf("media-kit-content", "media-kit.pdf");
+        } finally {
+            setIsGeneratingPdf(false);
+        }
+    };
+
     return (
         <div 
             style={{
@@ -56,6 +68,7 @@ export const CallToAction: React.FC = () => {
             </button>
 
             <button 
+                disabled={isGeneratingPdf}
                 style={{
                     background: "var(--background-tertiary)",
                     color: "var(--foreground)",
@@ -67,15 +80,18 @@ export const CallToAction: React.FC = () => {
                     display: "flex",
                     alignItems: "center",
                     gap: "var(--space-2)",
-                    cursor: "pointer",
+                    cursor: isGeneratingPdf ? "wait" : "pointer",
                     whiteSpace: "nowrap",
                     transition: "all var(--transition-base)",
+                    opacity: isGeneratingPdf ? 0.7 : 1,
                 }}
-                onClick={() => window.print()}
+                onClick={handleDownloadPdf}
                 onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = "translateY(-2px)";
-                    e.currentTarget.style.borderColor = "var(--primary)";
-                    e.currentTarget.style.boxShadow = "var(--shadow-glow)";
+                    if (!isGeneratingPdf) {
+                        e.currentTarget.style.transform = "translateY(-2px)";
+                        e.currentTarget.style.borderColor = "var(--primary)";
+                        e.currentTarget.style.boxShadow = "var(--shadow-glow)";
+                    }
                 }}
                 onMouseLeave={(e) => {
                     e.currentTarget.style.transform = "translateY(0)";
@@ -83,8 +99,17 @@ export const CallToAction: React.FC = () => {
                     e.currentTarget.style.boxShadow = "none";
                 }}
             >
-                <Download size={18} />
-                PDF
+                {isGeneratingPdf ? (
+                    <>
+                        <Loader2 size={18} style={{ animation: "spin 1s linear infinite" }} />
+                        Gerando...
+                    </>
+                ) : (
+                    <>
+                        <Download size={18} />
+                        PDF
+                    </>
+                )}
             </button>
         </div>
     );

@@ -96,14 +96,16 @@ export default async function MediaKitPage({ params }: { params: Promise<{ slug:
     }
 
     return (
-        <main style={{ 
-            minHeight: "100vh", 
-            padding: "var(--space-12) var(--space-4)", 
-            background: "var(--background)", 
-            paddingBottom: "var(--space-24)",
-            position: "relative",
-            overflow: "hidden",
-        }}>
+        <main 
+            id="media-kit-content"
+            style={{ 
+                minHeight: "100vh", 
+                padding: "var(--space-12) var(--space-4)", 
+                background: "var(--background)", 
+                paddingBottom: "var(--space-24)",
+                position: "relative",
+                overflow: "hidden",
+            }}>
             {/* Background Effects */}
             <div style={{
                 position: "fixed",

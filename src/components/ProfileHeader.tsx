@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { MapPin, Youtube, Instagram, FileDown, RefreshCw, Pencil, Check, X, ChevronDown, ChevronUp } from "lucide-react";
+import { MapPin, Youtube, Instagram, FileDown, RefreshCw, Pencil, Check, X, ChevronDown, ChevronUp, Loader2 } from "lucide-react";
 import { updateYouTubeMetrics, updateProfileAvatar } from "@/lib/actions";
+import { generatePdf } from "@/lib/generatePdf";
 
 interface ProfileHeaderProps {
     slug: string;
@@ -29,6 +30,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
     const [avatarInput, setAvatarInput] = useState("");
     const [isSavingAvatar, setIsSavingAvatar] = useState(false);
     const [isBioExpanded, setIsBioExpanded] = useState(false);
+    const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
     const avatarContainerRef = useRef<HTMLDivElement>(null);
     
     // Limite de caracteres para truncar a bio
@@ -48,7 +50,14 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, [isEditingAvatar]);
 
-    const handlePrint = () => window.print();
+    const handleDownloadPdf = async () => {
+        setIsGeneratingPdf(true);
+        try {
+            await generatePdf("media-kit-content", `${name.replace(/\s+/g, "-").toLowerCase()}-media-kit.pdf`);
+        } finally {
+            setIsGeneratingPdf(false);
+        }
+    };
 
     const handleSync = async () => {
         const youtubeSocial = socials.find(s => s.platform === "YouTube");
@@ -343,7 +352,8 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                 ))}
 
                 <button
-                    onClick={handlePrint}
+                    onClick={handleDownloadPdf}
+                    disabled={isGeneratingPdf}
                     className="glass-panel no-print"
                     style={{
                         padding: "var(--space-3) var(--space-5)",
@@ -353,12 +363,21 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                         gap: "var(--space-2)",
                         fontSize: "var(--text-sm)",
                         fontWeight: 600,
-                        cursor: "pointer",
+                        cursor: isGeneratingPdf ? "wait" : "pointer",
                         color: "var(--foreground)",
                         border: "none",
+                        opacity: isGeneratingPdf ? 0.7 : 1,
                     }}
                 >
-                    <FileDown size={18} /> Salvar PDF
+                    {isGeneratingPdf ? (
+                        <>
+                            <Loader2 size={18} style={{ animation: "spin 1s linear infinite" }} /> Gerando...
+                        </>
+                    ) : (
+                        <>
+                            <FileDown size={18} /> Salvar PDF
+                        </>
+                    )}
                 </button>
 
                 <button
