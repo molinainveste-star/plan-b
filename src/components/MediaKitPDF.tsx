@@ -9,6 +9,7 @@ import {
   StyleSheet,
   Image,
   pdf,
+  Font,
 } from "@react-pdf/renderer";
 
 // Cores do design system
@@ -22,162 +23,191 @@ const colors = {
   primary: "#00D4FF",
   accent: "#7C3AED",
   success: "#10B981",
-  border: "rgba(240, 246, 252, 0.1)",
+  border: "#30363D",
 };
 
 // Estilos do PDF
 const styles = StyleSheet.create({
   page: {
     backgroundColor: colors.background,
-    padding: 40,
+    paddingTop: 50,
+    paddingBottom: 60,
+    paddingHorizontal: 50,
     fontFamily: "Helvetica",
   },
   // Header
   header: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 30,
+    marginBottom: 25,
     paddingBottom: 20,
-    borderBottom: `1px solid ${colors.backgroundTertiary}`,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.backgroundTertiary,
+  },
+  avatarContainer: {
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    marginRight: 16,
+    backgroundColor: colors.primary,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 3,
   },
   avatar: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    marginRight: 20,
-    border: `3px solid ${colors.primary}`,
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+  },
+  avatarPlaceholder: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    backgroundColor: colors.backgroundSecondary,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  avatarInitial: {
+    fontSize: 28,
+    fontWeight: "bold",
+    color: colors.foreground,
   },
   headerInfo: {
     flex: 1,
   },
   name: {
-    fontSize: 28,
+    fontSize: 24,
     fontWeight: "bold",
     color: colors.foreground,
     marginBottom: 4,
   },
   tagline: {
-    fontSize: 11,
+    fontSize: 10,
     color: colors.foregroundMuted,
-    marginBottom: 8,
+    marginBottom: 6,
+  },
+  badgeRow: {
+    flexDirection: "row",
+    gap: 6,
   },
   badge: {
     backgroundColor: colors.backgroundTertiary,
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 12,
-    alignSelf: "flex-start",
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 10,
   },
   badgeText: {
-    fontSize: 9,
+    fontSize: 8,
     color: colors.primary,
     fontWeight: "bold",
   },
   // Section
   section: {
-    marginBottom: 24,
+    marginBottom: 20,
   },
   sectionTitle: {
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: "bold",
     color: colors.foreground,
-    marginBottom: 12,
+    marginBottom: 10,
     textTransform: "uppercase",
-    letterSpacing: 1,
+    letterSpacing: 0.5,
   },
   sectionTitleAccent: {
     color: colors.primary,
   },
   // Bio
   bio: {
-    fontSize: 11,
+    fontSize: 10,
     color: colors.foregroundSecondary,
-    lineHeight: 1.6,
-    marginBottom: 20,
+    lineHeight: 1.5,
+    marginBottom: 16,
   },
   // Metrics Grid
   metricsGrid: {
     flexDirection: "row",
     flexWrap: "wrap",
-    gap: 12,
+    gap: 8,
+    marginBottom: 8,
   },
   metricCard: {
     backgroundColor: colors.backgroundSecondary,
-    padding: 16,
-    borderRadius: 8,
+    padding: 12,
+    borderRadius: 6,
     width: "31%",
-    border: `1px solid ${colors.backgroundTertiary}`,
+    borderWidth: 1,
+    borderColor: colors.border,
   },
   metricLabel: {
-    fontSize: 9,
+    fontSize: 7,
     color: colors.foregroundMuted,
-    marginBottom: 4,
+    marginBottom: 3,
     textTransform: "uppercase",
   },
   metricValue: {
-    fontSize: 22,
+    fontSize: 18,
     fontWeight: "bold",
     color: colors.foreground,
     marginBottom: 2,
   },
   metricTrend: {
-    fontSize: 9,
+    fontSize: 7,
     color: colors.success,
   },
   // Demographics
   demographicsGrid: {
     flexDirection: "row",
-    gap: 20,
+    gap: 16,
   },
   demographicsColumn: {
     flex: 1,
   },
   progressBar: {
-    height: 6,
+    height: 5,
     backgroundColor: colors.backgroundTertiary,
     borderRadius: 3,
-    marginTop: 4,
-    marginBottom: 8,
+    marginTop: 3,
+    marginBottom: 6,
   },
   progressFill: {
-    height: "100%",
+    height: 5,
     backgroundColor: colors.primary,
     borderRadius: 3,
   },
   progressLabel: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 2,
+    marginBottom: 1,
   },
   progressText: {
-    fontSize: 9,
+    fontSize: 8,
     color: colors.foregroundSecondary,
   },
   progressValue: {
-    fontSize: 9,
+    fontSize: 8,
     color: colors.primary,
     fontWeight: "bold",
   },
   // Gender boxes
   genderRow: {
     flexDirection: "row",
-    gap: 10,
-    marginBottom: 16,
+    gap: 8,
+    marginBottom: 12,
   },
   genderBox: {
     flex: 1,
     backgroundColor: colors.backgroundTertiary,
-    padding: 12,
-    borderRadius: 8,
+    padding: 10,
+    borderRadius: 6,
     alignItems: "center",
   },
   genderValue: {
-    fontSize: 20,
+    fontSize: 16,
     fontWeight: "bold",
     color: colors.foreground,
   },
   genderLabel: {
-    fontSize: 8,
+    fontSize: 7,
     color: colors.foregroundMuted,
     textTransform: "uppercase",
     marginTop: 2,
@@ -186,83 +216,100 @@ const styles = StyleSheet.create({
   locationTags: {
     flexDirection: "row",
     flexWrap: "wrap",
-    gap: 6,
+    gap: 4,
   },
   locationTag: {
     backgroundColor: colors.backgroundTertiary,
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 12,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 10,
   },
   locationText: {
-    fontSize: 9,
+    fontSize: 8,
     color: colors.foregroundSecondary,
   },
   // Story
   storyBox: {
     backgroundColor: colors.backgroundSecondary,
-    padding: 20,
-    borderRadius: 12,
-    borderLeft: `3px solid ${colors.accent}`,
+    padding: 16,
+    borderRadius: 8,
+    borderLeftWidth: 3,
+    borderLeftColor: colors.accent,
   },
   storyText: {
-    fontSize: 11,
+    fontSize: 9,
     color: colors.foregroundSecondary,
-    lineHeight: 1.7,
-    fontStyle: "italic",
+    lineHeight: 1.6,
   },
   // Footer
   footer: {
     position: "absolute",
-    bottom: 30,
-    left: 40,
-    right: 40,
+    bottom: 25,
+    left: 50,
+    right: 50,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingTop: 15,
-    borderTop: `1px solid ${colors.backgroundTertiary}`,
+    paddingTop: 12,
+    borderTopWidth: 1,
+    borderTopColor: colors.backgroundTertiary,
   },
   footerText: {
-    fontSize: 8,
+    fontSize: 7,
     color: colors.foregroundMuted,
   },
   footerBrand: {
-    fontSize: 10,
+    fontSize: 9,
     color: colors.primary,
     fontWeight: "bold",
   },
   // Pricing
   pricingGrid: {
     flexDirection: "row",
-    gap: 12,
+    gap: 8,
   },
   pricingCard: {
     flex: 1,
     backgroundColor: colors.backgroundSecondary,
-    padding: 16,
-    borderRadius: 8,
-    border: `1px solid ${colors.backgroundTertiary}`,
+    padding: 12,
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: colors.border,
   },
   pricingCardPopular: {
     borderColor: colors.primary,
+    borderWidth: 2,
   },
   pricingName: {
-    fontSize: 12,
+    fontSize: 10,
     fontWeight: "bold",
     color: colors.foreground,
-    marginBottom: 4,
+    marginBottom: 3,
   },
   pricingPrice: {
-    fontSize: 18,
+    fontSize: 14,
     fontWeight: "bold",
     color: colors.primary,
-    marginBottom: 8,
+    marginBottom: 6,
   },
   pricingFeature: {
-    fontSize: 9,
+    fontSize: 7,
     color: colors.foregroundMuted,
-    marginBottom: 3,
+    marginBottom: 2,
+  },
+  // Page number
+  pageNumber: {
+    position: "absolute",
+    bottom: 25,
+    right: 50,
+    fontSize: 8,
+    color: colors.foregroundMuted,
+  },
+  // Divider
+  divider: {
+    height: 1,
+    backgroundColor: colors.backgroundTertiary,
+    marginVertical: 16,
   },
 });
 
@@ -294,26 +341,35 @@ interface MediaKitData {
 }
 
 // Componente do documento PDF
-const MediaKitDocument: React.FC<{ data: MediaKitData }> = ({ data }) => (
+const MediaKitDocument: React.FC<{ data: MediaKitData; avatarBase64?: string }> = ({ data, avatarBase64 }) => (
   <Document>
+    {/* Página 1 - Header, Métricas */}
     <Page size="A4" style={styles.page}>
       {/* Header */}
       <View style={styles.header}>
-        {data.avatarUrl && (
-          <Image src={data.avatarUrl} style={styles.avatar} />
-        )}
+        <View style={styles.avatarContainer}>
+          {avatarBase64 ? (
+            <Image src={avatarBase64} style={styles.avatar} />
+          ) : (
+            <View style={styles.avatarPlaceholder}>
+              <Text style={styles.avatarInitial}>{data.name.charAt(0).toUpperCase()}</Text>
+            </View>
+          )}
+        </View>
         <View style={styles.headerInfo}>
           <Text style={styles.name}>{data.name}</Text>
           <Text style={styles.tagline}>
             📍 {data.location} • {data.niche}
           </Text>
-          {data.socials?.map((social, i) => (
-            <View key={i} style={styles.badge}>
-              <Text style={styles.badgeText}>
-                {social.platform}: {social.handle}
-              </Text>
-            </View>
-          ))}
+          <View style={styles.badgeRow}>
+            {data.socials?.slice(0, 3).map((social, i) => (
+              <View key={i} style={styles.badge}>
+                <Text style={styles.badgeText}>
+                  {social.platform}: {social.handle}
+                </Text>
+              </View>
+            ))}
+          </View>
         </View>
       </View>
 
@@ -342,8 +398,32 @@ const MediaKitDocument: React.FC<{ data: MediaKitData }> = ({ data }) => (
         </View>
       </View>
 
-      {/* Demographics */}
-      {data.demographics && (
+      {/* Story */}
+      {data.story && (
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>
+            Minha <Text style={{ color: colors.accent }}>História</Text>
+          </Text>
+          <View style={styles.storyBox}>
+            <Text style={styles.storyText}>
+              {data.story.length > 800 ? data.story.slice(0, 800) + "..." : data.story}
+            </Text>
+          </View>
+        </View>
+      )}
+
+      {/* Footer */}
+      <View style={styles.footer}>
+        <Text style={styles.footerText}>
+          Gerado em {new Date().toLocaleDateString("pt-BR")}
+        </Text>
+        <Text style={styles.footerBrand}>PubliScore</Text>
+      </View>
+    </Page>
+
+    {/* Página 2 - Demographics */}
+    {data.demographics && (
+      <Page size="A4" style={styles.page}>
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>
             Demografia da <Text style={styles.sectionTitleAccent}>Audiência</Text>
@@ -351,7 +431,7 @@ const MediaKitDocument: React.FC<{ data: MediaKitData }> = ({ data }) => (
           <View style={styles.demographicsGrid}>
             {/* Age */}
             <View style={styles.demographicsColumn}>
-              <Text style={{ ...styles.metricLabel, marginBottom: 8 }}>
+              <Text style={{ ...styles.metricLabel, marginBottom: 8, fontSize: 9 }}>
                 Faixa Etária
               </Text>
               {data.demographics.age.map((item, i) => (
@@ -364,7 +444,7 @@ const MediaKitDocument: React.FC<{ data: MediaKitData }> = ({ data }) => (
                     <View
                       style={{
                         ...styles.progressFill,
-                        width: `${item.value}%`,
+                        width: `${Math.min(item.value, 100)}%`,
                       }}
                     />
                   </View>
@@ -374,7 +454,7 @@ const MediaKitDocument: React.FC<{ data: MediaKitData }> = ({ data }) => (
 
             {/* Gender & Location */}
             <View style={styles.demographicsColumn}>
-              <Text style={{ ...styles.metricLabel, marginBottom: 8 }}>
+              <Text style={{ ...styles.metricLabel, marginBottom: 8, fontSize: 9 }}>
                 Gênero
               </Text>
               <View style={styles.genderRow}>
@@ -392,7 +472,7 @@ const MediaKitDocument: React.FC<{ data: MediaKitData }> = ({ data }) => (
                 </View>
               </View>
 
-              <Text style={{ ...styles.metricLabel, marginBottom: 8 }}>
+              <Text style={{ ...styles.metricLabel, marginBottom: 8, marginTop: 8, fontSize: 9 }}>
                 Localização
               </Text>
               <View style={styles.locationTags}>
@@ -405,59 +485,80 @@ const MediaKitDocument: React.FC<{ data: MediaKitData }> = ({ data }) => (
             </View>
           </View>
         </View>
-      )}
 
-      {/* Story */}
-      {data.story && (
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>
-            Minha <Text style={{ color: colors.accent }}>História</Text>
-          </Text>
-          <View style={styles.storyBox}>
-            <Text style={styles.storyText}>{data.story}</Text>
+        {/* Pricing */}
+        {data.pricing && data.pricing.length > 0 && (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>
+              Pacotes de <Text style={styles.sectionTitleAccent}>Parceria</Text>
+            </Text>
+            <View style={styles.pricingGrid}>
+              {data.pricing.slice(0, 3).map((pkg, i) => (
+                <View
+                  key={i}
+                  style={pkg.popular ? [styles.pricingCard, styles.pricingCardPopular] : styles.pricingCard}
+                >
+                  <Text style={styles.pricingName}>{pkg.name}</Text>
+                  <Text style={styles.pricingPrice}>{pkg.price}</Text>
+                  {pkg.features.slice(0, 4).map((feature, j) => (
+                    <Text key={j} style={styles.pricingFeature}>
+                      ✓ {feature}
+                    </Text>
+                  ))}
+                </View>
+              ))}
+            </View>
           </View>
-        </View>
-      )}
+        )}
 
-      {/* Pricing */}
-      {data.pricing && data.pricing.length > 0 && (
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>
-            Pacotes de <Text style={styles.sectionTitleAccent}>Parceria</Text>
+        {/* Footer */}
+        <View style={styles.footer}>
+          <Text style={styles.footerText}>
+            Gerado em {new Date().toLocaleDateString("pt-BR")}
           </Text>
-          <View style={styles.pricingGrid}>
-            {data.pricing.slice(0, 3).map((pkg, i) => (
-              <View
-                key={i}
-                style={pkg.popular ? [styles.pricingCard, styles.pricingCardPopular] : styles.pricingCard}
-              >
-                <Text style={styles.pricingName}>{pkg.name}</Text>
-                <Text style={styles.pricingPrice}>{pkg.price}</Text>
-                {pkg.features.slice(0, 4).map((feature, j) => (
-                  <Text key={j} style={styles.pricingFeature}>
-                    ✓ {feature}
-                  </Text>
-                ))}
-              </View>
-            ))}
-          </View>
+          <Text style={styles.footerBrand}>PubliScore</Text>
         </View>
-      )}
-
-      {/* Footer */}
-      <View style={styles.footer}>
-        <Text style={styles.footerText}>
-          Gerado em {new Date().toLocaleDateString("pt-BR")}
-        </Text>
-        <Text style={styles.footerBrand}>PubliScore</Text>
-      </View>
-    </Page>
+      </Page>
+    )}
   </Document>
 );
 
+// Função para converter URL de imagem em base64
+async function imageUrlToBase64(url: string): Promise<string | null> {
+  try {
+    // Usa um proxy para evitar CORS ou tenta direto
+    const response = await fetch(url, {
+      mode: 'cors',
+      credentials: 'omit',
+    });
+    
+    if (!response.ok) {
+      console.warn("Falha ao carregar imagem:", url);
+      return null;
+    }
+    
+    const blob = await response.blob();
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result as string);
+      reader.onerror = () => resolve(null);
+      reader.readAsDataURL(blob);
+    });
+  } catch (error) {
+    console.warn("Erro ao converter imagem:", error);
+    return null;
+  }
+}
+
 // Função para gerar e baixar o PDF
 export async function downloadMediaKitPDF(data: MediaKitData, filename: string = "media-kit.pdf") {
-  const blob = await pdf(<MediaKitDocument data={data} />).toBlob();
+  // Tenta converter avatar para base64
+  let avatarBase64: string | null = null;
+  if (data.avatarUrl) {
+    avatarBase64 = await imageUrlToBase64(data.avatarUrl);
+  }
+
+  const blob = await pdf(<MediaKitDocument data={data} avatarBase64={avatarBase64 || undefined} />).toBlob();
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;
@@ -470,4 +571,3 @@ export async function downloadMediaKitPDF(data: MediaKitData, filename: string =
 
 export { MediaKitDocument };
 export type { MediaKitData };
-

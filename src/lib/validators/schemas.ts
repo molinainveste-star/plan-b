@@ -152,7 +152,7 @@ export function validateInput<T>(
     const result = schema.safeParse(data);
     
     if (!result.success) {
-        const firstError = result.error.errors[0];
+        const firstError = result.error.issues[0];
         return {
             success: false,
             error: firstError?.message || "Dados inválidos",
