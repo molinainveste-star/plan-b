@@ -154,6 +154,12 @@ export default async function MediaKitPage({ params }: { params: Promise<{ slug:
                             features: p.features || [],
                             popular: p.popular,
                         })),
+                        cases: profile.brand_cases?.map((c: any) => ({
+                            brand: c.brand_name || c.brand || "Marca",
+                            title: c.title || c.campaign_name || "Campanha",
+                            description: c.description || c.results || "",
+                            metrics: c.metrics || [],
+                        })),
                     }}
                 />
 

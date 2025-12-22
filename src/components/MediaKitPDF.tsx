@@ -9,7 +9,6 @@ import {
   StyleSheet,
   Image,
   pdf,
-  Font,
 } from "@react-pdf/renderer";
 
 // Cores do design system
@@ -30,45 +29,45 @@ const colors = {
 const styles = StyleSheet.create({
   page: {
     backgroundColor: colors.background,
-    paddingTop: 50,
-    paddingBottom: 60,
-    paddingHorizontal: 50,
+    paddingTop: 40,
+    paddingBottom: 50,
+    paddingHorizontal: 40,
     fontFamily: "Helvetica",
   },
   // Header
   header: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 25,
-    paddingBottom: 20,
+    marginBottom: 20,
+    paddingBottom: 16,
     borderBottomWidth: 1,
     borderBottomColor: colors.backgroundTertiary,
   },
   avatarContainer: {
-    width: 70,
-    height: 70,
-    borderRadius: 35,
-    marginRight: 16,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    marginRight: 14,
     backgroundColor: colors.primary,
     justifyContent: "center",
     alignItems: "center",
-    padding: 3,
+    padding: 2,
   },
   avatar: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
   },
   avatarPlaceholder: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
     backgroundColor: colors.backgroundSecondary,
     justifyContent: "center",
     alignItems: "center",
   },
   avatarInitial: {
-    fontSize: 28,
+    fontSize: 24,
     fontWeight: "bold",
     color: colors.foreground,
   },
@@ -76,40 +75,40 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   name: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: "bold",
     color: colors.foreground,
-    marginBottom: 4,
+    marginBottom: 3,
   },
   tagline: {
-    fontSize: 10,
+    fontSize: 9,
     color: colors.foregroundMuted,
-    marginBottom: 6,
+    marginBottom: 5,
   },
   badgeRow: {
     flexDirection: "row",
-    gap: 6,
+    gap: 5,
   },
   badge: {
     backgroundColor: colors.backgroundTertiary,
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-    borderRadius: 10,
+    paddingHorizontal: 7,
+    paddingVertical: 2,
+    borderRadius: 8,
   },
   badgeText: {
-    fontSize: 8,
+    fontSize: 7,
     color: colors.primary,
     fontWeight: "bold",
   },
   // Section
   section: {
-    marginBottom: 20,
+    marginBottom: 16,
   },
   sectionTitle: {
-    fontSize: 12,
+    fontSize: 11,
     fontWeight: "bold",
     color: colors.foreground,
-    marginBottom: 10,
+    marginBottom: 8,
     textTransform: "uppercase",
     letterSpacing: 0.5,
   },
@@ -118,61 +117,61 @@ const styles = StyleSheet.create({
   },
   // Bio
   bio: {
-    fontSize: 10,
+    fontSize: 9,
     color: colors.foregroundSecondary,
     lineHeight: 1.5,
-    marginBottom: 16,
+    marginBottom: 12,
   },
   // Metrics Grid
   metricsGrid: {
     flexDirection: "row",
     flexWrap: "wrap",
-    gap: 8,
-    marginBottom: 8,
+    gap: 6,
+    marginBottom: 6,
   },
   metricCard: {
     backgroundColor: colors.backgroundSecondary,
-    padding: 12,
-    borderRadius: 6,
+    padding: 10,
+    borderRadius: 5,
     width: "31%",
     borderWidth: 1,
     borderColor: colors.border,
   },
   metricLabel: {
-    fontSize: 7,
+    fontSize: 6,
     color: colors.foregroundMuted,
-    marginBottom: 3,
+    marginBottom: 2,
     textTransform: "uppercase",
   },
   metricValue: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "bold",
     color: colors.foreground,
-    marginBottom: 2,
+    marginBottom: 1,
   },
   metricTrend: {
-    fontSize: 7,
+    fontSize: 6,
     color: colors.success,
   },
   // Demographics
   demographicsGrid: {
     flexDirection: "row",
-    gap: 16,
+    gap: 14,
   },
   demographicsColumn: {
     flex: 1,
   },
   progressBar: {
-    height: 5,
+    height: 4,
     backgroundColor: colors.backgroundTertiary,
-    borderRadius: 3,
-    marginTop: 3,
-    marginBottom: 6,
+    borderRadius: 2,
+    marginTop: 2,
+    marginBottom: 5,
   },
   progressFill: {
-    height: 5,
+    height: 4,
     backgroundColor: colors.primary,
-    borderRadius: 3,
+    borderRadius: 2,
   },
   progressLabel: {
     flexDirection: "row",
@@ -180,99 +179,99 @@ const styles = StyleSheet.create({
     marginBottom: 1,
   },
   progressText: {
-    fontSize: 8,
+    fontSize: 7,
     color: colors.foregroundSecondary,
   },
   progressValue: {
-    fontSize: 8,
+    fontSize: 7,
     color: colors.primary,
     fontWeight: "bold",
   },
   // Gender boxes
   genderRow: {
     flexDirection: "row",
-    gap: 8,
-    marginBottom: 12,
+    gap: 6,
+    marginBottom: 10,
   },
   genderBox: {
     flex: 1,
     backgroundColor: colors.backgroundTertiary,
-    padding: 10,
-    borderRadius: 6,
+    padding: 8,
+    borderRadius: 5,
     alignItems: "center",
   },
   genderValue: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "bold",
     color: colors.foreground,
   },
   genderLabel: {
-    fontSize: 7,
+    fontSize: 6,
     color: colors.foregroundMuted,
     textTransform: "uppercase",
-    marginTop: 2,
+    marginTop: 1,
   },
   // Location tags
   locationTags: {
     flexDirection: "row",
     flexWrap: "wrap",
-    gap: 4,
+    gap: 3,
   },
   locationTag: {
     backgroundColor: colors.backgroundTertiary,
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-    borderRadius: 10,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 8,
   },
   locationText: {
-    fontSize: 8,
+    fontSize: 7,
     color: colors.foregroundSecondary,
   },
   // Story
   storyBox: {
     backgroundColor: colors.backgroundSecondary,
-    padding: 16,
-    borderRadius: 8,
+    padding: 12,
+    borderRadius: 6,
     borderLeftWidth: 3,
     borderLeftColor: colors.accent,
   },
   storyText: {
-    fontSize: 9,
+    fontSize: 8,
     color: colors.foregroundSecondary,
-    lineHeight: 1.6,
+    lineHeight: 1.5,
   },
   // Footer
   footer: {
     position: "absolute",
-    bottom: 25,
-    left: 50,
-    right: 50,
+    bottom: 20,
+    left: 40,
+    right: 40,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingTop: 12,
+    paddingTop: 10,
     borderTopWidth: 1,
     borderTopColor: colors.backgroundTertiary,
   },
   footerText: {
-    fontSize: 7,
+    fontSize: 6,
     color: colors.foregroundMuted,
   },
   footerBrand: {
-    fontSize: 9,
+    fontSize: 8,
     color: colors.primary,
     fontWeight: "bold",
   },
   // Pricing
   pricingGrid: {
     flexDirection: "row",
-    gap: 8,
+    gap: 6,
   },
   pricingCard: {
     flex: 1,
     backgroundColor: colors.backgroundSecondary,
-    padding: 12,
-    borderRadius: 6,
+    padding: 10,
+    borderRadius: 5,
     borderWidth: 1,
     borderColor: colors.border,
   },
@@ -281,35 +280,85 @@ const styles = StyleSheet.create({
     borderWidth: 2,
   },
   pricingName: {
-    fontSize: 10,
+    fontSize: 9,
+    fontWeight: "bold",
+    color: colors.foreground,
+    marginBottom: 2,
+  },
+  pricingPrice: {
+    fontSize: 12,
+    fontWeight: "bold",
+    color: colors.primary,
+    marginBottom: 5,
+  },
+  pricingFeature: {
+    fontSize: 6,
+    color: colors.foregroundMuted,
+    marginBottom: 2,
+  },
+  // Cases / Vitrine de Sucesso
+  casesGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 8,
+  },
+  caseCard: {
+    width: "48%",
+    backgroundColor: colors.backgroundSecondary,
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: colors.border,
+    overflow: "hidden",
+  },
+  caseImage: {
+    width: "100%",
+    height: 80,
+    backgroundColor: colors.backgroundTertiary,
+  },
+  caseContent: {
+    padding: 8,
+  },
+  caseBrand: {
+    fontSize: 8,
+    fontWeight: "bold",
+    color: colors.primary,
+    marginBottom: 2,
+  },
+  caseTitle: {
+    fontSize: 8,
     fontWeight: "bold",
     color: colors.foreground,
     marginBottom: 3,
   },
-  pricingPrice: {
-    fontSize: 14,
-    fontWeight: "bold",
-    color: colors.primary,
-    marginBottom: 6,
-  },
-  pricingFeature: {
+  caseDescription: {
     fontSize: 7,
     color: colors.foregroundMuted,
-    marginBottom: 2,
+    lineHeight: 1.4,
+    marginBottom: 4,
+  },
+  caseMetrics: {
+    flexDirection: "row",
+    gap: 4,
+    flexWrap: "wrap",
+  },
+  caseMetricBadge: {
+    backgroundColor: colors.backgroundTertiary,
+    paddingHorizontal: 5,
+    paddingVertical: 2,
+    borderRadius: 6,
+  },
+  caseMetricText: {
+    fontSize: 6,
+    color: colors.success,
+    fontWeight: "bold",
   },
   // Page number
   pageNumber: {
     position: "absolute",
-    bottom: 25,
-    right: 50,
-    fontSize: 8,
+    bottom: 20,
+    right: 40,
+    fontSize: 7,
     color: colors.foregroundMuted,
-  },
-  // Divider
-  divider: {
-    height: 1,
-    backgroundColor: colors.backgroundTertiary,
-    marginVertical: 16,
   },
 });
 
@@ -338,12 +387,18 @@ interface MediaKitData {
     features: string[];
     popular?: boolean;
   }>;
+  cases?: Array<{
+    brand: string;
+    title: string;
+    description: string;
+    metrics: string[];
+  }>;
 }
 
 // Componente do documento PDF
 const MediaKitDocument: React.FC<{ data: MediaKitData; avatarBase64?: string }> = ({ data, avatarBase64 }) => (
   <Document>
-    {/* Página 1 - Header, Métricas */}
+    {/* Página 1 - Header, Métricas, História */}
     <Page size="A4" style={styles.page}>
       {/* Header */}
       <View style={styles.header}>
@@ -376,7 +431,9 @@ const MediaKitDocument: React.FC<{ data: MediaKitData; avatarBase64?: string }> 
       {/* Bio */}
       {data.bio && (
         <View style={styles.section}>
-          <Text style={styles.bio}>{data.bio}</Text>
+          <Text style={styles.bio}>
+            {data.bio.length > 300 ? data.bio.slice(0, 300) + "..." : data.bio}
+          </Text>
         </View>
       )}
 
@@ -398,7 +455,7 @@ const MediaKitDocument: React.FC<{ data: MediaKitData; avatarBase64?: string }> 
         </View>
       </View>
 
-      {/* Story */}
+      {/* Story (resumida) */}
       {data.story && (
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>
@@ -406,24 +463,14 @@ const MediaKitDocument: React.FC<{ data: MediaKitData; avatarBase64?: string }> 
           </Text>
           <View style={styles.storyBox}>
             <Text style={styles.storyText}>
-              {data.story.length > 800 ? data.story.slice(0, 800) + "..." : data.story}
+              {data.story.length > 500 ? data.story.slice(0, 500) + "..." : data.story}
             </Text>
           </View>
         </View>
       )}
 
-      {/* Footer */}
-      <View style={styles.footer}>
-        <Text style={styles.footerText}>
-          Gerado em {new Date().toLocaleDateString("pt-BR")}
-        </Text>
-        <Text style={styles.footerBrand}>PubliScore</Text>
-      </View>
-    </Page>
-
-    {/* Página 2 - Demographics */}
-    {data.demographics && (
-      <Page size="A4" style={styles.page}>
+      {/* Demographics na mesma página */}
+      {data.demographics && (
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>
             Demografia da <Text style={styles.sectionTitleAccent}>Audiência</Text>
@@ -431,10 +478,10 @@ const MediaKitDocument: React.FC<{ data: MediaKitData; avatarBase64?: string }> 
           <View style={styles.demographicsGrid}>
             {/* Age */}
             <View style={styles.demographicsColumn}>
-              <Text style={{ ...styles.metricLabel, marginBottom: 8, fontSize: 9 }}>
+              <Text style={{ ...styles.metricLabel, marginBottom: 6, fontSize: 8 }}>
                 Faixa Etária
               </Text>
-              {data.demographics.age.map((item, i) => (
+              {data.demographics.age.slice(0, 4).map((item, i) => (
                 <View key={i}>
                   <View style={styles.progressLabel}>
                     <Text style={styles.progressText}>{item.label}</Text>
@@ -454,7 +501,7 @@ const MediaKitDocument: React.FC<{ data: MediaKitData; avatarBase64?: string }> 
 
             {/* Gender & Location */}
             <View style={styles.demographicsColumn}>
-              <Text style={{ ...styles.metricLabel, marginBottom: 8, fontSize: 9 }}>
+              <Text style={{ ...styles.metricLabel, marginBottom: 6, fontSize: 8 }}>
                 Gênero
               </Text>
               <View style={styles.genderRow}>
@@ -462,21 +509,21 @@ const MediaKitDocument: React.FC<{ data: MediaKitData; avatarBase64?: string }> 
                   <Text style={styles.genderValue}>
                     {data.demographics.gender.female}%
                   </Text>
-                  <Text style={styles.genderLabel}>Feminino</Text>
+                  <Text style={styles.genderLabel}>Fem</Text>
                 </View>
                 <View style={styles.genderBox}>
                   <Text style={styles.genderValue}>
                     {data.demographics.gender.male}%
                   </Text>
-                  <Text style={styles.genderLabel}>Masculino</Text>
+                  <Text style={styles.genderLabel}>Masc</Text>
                 </View>
               </View>
 
-              <Text style={{ ...styles.metricLabel, marginBottom: 8, marginTop: 8, fontSize: 9 }}>
+              <Text style={{ ...styles.metricLabel, marginBottom: 4, fontSize: 8 }}>
                 Localização
               </Text>
               <View style={styles.locationTags}>
-                {data.demographics.countries.map((country, i) => (
+                {data.demographics.countries.slice(0, 4).map((country, i) => (
                   <View key={i} style={styles.locationTag}>
                     <Text style={styles.locationText}>{country}</Text>
                   </View>
@@ -485,7 +532,21 @@ const MediaKitDocument: React.FC<{ data: MediaKitData; avatarBase64?: string }> 
             </View>
           </View>
         </View>
+      )}
 
+      {/* Footer */}
+      <View style={styles.footer}>
+        <Text style={styles.footerText}>
+          Gerado em {new Date().toLocaleDateString("pt-BR")}
+        </Text>
+        <Text style={styles.footerBrand}>PubliScore</Text>
+      </View>
+      <Text style={styles.pageNumber}>1</Text>
+    </Page>
+
+    {/* Página 2 - Pacotes + Vitrine de Sucesso */}
+    {(data.pricing && data.pricing.length > 0) || (data.cases && data.cases.length > 0) ? (
+      <Page size="A4" style={styles.page}>
         {/* Pricing */}
         {data.pricing && data.pricing.length > 0 && (
           <View style={styles.section}>
@@ -500,11 +561,44 @@ const MediaKitDocument: React.FC<{ data: MediaKitData; avatarBase64?: string }> 
                 >
                   <Text style={styles.pricingName}>{pkg.name}</Text>
                   <Text style={styles.pricingPrice}>{pkg.price}</Text>
-                  {pkg.features.slice(0, 4).map((feature, j) => (
+                  {pkg.features.slice(0, 5).map((feature, j) => (
                     <Text key={j} style={styles.pricingFeature}>
                       ✓ {feature}
                     </Text>
                   ))}
+                </View>
+              ))}
+            </View>
+          </View>
+        )}
+
+        {/* Vitrine de Sucesso */}
+        {data.cases && data.cases.length > 0 && (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>
+              Vitrine de <Text style={styles.sectionTitleAccent}>Sucesso</Text>
+            </Text>
+            <View style={styles.casesGrid}>
+              {data.cases.slice(0, 4).map((caseItem, i) => (
+                <View key={i} style={styles.caseCard}>
+                  <View style={styles.caseContent}>
+                    <Text style={styles.caseBrand}>{caseItem.brand}</Text>
+                    <Text style={styles.caseTitle}>{caseItem.title}</Text>
+                    <Text style={styles.caseDescription}>
+                      {caseItem.description.length > 100 
+                        ? caseItem.description.slice(0, 100) + "..." 
+                        : caseItem.description}
+                    </Text>
+                    {caseItem.metrics && caseItem.metrics.length > 0 && (
+                      <View style={styles.caseMetrics}>
+                        {caseItem.metrics.slice(0, 2).map((metric, j) => (
+                          <View key={j} style={styles.caseMetricBadge}>
+                            <Text style={styles.caseMetricText}>{metric}</Text>
+                          </View>
+                        ))}
+                      </View>
+                    )}
+                  </View>
                 </View>
               ))}
             </View>
@@ -518,15 +612,15 @@ const MediaKitDocument: React.FC<{ data: MediaKitData; avatarBase64?: string }> 
           </Text>
           <Text style={styles.footerBrand}>PubliScore</Text>
         </View>
+        <Text style={styles.pageNumber}>2</Text>
       </Page>
-    )}
+    ) : null}
   </Document>
 );
 
 // Função para converter URL de imagem em base64
 async function imageUrlToBase64(url: string): Promise<string | null> {
   try {
-    // Usa um proxy para evitar CORS ou tenta direto
     const response = await fetch(url, {
       mode: 'cors',
       credentials: 'omit',
@@ -552,7 +646,6 @@ async function imageUrlToBase64(url: string): Promise<string | null> {
 
 // Função para gerar e baixar o PDF
 export async function downloadMediaKitPDF(data: MediaKitData, filename: string = "media-kit.pdf") {
-  // Tenta converter avatar para base64
   let avatarBase64: string | null = null;
   if (data.avatarUrl) {
     avatarBase64 = await imageUrlToBase64(data.avatarUrl);

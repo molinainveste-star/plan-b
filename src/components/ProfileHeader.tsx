@@ -24,6 +24,7 @@ interface ProfileHeaderProps {
         };
         story?: string;
         pricing?: Array<{ name: string; price: string; features: string[]; popular?: boolean }>;
+        cases?: Array<{ brand: string; title: string; description: string; metrics: string[] }>;
     };
 }
 
@@ -60,6 +61,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
             story: pdfData?.story,
             socials: socials.map(s => ({ platform: s.platform, handle: s.handle })),
             pricing: pdfData?.pricing,
+            cases: pdfData?.cases,
         };
         setPdfData(data);
     }, [name, bio, avatarUrl, location, niche, pdfData, socials, setPdfData]);
@@ -95,6 +97,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                 story: pdfData?.story,
                 socials: socials.map(s => ({ platform: s.platform, handle: s.handle })),
                 pricing: pdfData?.pricing,
+                cases: pdfData?.cases,
             };
             await downloadMediaKitPDF(data, `${name.replace(/\s+/g, "-").toLowerCase()}-media-kit.pdf`);
         } finally {
