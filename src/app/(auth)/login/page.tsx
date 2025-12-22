@@ -1,18 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
 
-export default function LoginPage() {
+function LoginForm() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const router = useRouter();
     const searchParams = useSearchParams();
-    const redirect = searchParams.get("redirect") || "/dashboard";
+    const redirect = searchParams.get("redirect") || "/";
 
     async function handleLogin(e: React.FormEvent) {
         e.preventDefault();
@@ -102,6 +102,14 @@ export default function LoginPage() {
                 </div>
             </div>
         </div>
+    );
+}
+
+export default function LoginPage() {
+    return (
+        <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-slate-900"><p className="text-white">Carregando...</p></div>}>
+            <LoginForm />
+        </Suspense>
     );
 }
 
