@@ -1,10 +1,6 @@
 "use server";
 
-<<<<<<< HEAD
 import { createClient as createServerClient } from "@/lib/supabase/server";
-=======
-import { createServerClient } from "@/lib/supabase";
->>>>>>> feature/redesign-alura-style
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import {
     createProfileSchema,

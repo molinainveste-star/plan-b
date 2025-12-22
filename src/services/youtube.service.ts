@@ -1,20 +1,12 @@
 "use server";
 
-<<<<<<< HEAD
 import { createClient as createServerClient } from "@/lib/supabase/server";
-=======
-import { createServerClient } from "@/lib/supabase";
->>>>>>> feature/redesign-alura-style
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import {
     fetchCompleteYouTubeMetrics,
     buildYouTubeSocialUrl,
 } from "@/lib/youtube";
-<<<<<<< HEAD
 import { discoverNicheWithAI, refineStoryWithAI } from "@/lib/ai/gemini";
-=======
-import { discoverNicheWithAI, refineStoryWithAI } from "@/lib/ai";
->>>>>>> feature/redesign-alura-style
 import {
     formatNumber,
     videoGrowthCalc,
@@ -283,4 +275,3 @@ export async function fetchDemographicsFromYouTube(slug: string, accessToken: st
         return { success: false, error: message };
     }
 }
-
