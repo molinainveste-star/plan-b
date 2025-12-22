@@ -415,32 +415,109 @@ a:hover {
   color: var(--accent);
 }
 
-/* ============ PRINT STYLES ============ */
+/* ============ PRINT STYLES - Mantém Dark Theme ============ */
 @media print {
   @page {
-    margin: 0;
-    size: auto;
+    margin: 0.5cm;
+    size: A4;
+  }
+
+  *,
+  *::before,
+  *::after {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
+  html {
+    background: #0D1117 !important;
   }
 
   body {
-    background: white !important;
-    color: #1a1a1a !important;
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
+    background: #0D1117 !important;
+    color: #F0F6FC !important;
   }
 
+  /* Força backgrounds nos containers principais */
+  main,
+  section,
+  div {
+    background-color: inherit;
+  }
+
+  /* Cards mantém o visual glass */
   .glass-panel {
-    background: white !important;
-    border: 1px solid #e5e5e5 !important;
-    box-shadow: none !important;
+    background: #161B22 !important;
+    border: 1px solid rgba(240, 246, 252, 0.1) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
   }
 
+  /* Esconde elementos interativos */
   .no-print {
     display: none !important;
   }
 
+  /* Gradientes de texto */
   .text-gradient {
     -webkit-text-fill-color: #00D4FF !important;
     color: #00D4FF !important;
+    background: none !important;
+  }
+
+  .text-gradient-accent {
+    -webkit-text-fill-color: #7C3AED !important;
+    color: #7C3AED !important;
+    background: none !important;
+  }
+
+  /* Cores de texto */
+  h1, h2, h3, h4, h5, h6 {
+    color: #F0F6FC !important;
+  }
+
+  p {
+    color: #C9D1D9 !important;
+  }
+
+  /* Badges */
+  .badge-primary {
+    background: rgba(0, 212, 255, 0.15) !important;
+    color: #00D4FF !important;
+  }
+
+  .badge-success {
+    background: rgba(16, 185, 129, 0.15) !important;
+    color: #10B981 !important;
+  }
+
+  /* Remove animações e transições */
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  /* Remove decorações de fundo que não funcionam bem na impressão */
+  .bg-grid,
+  .bg-dots {
+    background-image: none !important;
+  }
+
+  /* Força cores nas bordas */
+  [style*="border"] {
+    border-color: rgba(240, 246, 252, 0.1) !important;
+  }
+
+  /* Avatar border gradient - fallback para cor sólida */
+  [style*="gradient-primary"] {
+    background: #00D4FF !important;
+  }
+
+  /* Links */
+  a {
+    color: #00D4FF !important;
+    text-decoration: none !important;
   }
 }
