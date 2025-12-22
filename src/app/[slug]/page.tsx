@@ -158,7 +158,7 @@ export default async function MediaKitPage({ params }: { params: Promise<{ slug:
                             brand: c.brand_name || c.brand || "Marca",
                             title: c.title || c.campaign_name || "Campanha",
                             description: c.description || c.results || "",
-                            metrics: c.metrics || [],
+                            metrics: Array.isArray(c.metrics) ? c.metrics : (c.metrics ? [String(c.metrics)] : []),
                         })),
                     }}
                 />

@@ -589,11 +589,11 @@ const MediaKitDocument: React.FC<{ data: MediaKitData; avatarBase64?: string }> 
                         ? caseItem.description.slice(0, 100) + "..." 
                         : caseItem.description}
                     </Text>
-                    {caseItem.metrics && caseItem.metrics.length > 0 && (
+                    {caseItem.metrics && Array.isArray(caseItem.metrics) && caseItem.metrics.length > 0 && (
                       <View style={styles.caseMetrics}>
                         {caseItem.metrics.slice(0, 2).map((metric, j) => (
                           <View key={j} style={styles.caseMetricBadge}>
-                            <Text style={styles.caseMetricText}>{metric}</Text>
+                            <Text style={styles.caseMetricText}>{String(metric)}</Text>
                           </View>
                         ))}
                       </View>
