@@ -12,22 +12,30 @@ export const CallToAction: React.FC = () => {
             style={{
                 position: "fixed",
                 bottom: "var(--space-6)",
-                left: "50%",
-                transform: "translateX(-50%)",
+                left: 0,
+                right: 0,
                 zIndex: 100,
                 display: "flex",
-                gap: "var(--space-3)",
-                padding: "var(--space-3)",
-                background: "rgba(13, 17, 23, 0.9)",
-                backdropFilter: "blur(20px)",
-                borderRadius: "var(--radius-full)",
-                boxShadow: "var(--shadow-xl), 0 0 0 1px var(--border)",
-                animation: "fadeInUp 0.5s ease forwards",
-                animationDelay: "0.5s",
-                opacity: 0,
+                justifyContent: "center",
+                pointerEvents: "none",
             }}
             className="no-print"
         >
+            <div
+                style={{
+                    display: "flex",
+                    gap: "var(--space-3)",
+                    padding: "var(--space-3)",
+                    background: "rgba(13, 17, 23, 0.9)",
+                    backdropFilter: "blur(20px)",
+                    borderRadius: "var(--radius-full)",
+                    boxShadow: "var(--shadow-xl), 0 0 0 1px var(--border)",
+                    animation: "fadeInUp 0.5s ease forwards",
+                    animationDelay: "0.5s",
+                    opacity: 0,
+                    pointerEvents: "auto",
+                }}
+            >
             <button 
                 style={{
                     background: "#25D366",
@@ -102,6 +110,7 @@ export const CallToAction: React.FC = () => {
                     </>
                 )}
             </button>
+            </div>
         </div>
     );
 };
