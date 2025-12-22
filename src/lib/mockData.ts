@@ -13,6 +13,15 @@ export interface AudienceData {
     locations: { label: string; percentage: number }[];
 }
 
+export interface VideoPerformance {
+    video_id: string;
+    title: string;
+    view_count: number;
+    like_count: number;
+    comment_count: number;
+    published_at: string;
+}
+
 export interface MediaKit {
     slug: string;
     name: string;
@@ -23,6 +32,7 @@ export interface MediaKit {
     socials: { platform: string; handle: string; url: string }[];
     metrics: Metric[];
     audience: AudienceData;
+    videoPerformance: VideoPerformance[];
 }
 
 export const getMediaKit = (slug: string): MediaKit => {
@@ -83,5 +93,13 @@ export const getMediaKit = (slug: string): MediaKit => {
                 { label: "Other", percentage: 10 },
             ],
         },
+        videoPerformance: [
+            { video_id: "dQw4w9WgXcQ", title: "Meu primeiro vídeo viral! 🚀", view_count: 125000, like_count: 8500, comment_count: 420, published_at: "2024-11-01T10:00:00Z" },
+            { video_id: "jNQXAC9IVRw", title: "Tutorial completo: Como crescer no YouTube", view_count: 89000, like_count: 5200, comment_count: 310, published_at: "2024-11-08T14:30:00Z" },
+            { video_id: "9bZkp7q19f0", title: "Reagindo aos meus vídeos antigos", view_count: 156000, like_count: 12000, comment_count: 890, published_at: "2024-11-15T18:00:00Z" },
+            { video_id: "kJQP7kiw5Fk", title: "Q&A: Respondendo vocês!", view_count: 67000, like_count: 4100, comment_count: 520, published_at: "2024-11-22T12:00:00Z" },
+            { video_id: "RgKAFK5djSk", title: "Bastidores: Um dia na minha vida", view_count: 203000, like_count: 15000, comment_count: 1100, published_at: "2024-11-29T16:00:00Z" },
+            { video_id: "OPf0YbXqDm0", title: "Especial de fim de ano! 🎄", view_count: 178000, like_count: 11000, comment_count: 750, published_at: "2024-12-06T20:00:00Z" },
+        ],
     };
 };

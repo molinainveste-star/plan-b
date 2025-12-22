@@ -33,7 +33,7 @@ export default async function MediaKitPage({ params }: { params: Promise<{ slug:
                 icon: m.icon
             })),
             social_accounts: mockKit.socials,
-            video_performance: [],
+            video_performance: mockKit.videoPerformance,
             custom_story: null,
             custom_pitch: null,
             brand_cases: [],
