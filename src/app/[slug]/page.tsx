@@ -59,9 +59,34 @@ export default async function MediaKitPage({ params }: { params: Promise<{ slug:
         url: s.url,
     })) || [];
 
+    // Todos os vídeos ordenados por data (para o gráfico)
     const videoData = profile.video_performance?.sort((a: any, b: any) =>
         new Date(a.published_at).getTime() - new Date(b.published_at).getTime()
     ) || [];
+
+    // Vídeos dos últimos 30 dias, ordenados por engajamento (para destaques)
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+    
+    const featuredVideos = profile.video_performance
+        ?.filter((v: any) => new Date(v.published_at) >= thirtyDaysAgo)
+        .map((v: any) => ({
+            ...v,
+            // Score de engajamento: combina views, likes e comments
+            engagementScore: (v.view_count || 0) + (v.like_count || 0) * 100 + (v.comment_count || 0) * 500
+        }))
+        .sort((a: any, b: any) => b.engagementScore - a.engagementScore)
+        .slice(0, 6) || [];
+    
+    // Se não houver vídeos nos últimos 30 dias, usa os mais engajados de sempre
+    const displayVideos = featuredVideos.length > 0 ? featuredVideos : 
+        (profile.video_performance || [])
+            .map((v: any) => ({
+                ...v,
+                engagementScore: (v.view_count || 0) + (v.like_count || 0) * 100 + (v.comment_count || 0) * 500
+            }))
+            .sort((a: any, b: any) => b.engagementScore - a.engagementScore)
+            .slice(0, 6);
 
     const { story: defaultStory, pitch: defaultPitch } = generateAIStory(profile, metrics);
     const finalStory = profile.custom_story || defaultStory;
@@ -213,22 +238,43 @@ export default async function MediaKitPage({ params }: { params: Promise<{ slug:
                     </div>
                 )}
 
-                {/* Recent Videos */}
-                {videoData.length > 0 && (
+                {/* Featured Videos - Most Engaged from Last 30 Days */}
+                {displayVideos.length > 0 && (
                     <div style={{ marginTop: "var(--space-10)", animation: "fadeInUp 0.5s ease forwards", animationDelay: "250ms", opacity: 0 }}>
-                        <h4 style={{ fontSize: "var(--text-xl)", fontWeight: 700, marginBottom: "var(--space-6)", color: "var(--foreground)" }}>
-                            Destaques <span className="text-gradient">Recentes</span>
-                        </h4>
+                        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "var(--space-6)" }}>
+                            <h4 style={{ fontSize: "var(--text-xl)", fontWeight: 700, color: "var(--foreground)", margin: 0 }}>
+                                Destaques <span className="text-gradient">Recentes</span>
+                            </h4>
+                            <span style={{ fontSize: "var(--text-xs)", color: "var(--foreground-muted)", fontWeight: 500 }}>
+                                📈 Ordenado por engajamento
+                            </span>
+                        </div>
                         <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "var(--space-4)" }}>
-                            {videoData.slice(0, 6).map((video: any) => (
+                            {displayVideos.map((video: any, index: number) => (
                                 <a
                                     key={video.video_id}
                                     href={`https://www.youtube.com/watch?v=${video.video_id}`}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="glass-panel"
-                                    style={{ display: "block", textDecoration: "none", overflow: "hidden", borderRadius: "var(--radius-lg)" }}
+                                    style={{ display: "block", textDecoration: "none", overflow: "hidden", borderRadius: "var(--radius-lg)", position: "relative" }}
                                 >
+                                    {index === 0 && (
+                                        <div style={{ 
+                                            position: "absolute", 
+                                            top: "var(--space-2)", 
+                                            left: "var(--space-2)", 
+                                            background: "var(--gradient-accent)", 
+                                            padding: "var(--space-1) var(--space-2)", 
+                                            borderRadius: "var(--radius-md)",
+                                            fontSize: "var(--text-xs)",
+                                            fontWeight: 700,
+                                            color: "white",
+                                            zIndex: 1
+                                        }}>
+                                            🔥 Top
+                                        </div>
+                                    )}
                                     <div style={{ aspectRatio: "16/9", overflow: "hidden" }}>
                                         <img
                                             src={`https://img.youtube.com/vi/${video.video_id}/mqdefault.jpg`}
@@ -240,9 +286,14 @@ export default async function MediaKitPage({ params }: { params: Promise<{ slug:
                                         <p style={{ fontSize: "var(--text-sm)", fontWeight: 600, color: "var(--foreground)", lineHeight: "1.3", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
                                             {video.title}
                                         </p>
-                                        <p style={{ fontSize: "var(--text-xs)", color: "var(--foreground-muted)", marginTop: "var(--space-1)" }}>
-                                            {new Intl.NumberFormat('pt-BR', { notation: "compact" }).format(video.view_count)} views
-                                        </p>
+                                        <div style={{ display: "flex", gap: "var(--space-3)", marginTop: "var(--space-2)" }}>
+                                            <span style={{ fontSize: "var(--text-xs)", color: "var(--foreground-muted)" }}>
+                                                👁 {new Intl.NumberFormat('pt-BR', { notation: "compact" }).format(video.view_count)}
+                                            </span>
+                                            <span style={{ fontSize: "var(--text-xs)", color: "var(--foreground-muted)" }}>
+                                                ❤️ {new Intl.NumberFormat('pt-BR', { notation: "compact" }).format(video.like_count || 0)}
+                                            </span>
+                                        </div>
                                     </div>
                                 </a>
                             ))}
