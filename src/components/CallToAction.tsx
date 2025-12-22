@@ -1,20 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { MessageCircle, Download, Loader2 } from "lucide-react";
-import { generatePdf } from "@/lib/generatePdf";
+import { usePdf } from "@/contexts/PdfContext";
 
 export const CallToAction: React.FC = () => {
-    const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
-
-    const handleDownloadPdf = async () => {
-        setIsGeneratingPdf(true);
-        try {
-            await generatePdf("media-kit-content", "media-kit.pdf");
-        } finally {
-            setIsGeneratingPdf(false);
-        }
-    };
+    const { downloadPdf, isGenerating: isGeneratingPdf } = usePdf();
 
     return (
         <div 
@@ -85,7 +76,7 @@ export const CallToAction: React.FC = () => {
                     transition: "all var(--transition-base)",
                     opacity: isGeneratingPdf ? 0.7 : 1,
                 }}
-                onClick={handleDownloadPdf}
+                onClick={() => downloadPdf()}
                 onMouseEnter={(e) => {
                     if (!isGeneratingPdf) {
                         e.currentTarget.style.transform = "translateY(-2px)";

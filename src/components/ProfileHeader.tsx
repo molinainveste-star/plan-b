@@ -3,7 +3,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import { MapPin, Youtube, Instagram, FileDown, RefreshCw, Pencil, Check, X, ChevronDown, ChevronUp, Loader2 } from "lucide-react";
 import { updateYouTubeMetrics, updateProfileAvatar } from "@/lib/actions";
-import { generatePdf } from "@/lib/generatePdf";
+import { downloadMediaKitPDF, MediaKitData } from "@/components/MediaKitPDF";
+import { usePdf } from "@/contexts/PdfContext";
 
 interface ProfileHeaderProps {
     slug: string;
@@ -13,6 +14,17 @@ interface ProfileHeaderProps {
     location: string;
     niche: string;
     socials: { platform: string; handle: string; url: string }[];
+    // Dados extras para o PDF
+    pdfData?: {
+        metrics: Array<{ label: string; value: string; trend?: string }>;
+        demographics?: {
+            age: Array<{ label: string; value: number }>;
+            gender: { female: number; male: number };
+            countries: string[];
+        };
+        story?: string;
+        pricing?: Array<{ name: string; price: string; features: string[]; popular?: boolean }>;
+    };
 }
 
 export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
@@ -23,6 +35,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
     location,
     niche,
     socials,
+    pdfData,
 }) => {
     const [isSyncing, setIsSyncing] = useState(false);
     const [avatarUrl, setAvatarUrl] = useState(initialAvatarUrl);
@@ -32,6 +45,24 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
     const [isBioExpanded, setIsBioExpanded] = useState(false);
     const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
     const avatarContainerRef = useRef<HTMLDivElement>(null);
+    const { setData: setPdfData } = usePdf();
+
+    // Seta os dados do PDF no contexto
+    useEffect(() => {
+        const data: MediaKitData = {
+            name,
+            bio,
+            avatarUrl,
+            location,
+            niche,
+            metrics: pdfData?.metrics || [],
+            demographics: pdfData?.demographics,
+            story: pdfData?.story,
+            socials: socials.map(s => ({ platform: s.platform, handle: s.handle })),
+            pricing: pdfData?.pricing,
+        };
+        setPdfData(data);
+    }, [name, bio, avatarUrl, location, niche, pdfData, socials, setPdfData]);
     
     // Limite de caracteres para truncar a bio
     const BIO_CHAR_LIMIT = 200;
@@ -53,7 +84,19 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
     const handleDownloadPdf = async () => {
         setIsGeneratingPdf(true);
         try {
-            await generatePdf("media-kit-content", `${name.replace(/\s+/g, "-").toLowerCase()}-media-kit.pdf`);
+            const data: MediaKitData = {
+                name,
+                bio,
+                avatarUrl,
+                location,
+                niche,
+                metrics: pdfData?.metrics || [],
+                demographics: pdfData?.demographics,
+                story: pdfData?.story,
+                socials: socials.map(s => ({ platform: s.platform, handle: s.handle })),
+                pricing: pdfData?.pricing,
+            };
+            await downloadMediaKitPDF(data, `${name.replace(/\s+/g, "-").toLowerCase()}-media-kit.pdf`);
         } finally {
             setIsGeneratingPdf(false);
         }

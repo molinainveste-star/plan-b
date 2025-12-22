@@ -140,6 +140,21 @@ export default async function MediaKitPage({ params }: { params: Promise<{ slug:
                     niche={profile.niche || "Geral"}
                     avatarUrl={profile.avatar_url}
                     socials={socialLinks}
+                    pdfData={{
+                        metrics: metrics.map((m: any) => ({ label: m.label, value: m.value, trend: m.trend })),
+                        demographics: {
+                            age: ageData.map((a: any) => ({ label: a.label, value: parseFloat(a.value) })),
+                            gender: genderData,
+                            countries: countryData,
+                        },
+                        story: finalStory,
+                        pricing: profile.pricing_packages?.map((p: any) => ({
+                            name: p.name,
+                            price: p.price,
+                            features: p.features || [],
+                            popular: p.popular,
+                        })),
+                    }}
                 />
 
                 {/* Stats Section Header */}
