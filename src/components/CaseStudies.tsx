@@ -19,12 +19,35 @@ export const CaseStudies: React.FC<CaseStudiesProps> = ({
     isPro = true
 }) => {
     const defaultCases: CaseStudy[] = [
-        { id: "1", brandName: "Nike", logoUrl: "https://upload.wikimedia.org/wikipedia/commons/a/a6/Logo_NIKE.svg", description: "Lançamento Air Max: Foco em lifestyle urbano e alta performance.", metrics: "1.2M Views • 15% CTR", videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
-        { id: "2", brandName: "Samsung", logoUrl: "https://upload.wikimedia.org/wikipedia/commons/2/24/Samsung_Logo.svg", description: "Review Galaxy S24: Demonstração de recursos de IA e câmera.", metrics: "850k Views • 8k Comentários", videoUrl: "" },
-        { id: "3", brandName: "Coca-Cola", logoUrl: "https://upload.wikimedia.org/wikipedia/commons/c/ce/Coca-Cola_logo.svg", description: "Campanha de Natal: Conexão emocional e partilha.", metrics: "2.5M Alcance • Viralizou no TikTok", videoUrl: "" },
+        { 
+            id: "1", 
+            brandName: "Nike", 
+            logoUrl: "https://upload.wikimedia.org/wikipedia/commons/a/a6/Logo_NIKE.svg", 
+            description: "Lançamento Air Max: Foco em lifestyle urbano e alta performance.", 
+            metrics: "1.2M Views • 15% CTR", 
+            videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" 
+        },
+        { 
+            id: "2", 
+            brandName: "Samsung", 
+            logoUrl: "https://upload.wikimedia.org/wikipedia/commons/2/24/Samsung_Logo.svg", 
+            description: "Review Galaxy S24: Demonstração de recursos de IA e câmera.", 
+            metrics: "850k Views • 8k Comentários", 
+            videoUrl: "" 
+        },
+        { 
+            id: "3", 
+            brandName: "Coca-Cola", 
+            logoUrl: "https://upload.wikimedia.org/wikipedia/commons/c/ce/Coca-Cola_logo.svg", 
+            description: "Campanha de Natal: Conexão emocional e partilha.", 
+            metrics: "2.5M Alcance • Viralizou no TikTok", 
+            videoUrl: "" 
+        },
     ];
 
-    const [cases, setCases] = useState<CaseStudy[]>(initialCases.length > 0 ? initialCases : defaultCases);
+    const [cases, setCases] = useState<CaseStudy[]>(
+        initialCases.length > 0 ? initialCases : defaultCases
+    );
     const [isEditing, setIsEditing] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
 
@@ -77,40 +100,77 @@ export const CaseStudies: React.FC<CaseStudiesProps> = ({
         return null;
     };
 
+    const inputStyle: React.CSSProperties = {
+        padding: "var(--space-2) var(--space-3)",
+        borderRadius: "var(--radius-sm)",
+        border: "1px solid var(--border)",
+        fontSize: "var(--text-sm)",
+        width: "100%",
+        fontFamily: "inherit",
+        outline: "none",
+    };
+
     return (
-        <section style={{ marginTop: "6rem", textAlign: "center", position: "relative" }}>
+        <section 
+            style={{ 
+                marginTop: "var(--space-20)", 
+                textAlign: "center", 
+                position: "relative",
+                animation: "fadeInUp 0.4s ease forwards",
+                animationDelay: "250ms",
+                opacity: 0,
+            }}
+        >
+            {/* Edit Controls */}
             {isOwner && (
-                <div style={{ position: "absolute", top: -50, right: 0, zIndex: 10 }} className="no-print">
+                <div 
+                    style={{ 
+                        position: "absolute", 
+                        top: "-3rem", 
+                        right: 0, 
+                        zIndex: 10 
+                    }} 
+                    className="no-print"
+                >
                     {!isEditing ? (
                         <button
                             onClick={() => setIsEditing(true)}
-                            className="glass-panel"
                             style={{
-                                padding: "0.5rem 1rem",
-                                borderRadius: "1rem",
-                                border: "none",
+                                padding: "var(--space-2) var(--space-4)",
+                                borderRadius: "var(--radius-md)",
+                                border: "1px solid var(--border)",
                                 background: "var(--card)",
                                 color: "var(--foreground)",
                                 cursor: "pointer",
-                                fontSize: "0.875rem",
-                                fontWeight: 600,
-                                display: "flex", alignItems: "center", gap: "0.5rem"
+                                fontSize: "var(--text-sm)",
+                                fontWeight: 500,
+                                display: "flex",
+                                alignItems: "center",
+                                gap: "var(--space-2)",
+                                transition: "all var(--transition-base)",
+                            }}
+                            onMouseEnter={(e) => {
+                                e.currentTarget.style.borderColor = "var(--primary)";
+                            }}
+                            onMouseLeave={(e) => {
+                                e.currentTarget.style.borderColor = "var(--border)";
                             }}
                         >
                             ✏️ Editar Cases
                         </button>
                     ) : (
-                        <div style={{ display: "flex", gap: "0.5rem" }}>
+                        <div style={{ display: "flex", gap: "var(--space-2)" }}>
                             <button
                                 onClick={() => setIsEditing(false)}
                                 style={{
-                                    padding: "0.5rem 1rem",
-                                    borderRadius: "1rem",
+                                    padding: "var(--space-2) var(--space-4)",
+                                    borderRadius: "var(--radius-md)",
                                     border: "none",
-                                    background: "#eee",
-                                    color: "#333",
+                                    background: "var(--secondary)",
+                                    color: "var(--foreground)",
                                     cursor: "pointer",
-                                    fontWeight: 600
+                                    fontWeight: 500,
+                                    fontSize: "var(--text-sm)",
                                 }}
                             >
                                 Cancelar
@@ -119,14 +179,15 @@ export const CaseStudies: React.FC<CaseStudiesProps> = ({
                                 onClick={handleSave}
                                 disabled={isSaving}
                                 style={{
-                                    padding: "0.5rem 1rem",
-                                    borderRadius: "1rem",
+                                    padding: "var(--space-2) var(--space-4)",
+                                    borderRadius: "var(--radius-md)",
                                     border: "none",
                                     background: "var(--primary)",
                                     color: "white",
                                     cursor: "pointer",
-                                    fontWeight: 600,
-                                    opacity: isSaving ? 0.7 : 1
+                                    fontWeight: 500,
+                                    fontSize: "var(--text-sm)",
+                                    opacity: isSaving ? 0.7 : 1,
                                 }}
                             >
                                 {isSaving ? "Salvando..." : "Salvar"}
@@ -136,30 +197,32 @@ export const CaseStudies: React.FC<CaseStudiesProps> = ({
                 </div>
             )}
 
+            {/* Section Header */}
             <h3 style={{
-                fontSize: "2rem",
-                fontWeight: 800,
-                marginBottom: "0.5rem",
-                color: "var(--foreground)"
+                fontSize: "var(--text-3xl)",
+                fontWeight: 700,
+                marginBottom: "var(--space-2)",
+                color: "var(--foreground)",
+                letterSpacing: "var(--tracking-tight)",
             }}>
-                Vitrine de Sucesso 🏆
+                Vitrine de Sucesso
             </h3>
             <p style={{
-                fontSize: "1rem",
+                fontSize: "var(--text-base)",
                 color: "var(--muted-foreground)",
-                marginBottom: "3rem",
+                marginBottom: "var(--space-10)",
                 maxWidth: "600px",
                 marginLeft: "auto",
-                marginRight: "auto"
+                marginRight: "auto",
             }}>
                 Marcas que confiaram e os resultados que alcançamos juntos.
             </p>
 
+            {/* Cases Grid */}
             <div style={{
                 display: "grid",
                 gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-                gap: "2rem",
-                padding: "0 1rem"
+                gap: "var(--space-6)",
             }}>
                 {cases.map((brandCase, i) => {
                     const embedUrl = getEmbedUrl(brandCase.videoUrl);
@@ -169,28 +232,32 @@ export const CaseStudies: React.FC<CaseStudiesProps> = ({
                             key={brandCase.id}
                             className="glass-panel"
                             style={{
-                                padding: "1.5rem",
-                                borderRadius: "1.5rem",
+                                padding: "var(--space-6)",
+                                borderRadius: "var(--radius-xl)",
                                 display: "flex",
                                 flexDirection: "column",
-                                gap: "1.5rem",
+                                gap: "var(--space-4)",
                                 position: "relative",
                                 textAlign: "left",
-                                overflow: "hidden"
+                                overflow: "hidden",
                             }}
                         >
-                            {/* 1. Header: Logo Centered */}
-                            <div style={{ display: "flex", justifyContent: "center", marginBottom: "0.5rem" }}>
+                            {/* Logo */}
+                            <div style={{ 
+                                display: "flex", 
+                                justifyContent: "center", 
+                                marginBottom: "var(--space-2)",
+                            }}>
                                 <img
                                     src={brandCase.logoUrl}
                                     alt={brandCase.brandName}
                                     style={{
-                                        height: "32px",
+                                        height: "28px",
                                         maxWidth: "100px",
                                         objectFit: "contain",
-                                        filter: "grayscale(100%)", // Elegant default
-                                        opacity: 0.7,
-                                        transition: "all 0.3s ease"
+                                        filter: "grayscale(100%)",
+                                        opacity: 0.6,
+                                        transition: "all var(--transition-slow)",
                                     }}
                                     onMouseEnter={(e) => {
                                         e.currentTarget.style.filter = "grayscale(0%)";
@@ -198,24 +265,23 @@ export const CaseStudies: React.FC<CaseStudiesProps> = ({
                                     }}
                                     onMouseLeave={(e) => {
                                         e.currentTarget.style.filter = "grayscale(100%)";
-                                        e.currentTarget.style.opacity = "0.7";
+                                        e.currentTarget.style.opacity = "0.6";
                                     }}
                                     onError={(e) => {
                                         e.currentTarget.style.display = 'none';
-                                        // Fallback text logic could go here if needed
                                     }}
                                 />
                             </div>
 
-                            {/* 2. Middle: Video/Thumbnail */}
+                            {/* Video Thumbnail */}
                             <div style={{
                                 width: "100%",
                                 aspectRatio: "16/9",
-                                borderRadius: "1rem",
+                                borderRadius: "var(--radius-lg)",
                                 overflow: "hidden",
                                 background: "#000",
                                 position: "relative",
-                                boxShadow: "0 10px 30px -10px rgba(0,0,0,0.2)"
+                                boxShadow: "var(--shadow-md)",
                             }}>
                                 {embedUrl ? (
                                     <iframe
@@ -232,22 +298,28 @@ export const CaseStudies: React.FC<CaseStudiesProps> = ({
                                         display: "flex",
                                         alignItems: "center",
                                         justifyContent: "center",
-                                        background: "linear-gradient(135deg, var(--secondary) 0%, var(--border) 100%)"
+                                        background: "var(--gradient-primary-soft)",
                                     }}>
-                                        <Play size={40} className="text-muted-foreground" style={{ opacity: 0.5 }} />
+                                        <Play 
+                                            size={36} 
+                                            style={{ 
+                                                opacity: 0.4, 
+                                                color: "var(--muted-foreground)" 
+                                            }} 
+                                        />
                                     </div>
                                 )}
                             </div>
 
-                            {/* 3. Bottom: Description & Metrics */}
+                            {/* Description & Metrics */}
                             <div>
                                 {brandCase.description && (
                                     <p style={{
-                                        fontSize: "0.9rem",
+                                        fontSize: "var(--text-sm)",
                                         color: "var(--muted-foreground)",
-                                        marginBottom: "1rem",
-                                        lineHeight: "1.5",
-                                        minHeight: "2.7rem" // Ensure alignment
+                                        marginBottom: "var(--space-3)",
+                                        lineHeight: "var(--leading-relaxed)",
+                                        minHeight: "2.5rem",
                                     }}>
                                         {brandCase.description}
                                     </p>
@@ -257,15 +329,15 @@ export const CaseStudies: React.FC<CaseStudiesProps> = ({
                                     <div style={{
                                         display: "inline-flex",
                                         alignItems: "center",
-                                        gap: "0.5rem",
-                                        padding: "0.5rem 1rem",
-                                        background: "rgba(67, 97, 238, 0.08)",
-                                        borderRadius: "2rem",
+                                        gap: "var(--space-2)",
+                                        padding: "var(--space-2) var(--space-3)",
+                                        background: "var(--primary-light)",
+                                        borderRadius: "var(--radius-full)",
                                         color: "var(--primary)",
-                                        fontWeight: 700,
-                                        fontSize: "0.85rem"
+                                        fontWeight: 600,
+                                        fontSize: "var(--text-sm)",
                                     }}>
-                                        <TrendingUp size={16} />
+                                        <TrendingUp size={14} />
                                         {brandCase.metrics}
                                     </div>
                                 )}
@@ -276,49 +348,65 @@ export const CaseStudies: React.FC<CaseStudiesProps> = ({
                                 <div style={{
                                     position: "absolute",
                                     inset: 0,
-                                    background: "rgba(255,255,255,0.95)",
+                                    background: "rgba(255,255,255,0.98)",
                                     zIndex: 20,
-                                    padding: "1rem",
+                                    padding: "var(--space-4)",
                                     display: "flex",
                                     flexDirection: "column",
-                                    gap: "0.5rem",
-                                    justifyContent: "center"
+                                    gap: "var(--space-3)",
+                                    justifyContent: "center",
                                 }}>
                                     <input
                                         value={brandCase.brandName}
                                         onChange={(e) => updateCase(i, "brandName", e.target.value)}
                                         placeholder="Nome da Marca"
-                                        style={{ padding: "0.5rem", borderRadius: "8px", border: "1px solid var(--border)" }}
+                                        style={inputStyle}
                                     />
                                     <input
                                         value={brandCase.logoUrl}
                                         onChange={(e) => updateCase(i, "logoUrl", e.target.value)}
                                         placeholder="URL do Logo"
-                                        style={{ padding: "0.5rem", borderRadius: "8px", border: "1px solid var(--border)" }}
+                                        style={inputStyle}
                                     />
                                     <input
                                         value={brandCase.videoUrl || ""}
                                         onChange={(e) => updateCase(i, "videoUrl", e.target.value)}
                                         placeholder="Link do YouTube"
-                                        style={{ padding: "0.5rem", borderRadius: "8px", border: "1px solid var(--border)" }}
+                                        style={inputStyle}
                                     />
                                     <textarea
                                         value={brandCase.description || ""}
                                         onChange={(e) => updateCase(i, "description", e.target.value)}
                                         placeholder="Descrição curta..."
-                                        style={{ padding: "0.5rem", borderRadius: "8px", border: "1px solid var(--border)", height: "60px" }}
+                                        style={{ 
+                                            ...inputStyle, 
+                                            height: "60px", 
+                                            resize: "none",
+                                            fontFamily: "inherit",
+                                        }}
                                     />
                                     <input
                                         value={brandCase.metrics || ""}
                                         onChange={(e) => updateCase(i, "metrics", e.target.value)}
                                         placeholder="Métricas (ex: +50k views)"
-                                        style={{ padding: "0.5rem", borderRadius: "8px", border: "1px solid var(--border)" }}
+                                        style={inputStyle}
                                     />
                                     <button
                                         onClick={() => removeCase(i)}
-                                        style={{ color: "red", fontSize: "0.8rem", background: "none", border: "none", cursor: "pointer", alignSelf: "flex-end", marginTop: "0.5rem" }}
+                                        style={{ 
+                                            color: "var(--error)", 
+                                            fontSize: "var(--text-sm)", 
+                                            background: "none", 
+                                            border: "none", 
+                                            cursor: "pointer", 
+                                            alignSelf: "flex-end", 
+                                            marginTop: "var(--space-2)",
+                                            display: "flex",
+                                            alignItems: "center",
+                                            gap: "var(--space-1)",
+                                        }}
                                     >
-                                        <Trash2 size={14} /> Remover Case
+                                        <Trash2 size={14} /> Remover
                                     </button>
                                 </div>
                             )}
@@ -326,13 +414,13 @@ export const CaseStudies: React.FC<CaseStudiesProps> = ({
                     );
                 })}
 
-                {/* Add Button Card */}
+                {/* Add New Case Button */}
                 {isEditing && (
                     <button
                         onClick={addCase}
                         style={{
-                            minHeight: "400px",
-                            borderRadius: "1.5rem",
+                            minHeight: "380px",
+                            borderRadius: "var(--radius-xl)",
                             border: "2px dashed var(--border)",
                             background: "transparent",
                             color: "var(--muted-foreground)",
@@ -341,10 +429,19 @@ export const CaseStudies: React.FC<CaseStudiesProps> = ({
                             alignItems: "center",
                             justifyContent: "center",
                             cursor: "pointer",
-                            gap: "1rem"
+                            gap: "var(--space-4)",
+                            transition: "all var(--transition-base)",
+                        }}
+                        onMouseEnter={(e) => {
+                            e.currentTarget.style.borderColor = "var(--primary)";
+                            e.currentTarget.style.color = "var(--primary)";
+                        }}
+                        onMouseLeave={(e) => {
+                            e.currentTarget.style.borderColor = "var(--border)";
+                            e.currentTarget.style.color = "var(--muted-foreground)";
                         }}
                     >
-                        <Plus size={40} />
+                        <Plus size={36} />
                         <span style={{ fontWeight: 600 }}>Adicionar Novo Case</span>
                     </button>
                 )}

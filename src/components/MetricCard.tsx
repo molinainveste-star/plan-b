@@ -1,5 +1,7 @@
+"use client";
+
 import React from "react";
-import { Users, Activity, Eye, Heart, Youtube, Video, BarChart3, Calendar } from "lucide-react";
+import { Users, Activity, Eye, Heart, Youtube, Video, BarChart3, Calendar, TrendingUp, TrendingDown, Minus } from "lucide-react";
 
 interface MetricCardProps {
     label: string;
@@ -7,9 +9,10 @@ interface MetricCardProps {
     trend: string;
     trendDirection: "up" | "down" | "neutral";
     icon: string;
+    delay?: number;
 }
 
-const iconMap: Record<string, any> = {
+const iconMap: Record<string, React.ComponentType<{ size?: number; strokeWidth?: number }>> = {
     users: Users,
     activity: Activity,
     eye: Eye,
@@ -27,85 +30,105 @@ export const MetricCard: React.FC<MetricCardProps> = ({
     trend,
     trendDirection,
     icon,
+    delay = 0,
 }) => {
-    // Normalize icon name and fallback to chart if not found
     const iconKey = icon?.toLowerCase() || "chart";
     const Icon = iconMap[iconKey] || BarChart3;
+    const TrendIcon = trendDirection === "up" ? TrendingUp : trendDirection === "down" ? TrendingDown : Minus;
+
+    const trendColors = {
+        up: { color: "var(--success)", bg: "var(--success-light)" },
+        down: { color: "var(--error)", bg: "var(--error-light)" },
+        neutral: { color: "var(--foreground-muted)", bg: "var(--background-tertiary)" },
+    };
 
     return (
         <div
             className="glass-panel"
             style={{
-                padding: "2rem",
-                borderRadius: "var(--radius)",
+                padding: "var(--space-6)",
+                borderRadius: "var(--radius-xl)",
                 display: "flex",
                 flexDirection: "column",
-                gap: "1rem",
+                gap: "var(--space-4)",
                 position: "relative",
                 overflow: "hidden",
-                // Remove redundant inline styles handled by class
+                animation: `fadeInUp 0.5s ease forwards`,
+                animationDelay: `${delay}ms`,
+                opacity: 0,
             }}
         >
+            {/* Glow effect on hover */}
             <div
                 style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "flex-start",
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    height: "2px",
+                    background: "var(--gradient-primary)",
+                    opacity: 0.8,
                 }}
-            >
-                <div>
+            />
+
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                <div style={{ flex: 1 }}>
                     <div style={{
-                        color: "var(--muted-foreground)",
-                        fontSize: "0.875rem",
-                        marginBottom: "0.5rem",
-                        fontWeight: 600,
+                        color: "var(--foreground-muted)",
+                        fontSize: "var(--text-sm)",
+                        fontWeight: 500,
+                        marginBottom: "var(--space-2)",
                         textTransform: "uppercase",
-                        letterSpacing: "0.05em"
+                        letterSpacing: "0.05em",
                     }}>
                         {label}
                     </div>
-                    <div style={{
-                        fontSize: "3rem",
-                        fontWeight: 800,
-                        letterSpacing: "-0.04em",
-                        color: "var(--primary)",
-                        lineHeight: 1
-                    }}>
+                    
+                    <div 
+                        className="text-gradient"
+                        style={{
+                            fontSize: "var(--text-4xl)",
+                            fontWeight: 800,
+                            letterSpacing: "-0.02em",
+                            lineHeight: 1,
+                        }}
+                    >
                         {value}
                     </div>
                 </div>
 
                 <div
                     style={{
-                        padding: "1rem",
-                        borderRadius: "1.25rem",
-                        background: "rgba(67, 97, 238, 0.05)",
+                        padding: "var(--space-3)",
+                        borderRadius: "var(--radius-lg)",
+                        background: "var(--primary-light)",
                         color: "var(--primary)",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
+                        boxShadow: "var(--shadow-glow)",
                     }}
                 >
-                    <Icon size={28} strokeWidth={2.5} />
+                    <Icon size={24} strokeWidth={2} />
                 </div>
             </div>
 
-            <div style={{ marginTop: "0.5rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            <div style={{ display: "flex", alignItems: "center" }}>
                 <div
                     style={{
-                        fontSize: "0.80rem",
-                        color: trendDirection === "up" ? "#10b981" : "var(--muted-foreground)",
-                        background: trendDirection === "up" ? "rgba(16, 185, 129, 0.1)" : "var(--secondary)",
-                        padding: "0.35rem 0.75rem",
-                        borderRadius: "2rem",
-                        fontWeight: 700,
-                        letterSpacing: "0.02em",
-                        display: "flex",
+                        display: "inline-flex",
                         alignItems: "center",
-                        gap: "0.25rem"
+                        gap: "var(--space-1)",
+                        fontSize: "var(--text-sm)",
+                        color: trendColors[trendDirection].color,
+                        background: trendColors[trendDirection].bg,
+                        padding: "var(--space-1) var(--space-3)",
+                        borderRadius: "var(--radius-full)",
+                        fontWeight: 600,
                     }}
                 >
-                    {trendDirection === "up" && "↗"} {trend}
+                    <TrendIcon size={14} strokeWidth={2.5} />
+                    <span>{trend}</span>
                 </div>
             </div>
         </div>

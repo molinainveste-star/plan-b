@@ -1,43 +1,138 @@
+/* ============================================
+   PubliScore Design System - ALURA STYLE
+   Dark Mode + Glassmorphism + Premium Feel
+   ============================================ */
+
 :root {
-  /* Clean & Crisp Theme */
-  --background: #FFFFFF;
-  /* Pure White */
-  --foreground: #1A1A1A;
-  /* Darker, higher contrast */
+  /* ============ DARK THEME COLORS ============ */
+  /* Background - Deep Ocean Blue */
+  --background: #0D1117;
+  --background-secondary: #161B22;
+  --background-tertiary: #21262D;
+  --background-elevated: #30363D;
 
-  --card: #FFFFFF;
-  --card-foreground: #1A1A1A;
+  /* Foreground */
+  --foreground: #F0F6FC;
+  --foreground-secondary: #C9D1D9;
+  --foreground-muted: #8B949E;
 
-  /* Royal Blue Electric */
-  --primary: #4361EE;
-  --primary-foreground: #FFFFFF;
-  --primary-rgb: 67, 97, 238;
+  /* Primary - Electric Blue (Alura style) */
+  --primary: #00D4FF;
+  --primary-hover: #00BFFF;
+  --primary-dark: #0099CC;
+  --primary-light: rgba(0, 212, 255, 0.15);
+  --primary-glow: rgba(0, 212, 255, 0.4);
+  --primary-rgb: 0, 212, 255;
 
-  --secondary: #F8F9FA;
-  --secondary-foreground: #4361EE;
+  /* Accent - Vibrant Purple/Magenta */
+  --accent: #7C3AED;
+  --accent-light: rgba(124, 58, 237, 0.15);
+  --accent-pink: #EC4899;
+  --accent-orange: #F97316;
 
-  --muted: #FAFAFA;
-  --muted-foreground: #64748B;
+  /* Success/Error/Warning */
+  --success: #10B981;
+  --success-light: rgba(16, 185, 129, 0.15);
+  --error: #EF4444;
+  --error-light: rgba(239, 68, 68, 0.15);
+  --warning: #F59E0B;
 
-  --accent: #F1F5F9;
-  --accent-foreground: #4361EE;
+  /* Cards & Surfaces - Glassmorphism */
+  --card: rgba(22, 27, 34, 0.8);
+  --card-hover: rgba(33, 38, 45, 0.9);
+  --card-border: rgba(240, 246, 252, 0.1);
+  --card-border-hover: rgba(0, 212, 255, 0.3);
 
-  --border: #E2E8F0;
-  --input: #FFFFFF;
-  --ring: #4361EE;
+  /* Borders */
+  --border: rgba(240, 246, 252, 0.1);
+  --border-hover: rgba(240, 246, 252, 0.2);
+  --ring: var(--primary);
 
-  --radius: 1.5rem;
+  /* ============ SPACING SYSTEM ============ */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
 
-  /* Crisp Gradients */
-  --gradient-primary: linear-gradient(135deg, #4361EE 0%, #3A0CA3 100%);
-  --gradient-soft: linear-gradient(to bottom, #FFFFFF, #F8F9FA);
-  --primary-gradient: linear-gradient(135deg, #4361EE 0%, #4CC9F0 100%);
+  /* ============ BORDER RADIUS ============ */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --radius-full: 9999px;
+  --radius: var(--radius-lg);
+
+  /* ============ SHADOWS - Glow Effects ============ */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
+  --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.6);
+  --shadow-glow: 0 0 20px rgba(0, 212, 255, 0.3);
+  --shadow-glow-lg: 0 0 40px rgba(0, 212, 255, 0.4);
+  --shadow-glow-accent: 0 0 30px rgba(124, 58, 237, 0.4);
+
+  /* ============ GRADIENTS - Alura Style ============ */
+  --gradient-primary: linear-gradient(135deg, #00D4FF 0%, #7C3AED 100%);
+  --gradient-accent: linear-gradient(135deg, #7C3AED 0%, #EC4899 100%);
+  --gradient-warm: linear-gradient(135deg, #F97316 0%, #EC4899 100%);
+  --gradient-surface: linear-gradient(180deg, #0D1117 0%, #161B22 100%);
+  --gradient-card: linear-gradient(145deg, rgba(22, 27, 34, 0.9) 0%, rgba(13, 17, 23, 0.95) 100%);
+  --gradient-glow: radial-gradient(ellipse at center, rgba(0, 212, 255, 0.15) 0%, transparent 70%);
+
+  /* ============ TRANSITIONS ============ */
+  --transition-fast: 0.1s ease;
+  --transition-base: 0.2s ease;
+  --transition-slow: 0.3s ease;
+  --transition-slower: 0.5s ease;
+
+  /* ============ TYPOGRAPHY ============ */
+  --font-sans: var(--font-body), system-ui, -apple-system, sans-serif;
+  --font-display: var(--font-heading), var(--font-sans);
+  
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
+  --text-4xl: 2.25rem;
+  --text-5xl: 3rem;
+  --text-6xl: 3.75rem;
+
+  --leading-tight: 1.1;
+  --leading-snug: 1.25;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.625;
+
+  --tracking-tight: -0.02em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.02em;
 }
 
-* {
+/* ============ RESET & BASE ============ */
+*,
+*::before,
+*::after {
   box-sizing: border-box;
-  padding: 0;
   margin: 0;
+  padding: 0;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  scroll-behavior: smooth;
 }
 
 html,
@@ -49,50 +144,67 @@ body {
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: var(--font-inter), sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  line-height: 1.6;
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: var(--leading-relaxed);
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: var(--font-outfit), sans-serif;
-  font-weight: 600;
-  line-height: 1.2;
-  letter-spacing: -0.02em;
-  color: var(--primary);
+/* ============ TYPOGRAPHY ============ */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  color: var(--foreground);
+}
+
+h1 {
+  font-size: clamp(var(--text-4xl), 6vw, var(--text-6xl));
+  font-weight: 800;
+}
+
+h2 {
+  font-size: clamp(var(--text-2xl), 4vw, var(--text-4xl));
+}
+
+h3 {
+  font-size: clamp(var(--text-xl), 3vw, var(--text-2xl));
+}
+
+p {
+  color: var(--foreground-muted);
+  line-height: var(--leading-relaxed);
 }
 
 a {
   color: inherit;
   text-decoration: none;
-  transition: all 0.2s ease;
+  transition: color var(--transition-base);
 }
 
 a:hover {
   color: var(--primary);
-  opacity: 0.8;
 }
 
-/* Utilities */
+/* ============ GLASS PANEL - Premium Glassmorphism ============ */
 .glass-panel {
-  background: #FFFFFF;
-  border: 1px solid rgba(0, 0, 0, 0.04);
-  box-shadow: 0 10px 40px -10px rgba(67, 97, 238, 0.1);
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  background: var(--card);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  transition: all var(--transition-slow);
 }
 
 .glass-panel:hover {
+  background: var(--card-hover);
+  border-color: var(--card-border-hover);
+  box-shadow: var(--shadow-xl), var(--shadow-glow);
   transform: translateY(-4px);
-  box-shadow: 0 20px 50px -10px rgba(67, 97, 238, 0.2);
-  border-color: rgba(67, 97, 238, 0.2);
 }
 
+/* ============ TEXT UTILITIES ============ */
 .text-gradient {
   background: var(--gradient-primary);
   -webkit-background-clip: text;
@@ -100,155 +212,235 @@ a:hover {
   background-clip: text;
 }
 
-/* Custom Scrollbar for Calm Aesthetic */
+.text-gradient-accent {
+  background: var(--gradient-accent);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-glow {
+  text-shadow: 0 0 20px var(--primary-glow);
+}
+
+/* ============ GLOW EFFECTS ============ */
+.glow {
+  box-shadow: var(--shadow-glow);
+}
+
+.glow-lg {
+  box-shadow: var(--shadow-glow-lg);
+}
+
+.glow-accent {
+  box-shadow: var(--shadow-glow-accent);
+}
+
+/* ============ BACKGROUND DECORATIONS ============ */
+.bg-gradient-radial {
+  background: var(--gradient-glow);
+}
+
+.bg-grid {
+  background-image: 
+    linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+.bg-dots {
+  background-image: radial-gradient(rgba(0, 212, 255, 0.15) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* ============ ANIMATION KEYFRAMES ============ */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { 
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+  }
+  50% { 
+    box-shadow: 0 0 40px rgba(0, 212, 255, 0.6);
+  }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ============ ANIMATION UTILITIES ============ */
+.animate-fade-in {
+  animation: fadeIn var(--transition-slow) ease forwards;
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.5s ease forwards;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.animate-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--background-secondary) 0%,
+    var(--background-tertiary) 50%,
+    var(--background-secondary) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient-shift 3s ease infinite;
+}
+
+/* Stagger animations */
+.stagger-1 { animation-delay: 0ms; }
+.stagger-2 { animation-delay: 100ms; }
+.stagger-3 { animation-delay: 200ms; }
+.stagger-4 { animation-delay: 300ms; }
+.stagger-5 { animation-delay: 400ms; }
+
+/* ============ SCROLLBAR - Dark Theme ============ */
 ::-webkit-scrollbar {
   width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--background);
+  background: var(--background-secondary);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--secondary);
-  border-radius: 10px;
+  background: var(--background-elevated);
+  border-radius: var(--radius-full);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--accent);
+  background: var(--primary);
 }
 
+/* ============ FOCUS STYLES ============ */
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* ============ SELECTION ============ */
+::selection {
+  background: rgba(0, 212, 255, 0.3);
+  color: var(--foreground);
+}
+
+/* ============ BADGE STYLES ============ */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-3);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  border-radius: var(--radius-full);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.badge-primary {
+  background: var(--primary-light);
+  color: var(--primary);
+  border: 1px solid rgba(0, 212, 255, 0.3);
+}
+
+.badge-success {
+  background: var(--success-light);
+  color: var(--success);
+}
+
+.badge-accent {
+  background: var(--accent-light);
+  color: var(--accent);
+}
+
+/* ============ PRINT STYLES ============ */
 @media print {
   @page {
     margin: 0;
     size: auto;
   }
 
-  /* Reset body but KEEP COLORS */
   body {
-    background: var(--background) !important;
-    /* Keep the light subtle gray or user theme */
-    color: var(--foreground) !important;
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    height: auto !important;
-    overflow: visible !important;
-  }
-
-  /* Hide Scrollbars */
-  ::-webkit-scrollbar {
-    display: none;
-  }
-
-  /* Hide interactive elements/non-essential */
-  button,
-  .no-print,
-  [role="button"],
-  [aria-label="Incrementar com IA"],
-  .ai-enhance-button,
-  nav,
-  header,
-  .ia-insight-badge {
-    display: none !important;
-  }
-
-  /* Expand Layout */
-  main {
-    padding: 2rem !important;
-    /* Add some padding for the PDF page */
-    margin: 0 auto !important;
-    width: 100% !important;
-    max-width: 1200px !important;
-    min-height: auto !important;
-  }
-
-  /* Adjust Grid for Print */
-  div[style*="grid"] {
-    display: grid !important;
-    grid-template-columns: repeat(3, 1fr) !important;
-    /* Force 3 columns for metrics */
-    gap: 1.5rem !important;
-    break-inside: avoid;
-    page-break-inside: avoid;
-  }
-
-  /* Metric Cards & Panels - Keep the design! */
-  .glass-panel {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important;
-    /* Subtle shadow for print */
-    border: 1px solid #e5e5e5 !important;
     background: white !important;
-    /* Cards should be white on the gray bg */
-    break-inside: avoid;
-    page-break-inside: avoid;
-    color: var(--foreground) !important;
-    padding: 1.5rem !important;
-    margin-bottom: 1.5rem !important;
-    border-radius: 1rem !important;
+    color: #1a1a1a !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
 
-  /* Allow text colors */
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    color: var(--primary) !important;
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
+  .glass-panel {
+    background: white !important;
+    border: 1px solid #e5e5e5 !important;
+    box-shadow: none !important;
   }
 
-  /* Text gradient support in print (best effort) */
-  .text-gradient {
-    -webkit-text-fill-color: var(--primary) !important;
-    /* Fallback to solid color as gradients often fail in print */
-    color: var(--primary) !important;
-  }
-
-  /* Force specific textarea overrides */
-  textarea {
+  .no-print {
     display: none !important;
   }
 
-  /* Show static text in print */
-  .print-story-content {
-    display: block !important;
-    font-size: 11pt;
-    line-height: 1.6;
-    color: var(--foreground);
-    text-align: justify;
-  }
-
-  /* Ensure images/avatars print */
-  img {
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
-
-  /* Show the NEW print-only thumbnails */
-  .print-thumbnails {
-    display: block !important;
-    margin-top: 1rem !important;
-    margin-bottom: 1rem !important;
-    break-inside: avoid;
-  }
-
-  /* Reduce gaps for print compactness */
-  .glass-panel {
-    margin-top: 1.5rem !important;
-    margin-bottom: 1.5rem !important;
-    padding: 1.5rem !important;
-  }
-
-  /* Handle Avatar Switching for Print */
-  .print-avatar {
-    display: block !important;
-    margin: 0 auto 1rem auto !important;
-    border: 4px solid var(--border) !important;
+  .text-gradient {
+    -webkit-text-fill-color: #00D4FF !important;
+    color: #00D4FF !important;
   }
 }

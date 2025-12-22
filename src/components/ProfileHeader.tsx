@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { MapPin, Link as LinkIcon, Youtube, Instagram, FileDown, RefreshCw, Pencil, Check, X } from "lucide-react";
+import { MapPin, Youtube, Instagram, FileDown, RefreshCw, Pencil, Check, X } from "lucide-react";
 import { updateYouTubeMetrics, updateProfileAvatar } from "@/lib/actions";
 
 interface ProfileHeaderProps {
@@ -36,24 +36,15 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                 setIsEditingAvatar(false);
             }
         };
-
-        if (isEditingAvatar) {
-            document.addEventListener("mousedown", handleClickOutside);
-        }
-
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
+        if (isEditingAvatar) document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
     }, [isEditingAvatar]);
 
-    const handlePrint = () => {
-        window.print();
-    };
+    const handlePrint = () => window.print();
 
     const handleSync = async () => {
         const youtubeSocial = socials.find(s => s.platform === "YouTube");
         if (!youtubeSocial) return alert("Nenhum canal do YouTube conectado.");
-
         setIsSyncing(true);
         try {
             await updateYouTubeMetrics(slug, youtubeSocial.handle);
@@ -79,8 +70,8 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
             setAvatarUrl(avatarInput);
             setIsEditingAvatar(false);
         } catch (error) {
-            console.error("Error saving avatar:", error);
-            alert("Erro ao salvar a foto de perfil.");
+            console.error(error);
+            alert("Erro ao salvar.");
         } finally {
             setIsSavingAvatar(false);
         }
@@ -91,25 +82,26 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
             style={{
                 display: "flex",
                 flexDirection: "column",
-                gap: "2rem",
+                gap: "var(--space-6)",
                 alignItems: "center",
                 textAlign: "center",
-                padding: "3rem 0",
+                padding: "var(--space-10) 0",
+                animation: "fadeInUp 0.6s ease forwards",
             }}
         >
-            {/* Avatar Section */}
-            <div
-                ref={avatarContainerRef}
-                style={{ position: "relative", display: "flex", flexDirection: "column", alignItems: "center", gap: "1rem" }}
-            >
+            {/* Avatar */}
+            <div ref={avatarContainerRef} style={{ position: "relative" }}>
                 <div
-                    className="avatar-container no-print"
+                    className="no-print"
                     style={{
                         position: "relative",
                         width: "140px",
                         height: "140px",
-                        borderRadius: "50%",
+                        borderRadius: "var(--radius-full)",
                         cursor: "pointer",
+                        padding: "4px",
+                        background: "var(--gradient-primary)",
+                        boxShadow: "var(--shadow-glow-lg)",
                     }}
                     onClick={!isEditingAvatar ? handleEditAvatarClick : undefined}
                 >
@@ -117,10 +109,9 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                         style={{
                             width: "100%",
                             height: "100%",
-                            borderRadius: "50%",
+                            borderRadius: "var(--radius-full)",
                             overflow: "hidden",
-                            border: "6px solid var(--card)",
-                            boxShadow: "0 10px 30px -10px rgba(0,0,0,0.1)",
+                            background: "var(--background)",
                         }}
                     >
                         <img
@@ -129,20 +120,18 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                             style={{ width: "100%", height: "100%", objectFit: "cover" }}
                         />
                     </div>
-
-                    {/* Hover Edit Overlay */}
                     {!isEditingAvatar && (
                         <div
                             style={{
                                 position: "absolute",
-                                inset: 0,
-                                background: "rgba(0,0,0,0.5)",
-                                borderRadius: "50%",
+                                inset: "4px",
+                                background: "rgba(0,0,0,0.6)",
+                                borderRadius: "var(--radius-full)",
                                 display: "flex",
                                 alignItems: "center",
                                 justifyContent: "center",
                                 opacity: 0,
-                                transition: "opacity 0.2s",
+                                transition: "opacity var(--transition-base)",
                                 color: "white",
                             }}
                             onMouseEnter={(e) => (e.currentTarget.style.opacity = "1")}
@@ -153,45 +142,20 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                     )}
                 </div>
 
-                {/* Print Avatar (Static) */}
-                <div
-                    className="print-avatar"
-                    style={{
-                        display: "none",
-                        width: "140px",
-                        height: "140px",
-                        borderRadius: "50%",
-                        overflow: "hidden",
-                        border: "6px solid #fff",
-                        marginBottom: "1rem"
-                    }}
-                >
-                    <img
-                        src={avatarUrl}
-                        alt={name}
-                        style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                    />
-                </div>
-
-                {/* Avatar Edit Input Overlay */}
                 {isEditingAvatar && (
                     <div
-                        className="no-print"
+                        className="no-print glass-panel"
                         style={{
                             position: "absolute",
                             top: "100%",
                             left: "50%",
-                            transform: "translateX(-50%) translateY(10px)",
+                            transform: "translateX(-50%) translateY(8px)",
                             zIndex: 50,
-                            background: "var(--card)",
-                            padding: "0.75rem",
+                            padding: "var(--space-3)",
                             display: "flex",
-                            gap: "0.5rem",
+                            gap: "var(--space-2)",
                             alignItems: "center",
-                            borderRadius: "1rem",
-                            boxShadow: "0 10px 40px -10px rgba(0,0,0,0.2)",
-                            border: "1px solid var(--border)",
-                            minWidth: "300px"
+                            minWidth: "320px",
                         }}
                     >
                         <input
@@ -206,13 +170,13 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                             }}
                             style={{
                                 flex: 1,
-                                background: "var(--background)",
-                                border: "none",
-                                borderRadius: "0.5rem",
-                                padding: "0.5rem",
+                                background: "var(--background-secondary)",
+                                border: "1px solid var(--border)",
+                                borderRadius: "var(--radius-md)",
+                                padding: "var(--space-2) var(--space-3)",
                                 outline: "none",
-                                fontSize: "0.875rem",
-                                color: "var(--foreground)"
+                                fontSize: "var(--text-sm)",
+                                color: "var(--foreground)",
                             }}
                         />
                         <button
@@ -220,102 +184,121 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                             disabled={isSavingAvatar}
                             style={{
                                 background: "var(--primary)",
-                                color: "white",
+                                color: "var(--background)",
                                 border: "none",
-                                borderRadius: "0.5rem",
-                                width: "32px",
-                                height: "32px",
+                                borderRadius: "var(--radius-md)",
+                                width: "36px",
+                                height: "36px",
                                 display: "flex",
                                 alignItems: "center",
                                 justifyContent: "center",
                                 cursor: "pointer",
-                                transition: "all 0.2s"
                             }}
                         >
-                            {isSavingAvatar ? <RefreshCw size={14} className="animate-spin" /> : <Check size={16} />}
+                            {isSavingAvatar ? <RefreshCw size={16} className="animate-spin" /> : <Check size={18} />}
                         </button>
                         <button
                             onClick={() => setIsEditingAvatar(false)}
                             style={{
-                                background: "#eee",
-                                color: "#666",
+                                background: "var(--background-tertiary)",
+                                color: "var(--foreground-muted)",
                                 border: "none",
-                                borderRadius: "0.5rem",
-                                width: "32px",
-                                height: "32px",
+                                borderRadius: "var(--radius-md)",
+                                width: "36px",
+                                height: "36px",
                                 display: "flex",
                                 alignItems: "center",
                                 justifyContent: "center",
-                                cursor: "pointer"
+                                cursor: "pointer",
                             }}
                         >
-                            <X size={16} />
+                            <X size={18} />
                         </button>
                     </div>
                 )}
             </div>
 
             {/* Info */}
-            <div>
-                <h1 style={{ fontSize: "3rem", marginBottom: "0.75rem", color: "var(--foreground)", letterSpacing: "-0.04em" }}>{name}</h1>
-                <div
-                    style={{
-                        display: "flex",
-                        gap: "1.25rem",
-                        justifyContent: "center",
-                        color: "var(--muted-foreground)",
-                        fontSize: "0.9375rem",
-                        marginBottom: "1.5rem",
-                        fontWeight: 500,
-                    }}
-                >
-                    <span style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
-                        <MapPin size={16} /> {location}
+            <div style={{ maxWidth: "640px" }}>
+                <h1 style={{ 
+                    fontSize: "clamp(2.5rem, 6vw, 3.5rem)",
+                    marginBottom: "var(--space-4)", 
+                    fontWeight: 800,
+                    letterSpacing: "-0.03em",
+                    color: "var(--foreground)",
+                }}>
+                    {name}
+                </h1>
+                
+                <div style={{
+                    display: "flex",
+                    gap: "var(--space-4)",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    color: "var(--foreground-muted)",
+                    fontSize: "var(--text-base)",
+                    marginBottom: "var(--space-4)",
+                    flexWrap: "wrap",
+                }}>
+                    <span style={{ display: "flex", alignItems: "center", gap: "var(--space-2)" }}>
+                        <MapPin size={18} /> {location}
                     </span>
-                    <span style={{ color: "var(--border)" }}>|</span>
-                    <span style={{ color: "var(--primary)", fontWeight: 600 }}>{niche}</span>
+                    <span style={{ color: "var(--border)" }}>•</span>
+                    <span 
+                        className="text-gradient"
+                        style={{ 
+                            fontWeight: 700,
+                            padding: "var(--space-1) var(--space-3)",
+                            background: "var(--primary-light)",
+                            borderRadius: "var(--radius-full)",
+                            WebkitBackgroundClip: "unset",
+                            WebkitTextFillColor: "unset",
+                            color: "var(--primary)",
+                        }}
+                    >
+                        {niche}
+                    </span>
                 </div>
-                <p
-                    style={{
-                        maxWidth: "640px",
-                        margin: "0 auto",
-                        lineHeight: "1.8",
-                        color: "var(--muted-foreground)",
-                        fontSize: "1.125rem",
-                    }}
-                >
+                
+                <p style={{
+                    lineHeight: "var(--leading-relaxed)",
+                    color: "var(--foreground-secondary)",
+                    fontSize: "var(--text-lg)",
+                }}>
                     {bio}
                 </p>
             </div>
 
-            {/* Socials & Actions */}
-            <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap", justifyContent: "center" }}>
+            {/* Actions */}
+            <div style={{ 
+                display: "flex", 
+                gap: "var(--space-3)", 
+                flexWrap: "wrap", 
+                justifyContent: "center",
+                marginTop: "var(--space-2)",
+            }}>
                 {socials.map((social) => (
                     <a
                         key={social.platform}
                         href={social.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="glass-panel"
                         style={{
-                            padding: "0.75rem 1.5rem",
-                            borderRadius: "var(--radius)",
+                            padding: "var(--space-3) var(--space-5)",
+                            borderRadius: "var(--radius-full)",
                             display: "flex",
                             alignItems: "center",
-                            gap: "0.6rem",
-                            fontSize: "0.875rem",
+                            gap: "var(--space-2)",
+                            fontSize: "var(--text-sm)",
                             fontWeight: 600,
-                            background: "var(--card)",
-                            border: "none",
-                            boxShadow: "0 4px 12px rgba(0,0,0,0.03)",
-                            color: "var(--foreground)"
+                            color: "var(--foreground)",
+                            textDecoration: "none",
                         }}
                     >
-                        {social.platform === "Instagram" && (
-                            <Instagram size={18} style={{ color: "#E1306C" }} />
-                        )}
-                        {social.platform === "TikTok" && <span>TT</span>}
-                        {social.platform === "YouTube" && (
-                            <Youtube size={18} style={{ color: "#FF0000" }} />
-                        )}
+                        {social.platform === "Instagram" && <Instagram size={18} style={{ color: "#E1306C" }} />}
+                        {social.platform === "TikTok" && <span style={{ fontWeight: 800 }}>TT</span>}
+                        {social.platform === "YouTube" && <Youtube size={18} style={{ color: "#FF0000" }} />}
                         {social.handle}
                     </a>
                 ))}
@@ -324,45 +307,43 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                     onClick={handlePrint}
                     className="glass-panel no-print"
                     style={{
-                        padding: "0.75rem 1.5rem",
-                        borderRadius: "var(--radius)",
+                        padding: "var(--space-3) var(--space-5)",
+                        borderRadius: "var(--radius-full)",
                         display: "flex",
                         alignItems: "center",
-                        gap: "0.6rem",
-                        fontSize: "0.875rem",
+                        gap: "var(--space-2)",
+                        fontSize: "var(--text-sm)",
                         fontWeight: 600,
                         cursor: "pointer",
-                        background: "var(--background)",
                         color: "var(--foreground)",
-                        border: "1px solid var(--border)",
-                        boxShadow: "0 4px 12px rgba(0,0,0,0.03)",
+                        border: "none",
                     }}
                 >
-                    <FileDown size={18} /> Salvar em PDF
+                    <FileDown size={18} /> Salvar PDF
                 </button>
 
                 <button
                     onClick={handleSync}
                     disabled={isSyncing}
-                    className="glass-panel no-print"
+                    className="no-print"
                     style={{
-                        padding: "0.75rem 1.5rem",
-                        borderRadius: "var(--radius)",
+                        padding: "var(--space-3) var(--space-5)",
+                        borderRadius: "var(--radius-full)",
                         display: "flex",
                         alignItems: "center",
-                        gap: "0.6rem",
-                        fontSize: "0.875rem",
+                        gap: "var(--space-2)",
+                        fontSize: "var(--text-sm)",
                         fontWeight: 600,
                         cursor: isSyncing ? "not-allowed" : "pointer",
-                        background: isSyncing ? "var(--secondary)" : "rgba(67, 97, 238, 0.1)",
-                        color: "var(--primary)",
+                        background: "var(--primary)",
+                        color: "var(--background)",
                         border: "none",
-                        boxShadow: "none",
-                        opacity: isSyncing ? 0.7 : 1
+                        boxShadow: "var(--shadow-glow)",
+                        opacity: isSyncing ? 0.7 : 1,
                     }}
                 >
-                    <RefreshCw size={18} className={isSyncing ? "animate-spin" : ""} />
-                    {isSyncing ? "Sincronizando..." : "Atualizar Dados"}
+                    <RefreshCw size={18} style={{ animation: isSyncing ? "spin 1s linear infinite" : "none" }} />
+                    {isSyncing ? "Sincronizando..." : "Atualizar"}
                 </button>
             </div>
         </div>

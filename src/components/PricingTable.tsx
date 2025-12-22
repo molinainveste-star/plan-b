@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Check } from "lucide-react";
+import { Check, Sparkles } from "lucide-react";
 
 interface PricingPackage {
     title: string;
@@ -17,7 +17,11 @@ interface PricingTableProps {
     isOwner?: boolean;
 }
 
-export const PricingTable: React.FC<PricingTableProps> = ({ slug, initialPackages = [], isOwner = false }) => {
+export const PricingTable: React.FC<PricingTableProps> = ({ 
+    slug, 
+    initialPackages = [], 
+    isOwner = false 
+}) => {
     const defaultPackages: PricingPackage[] = [
         {
             title: "Shorts / Reels",
@@ -61,7 +65,6 @@ export const PricingTable: React.FC<PricingTableProps> = ({ slug, initialPackage
     const [isEditing, setIsEditing] = React.useState(false);
     const [isSaving, setIsSaving] = React.useState(false);
 
-    // Ensure packages have isActive property
     React.useEffect(() => {
         setPackages(prev => prev.map(p => ({ ...p, isActive: p.isActive !== undefined ? p.isActive : true })));
     }, []);
@@ -70,13 +73,6 @@ export const PricingTable: React.FC<PricingTableProps> = ({ slug, initialPackage
         if (!slug) return;
         setIsSaving(true);
         try {
-            // Dynamically import to avoid server-side issues if this component was used there, 
-            // but "use client" protects us. Still, good practice or just import at top.
-            // We'll trust the import at top if we add it, but wait, I can't add imports easily with replace_file_content unless I replace the whole file.
-            // I will target the imports separately or just assume updatePricingPackages is imported.
-            // Actually, I need to add the import statement too. I will do that in a separate step or try to include it if I replace the whole file.
-            // Since I am replacing the component, I can't easily add the import at the top without another replace.
-            // I will use a separate replace for the import.
             const { updatePricingPackages } = await import("@/lib/actions");
             await updatePricingPackages(slug, packages);
             setIsEditing(false);
@@ -112,45 +108,61 @@ export const PricingTable: React.FC<PricingTableProps> = ({ slug, initialPackage
         setPackages(newPackages);
     };
 
-    // Only show active packages when not editing
     const visiblePackages = isEditing ? packages : packages.filter(p => p.isActive !== false);
 
+    const inputStyle: React.CSSProperties = {
+        width: "100%",
+        background: "var(--background-secondary)",
+        border: "1px solid var(--border)",
+        color: "var(--foreground)",
+        padding: "var(--space-2) var(--space-3)",
+        borderRadius: "var(--radius-md)",
+        fontSize: "inherit",
+        fontFamily: "inherit",
+        outline: "none",
+    };
+
     return (
-        <section style={{ marginTop: "5rem", position: "relative" }} className="no-print-break">
+        <section 
+            style={{ 
+                marginTop: "var(--space-20)", 
+                position: "relative",
+                animation: "fadeInUp 0.5s ease forwards",
+                animationDelay: "300ms",
+                opacity: 0,
+            }}
+        >
             {isOwner && (
-                <div style={{ position: "absolute", top: 0, right: 0, zIndex: 10 }} className="no-print">
+                <div style={{ position: "absolute", top: "-3rem", right: 0, zIndex: 10 }} className="no-print">
                     {!isEditing ? (
                         <button
                             onClick={() => setIsEditing(true)}
                             className="glass-panel"
                             style={{
-                                padding: "0.5rem 1rem",
-                                borderRadius: "1rem",
+                                padding: "var(--space-2) var(--space-4)",
+                                borderRadius: "var(--radius-full)",
                                 border: "none",
-                                background: "var(--card)",
                                 color: "var(--foreground)",
                                 cursor: "pointer",
-                                fontSize: "0.875rem",
+                                fontSize: "var(--text-sm)",
                                 fontWeight: 600,
-                                display: "flex",
-                                alignItems: "center",
-                                gap: "0.5rem"
                             }}
                         >
-                            ✏️ Editar Preços
+                            ✏️ Editar
                         </button>
                     ) : (
-                        <div style={{ display: "flex", gap: "0.5rem" }}>
+                        <div style={{ display: "flex", gap: "var(--space-2)" }}>
                             <button
                                 onClick={() => setIsEditing(false)}
                                 style={{
-                                    padding: "0.5rem 1rem",
-                                    borderRadius: "1rem",
+                                    padding: "var(--space-2) var(--space-4)",
+                                    borderRadius: "var(--radius-full)",
                                     border: "none",
-                                    background: "#eee",
-                                    color: "#333",
+                                    background: "var(--background-tertiary)",
+                                    color: "var(--foreground)",
                                     cursor: "pointer",
-                                    fontWeight: 600
+                                    fontWeight: 600,
+                                    fontSize: "var(--text-sm)",
                                 }}
                             >
                                 Cancelar
@@ -159,17 +171,18 @@ export const PricingTable: React.FC<PricingTableProps> = ({ slug, initialPackage
                                 onClick={handleSave}
                                 disabled={isSaving}
                                 style={{
-                                    padding: "0.5rem 1rem",
-                                    borderRadius: "1rem",
+                                    padding: "var(--space-2) var(--space-4)",
+                                    borderRadius: "var(--radius-full)",
                                     border: "none",
                                     background: "var(--primary)",
-                                    color: "white",
+                                    color: "var(--background)",
                                     cursor: "pointer",
                                     fontWeight: 600,
-                                    opacity: isSaving ? 0.7 : 1
+                                    fontSize: "var(--text-sm)",
+                                    opacity: isSaving ? 0.7 : 1,
                                 }}
                             >
-                                {isSaving ? "Salvando..." : "Salvar Alterações"}
+                                {isSaving ? "Salvando..." : "Salvar"}
                             </button>
                         </div>
                     )}
@@ -178,52 +191,73 @@ export const PricingTable: React.FC<PricingTableProps> = ({ slug, initialPackage
 
             <h3 style={{
                 textAlign: "center",
-                fontSize: "2rem",
+                fontSize: "var(--text-3xl)",
                 fontWeight: 800,
-                marginBottom: "3rem",
-                color: "var(--foreground)"
+                marginBottom: "var(--space-10)",
+                color: "var(--foreground)",
             }}>
-                Pacotes de Parceria
+                Pacotes de <span className="text-gradient">Parceria</span>
             </h3>
 
             <div style={{
                 display: "grid",
                 gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-                gap: "2rem"
+                gap: "var(--space-6)",
             }}>
                 {visiblePackages.map((pkg, i) => (
                     <div
                         key={i}
                         className="glass-panel"
                         style={{
-                            padding: "2.5rem",
-                            borderRadius: "2rem",
-                            background: pkg.isPopular ? "linear-gradient(145deg, var(--card), rgba(var(--primary-rgb), 0.05))" : "var(--card)",
-                            border: pkg.isPopular ? "2px solid var(--primary)" : (isEditing && !pkg.isActive ? "2px dashed #444" : "none"),
-                            opacity: isEditing && !pkg.isActive ? 0.6 : 1,
+                            padding: "var(--space-8)",
+                            borderRadius: "var(--radius-2xl)",
+                            border: pkg.isPopular ? "2px solid var(--primary)" : "1px solid var(--border)",
+                            opacity: isEditing && !pkg.isActive ? 0.5 : 1,
                             position: "relative",
                             display: "flex",
                             flexDirection: "column",
-                            gap: "1.5rem"
+                            gap: "var(--space-6)",
+                            boxShadow: pkg.isPopular ? "var(--shadow-glow-lg)" : "var(--shadow-lg)",
                         }}
                     >
                         {isEditing && (
-                            <div style={{ marginBottom: "1rem", borderBottom: "1px solid var(--border)", paddingBottom: "1rem" }}>
-                                <label style={{ display: "flex", alignItems: "center", gap: "0.5rem", fontSize: "0.875rem", color: "var(--muted-foreground)" }}>
+                            <div style={{ 
+                                marginBottom: "var(--space-2)", 
+                                borderBottom: "1px solid var(--border)", 
+                                paddingBottom: "var(--space-4)",
+                                display: "flex",
+                                flexDirection: "column",
+                                gap: "var(--space-2)",
+                            }}>
+                                <label style={{ 
+                                    display: "flex", 
+                                    alignItems: "center", 
+                                    gap: "var(--space-2)", 
+                                    fontSize: "var(--text-sm)", 
+                                    color: "var(--foreground-muted)",
+                                    cursor: "pointer",
+                                }}>
                                     <input
                                         type="checkbox"
                                         checked={pkg.isActive !== false}
                                         onChange={(e) => updatePackage(i, "isActive", e.target.checked)}
                                     />
-                                    Pacote Ativo
+                                    Ativo
                                 </label>
-                                <label style={{ display: "flex", alignItems: "center", gap: "0.5rem", fontSize: "0.875rem", color: "var(--muted-foreground)", marginTop: "0.5rem" }}>
+                                <label style={{ 
+                                    display: "flex", 
+                                    alignItems: "center", 
+                                    gap: "var(--space-2)", 
+                                    fontSize: "var(--text-sm)", 
+                                    color: "var(--foreground-muted)",
+                                    cursor: "pointer",
+                                }}>
                                     <input
                                         type="checkbox"
                                         checked={pkg.isPopular}
                                         onChange={(e) => updatePackage(i, "isPopular", e.target.checked)}
                                     />
-                                    Destacar como Popular
+                                    Destacar
                                 </label>
                             </div>
                         )}
@@ -231,18 +265,23 @@ export const PricingTable: React.FC<PricingTableProps> = ({ slug, initialPackage
                         {pkg.isPopular && (
                             <span style={{
                                 position: "absolute",
-                                top: "-12px",
+                                top: "-14px",
                                 left: "50%",
                                 transform: "translateX(-50%)",
-                                background: "var(--primary)",
-                                color: "white",
-                                padding: "0.25rem 1rem",
-                                borderRadius: "1rem",
-                                fontSize: "0.75rem",
+                                background: "var(--gradient-primary)",
+                                color: "var(--background)",
+                                padding: "var(--space-2) var(--space-4)",
+                                borderRadius: "var(--radius-full)",
+                                fontSize: "var(--text-xs)",
                                 fontWeight: 700,
                                 textTransform: "uppercase",
-                                letterSpacing: "0.05em"
+                                letterSpacing: "0.05em",
+                                display: "flex",
+                                alignItems: "center",
+                                gap: "var(--space-1)",
+                                boxShadow: "var(--shadow-glow)",
                             }}>
+                                <Sparkles size={12} />
                                 Mais Escolhido
                             </span>
                         )}
@@ -252,76 +291,96 @@ export const PricingTable: React.FC<PricingTableProps> = ({ slug, initialPackage
                                 <input
                                     value={pkg.title}
                                     onChange={(e) => updatePackage(i, "title", e.target.value)}
-                                    style={{ width: "100%", fontSize: "1.25rem", fontWeight: 700, padding: "0.25rem", marginBottom: "0.5rem", background: "rgba(0,0,0,0.2)", border: "none", color: "white", borderRadius: "4px" }}
+                                    style={{ ...inputStyle, fontSize: "var(--text-xl)", fontWeight: 700 }}
                                 />
                             ) : (
-                                <h4 style={{ fontSize: "1.25rem", fontWeight: 700, color: "var(--foreground)" }}>{pkg.title}</h4>
+                                <h4 style={{ fontSize: "var(--text-xl)", fontWeight: 700, color: "var(--foreground)" }}>
+                                    {pkg.title}
+                                </h4>
                             )}
 
                             {isEditing ? (
                                 <input
                                     value={pkg.price}
                                     onChange={(e) => updatePackage(i, "price", e.target.value)}
-                                    style={{ width: "100%", fontSize: "2rem", fontWeight: 800, color: "var(--primary)", padding: "0.25rem", background: "rgba(0,0,0,0.2)", border: "none", borderRadius: "4px" }}
+                                    style={{ ...inputStyle, fontSize: "var(--text-3xl)", fontWeight: 800, marginTop: "var(--space-2)" }}
                                 />
                             ) : (
-                                <p style={{ fontSize: "2rem", fontWeight: 800, color: "var(--primary)", marginTop: "0.5rem" }}>
+                                <p className="text-gradient" style={{ 
+                                    fontSize: "var(--text-3xl)", 
+                                    fontWeight: 800,
+                                    marginTop: "var(--space-2)",
+                                }}>
                                     {pkg.price}
-                                    <span style={{ fontSize: "0.875rem", color: "var(--muted-foreground)", fontWeight: 500 }}> /unidade</span>
+                                    <span style={{ fontSize: "var(--text-sm)", color: "var(--foreground-muted)", fontWeight: 400 }}> /un</span>
                                 </p>
                             )}
                         </div>
 
-                        <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "1rem" }}>
+                        <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "var(--space-3)", flex: 1 }}>
                             {pkg.features.map((feature, j) => (
-                                <li key={j} style={{ display: "flex", alignItems: "center", gap: "0.75rem", fontSize: "0.9375rem", color: "var(--muted-foreground)" }}>
+                                <li key={j} style={{ display: "flex", alignItems: "center", gap: "var(--space-3)", fontSize: "var(--text-sm)", color: "var(--foreground-secondary)" }}>
                                     <div style={{
-                                        minWidth: "20px", height: "20px",
-                                        borderRadius: "50%",
-                                        background: "rgba(16, 185, 129, 0.1)",
-                                        display: "flex", alignItems: "center", justifyContent: "center",
-                                        color: "#10b981"
+                                        minWidth: "20px",
+                                        height: "20px",
+                                        borderRadius: "var(--radius-full)",
+                                        background: "var(--success-light)",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        color: "var(--success)",
                                     }}>
                                         <Check size={12} strokeWidth={3} />
                                     </div>
                                     {isEditing ? (
-                                        <div style={{ flex: 1, display: "flex", gap: "0.5rem" }}>
+                                        <div style={{ flex: 1, display: "flex", gap: "var(--space-2)" }}>
                                             <input
                                                 value={feature}
                                                 onChange={(e) => updateFeature(i, j, e.target.value)}
-                                                style={{ flex: 1, background: "rgba(0,0,0,0.2)", border: "none", color: "white", padding: "2px", borderRadius: "2px" }}
+                                                style={{ ...inputStyle, flex: 1 }}
                                             />
-                                            <button onClick={() => removeFeature(i, j)} style={{ background: "transparent", border: "none", color: "red", cursor: "pointer" }}>×</button>
+                                            <button onClick={() => removeFeature(i, j)} style={{ background: "transparent", border: "none", color: "var(--error)", cursor: "pointer", fontSize: "var(--text-lg)" }}>×</button>
                                         </div>
                                     ) : (
-                                        feature
+                                        <span>{feature}</span>
                                     )}
                                 </li>
                             ))}
                             {isEditing && (
                                 <button
                                     onClick={() => addFeature(i)}
-                                    style={{ fontSize: "0.8rem", color: "var(--primary)", background: "transparent", border: "1px dashed var(--primary)", padding: "0.5rem", borderRadius: "0.5rem", cursor: "pointer", marginTop: "0.5rem" }}
+                                    style={{
+                                        fontSize: "var(--text-sm)",
+                                        color: "var(--primary)",
+                                        background: "transparent",
+                                        border: "1px dashed var(--primary)",
+                                        padding: "var(--space-2)",
+                                        borderRadius: "var(--radius-md)",
+                                        cursor: "pointer",
+                                        marginTop: "var(--space-2)",
+                                    }}
                                 >
-                                    + Adicionar Item
+                                    + Adicionar
                                 </button>
                             )}
                         </ul>
 
-                        <button style={{
-                            marginTop: "auto",
-                            padding: "1rem",
-                            borderRadius: "1rem",
-                            border: "none",
-                            background: pkg.isPopular ? "var(--primary)" : "var(--background)",
-                            color: pkg.isPopular ? "white" : "var(--foreground)",
-                            fontWeight: 600,
-                            cursor: "pointer",
-                            transition: "transform 0.2s",
-                            boxShadow: pkg.isPopular ? "0 10px 20px -5px rgba(var(--primary-rgb), 0.3)" : "none",
-                            opacity: isEditing ? 0.5 : 1,
-                            pointerEvents: isEditing ? "none" : "auto"
-                        }}>
+                        <button 
+                            style={{
+                                marginTop: "auto",
+                                padding: "var(--space-4)",
+                                borderRadius: "var(--radius-lg)",
+                                border: "none",
+                                background: pkg.isPopular ? "var(--primary)" : "var(--background-tertiary)",
+                                color: pkg.isPopular ? "var(--background)" : "var(--foreground)",
+                                fontWeight: 600,
+                                fontSize: "var(--text-sm)",
+                                cursor: isEditing ? "not-allowed" : "pointer",
+                                transition: "all var(--transition-base)",
+                                boxShadow: pkg.isPopular ? "var(--shadow-glow)" : "none",
+                                opacity: isEditing ? 0.5 : 1,
+                            }}
+                        >
                             Selecionar Pacote
                         </button>
                     </div>

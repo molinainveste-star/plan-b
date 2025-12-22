@@ -5,17 +5,13 @@ import { useRouter } from "next/navigation";
 import { Input } from "@/components/Input";
 import { Button } from "@/components/Button";
 import { createProfile } from "@/lib/actions";
+import { User, Mail, Youtube, Link, Sparkles, Zap, BarChart3 } from "lucide-react";
 
 export default function Home() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [formData, setFormData] = useState<{
-    name: string;
-    email: string;
-    slug: string;
-    youtubeChannelId?: string;
-  }>({
+  const [formData, setFormData] = useState({
     name: "",
     email: "",
     slug: "",
@@ -35,7 +31,6 @@ export default function Home() {
 
     try {
       const result = await createProfile(formData);
-
       if (result.success) {
         router.push(`/${result.slug}`);
       } else {
@@ -56,124 +51,288 @@ export default function Home() {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        padding: "2rem",
+        padding: "var(--space-6)",
         background: "var(--background)",
+        position: "relative",
+        overflow: "hidden",
       }}
     >
+      {/* Background Effects */}
+      <div
+        style={{
+          position: "absolute",
+          top: "-30%",
+          left: "-20%",
+          width: "800px",
+          height: "800px",
+          background: "radial-gradient(circle, rgba(0, 212, 255, 0.15) 0%, transparent 60%)",
+          filter: "blur(60px)",
+          pointerEvents: "none",
+        }}
+      />
+      <div
+        style={{
+          position: "absolute",
+          bottom: "-30%",
+          right: "-20%",
+          width: "700px",
+          height: "700px",
+          background: "radial-gradient(circle, rgba(124, 58, 237, 0.12) 0%, transparent 60%)",
+          filter: "blur(60px)",
+          pointerEvents: "none",
+        }}
+      />
+      <div
+        className="bg-grid"
+        style={{
+          position: "absolute",
+          inset: 0,
+          opacity: 0.4,
+          pointerEvents: "none",
+        }}
+      />
+
       <main
         style={{
           width: "100%",
-          maxWidth: "480px",
+          maxWidth: "500px",
           display: "flex",
           flexDirection: "column",
-          gap: "2rem",
+          gap: "var(--space-10)",
+          position: "relative",
+          zIndex: 1,
         }}
       >
-        <div style={{ textAlign: "center", marginBottom: "1rem" }}>
+        {/* Hero Section */}
+        <div 
+          style={{ 
+            textAlign: "center",
+            animation: "fadeInUp 0.6s ease forwards",
+          }}
+        >
+          <div
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "var(--space-2)",
+              padding: "var(--space-2) var(--space-4)",
+              background: "var(--primary-light)",
+              borderRadius: "var(--radius-full)",
+              marginBottom: "var(--space-6)",
+              border: "1px solid rgba(0, 212, 255, 0.2)",
+            }}
+          >
+            <Sparkles size={14} style={{ color: "var(--primary)" }} />
+            <span style={{ 
+              fontSize: "var(--text-sm)", 
+              color: "var(--primary)",
+              fontWeight: 600,
+            }}>
+              Powered by AI
+            </span>
+          </div>
+
           <h1
             className="text-gradient"
             style={{
-              fontSize: "3.5rem",
+              fontSize: "clamp(3rem, 10vw, 4.5rem)",
               fontWeight: 800,
-              marginBottom: "0.5rem",
-              letterSpacing: "-0.04em",
+              marginBottom: "var(--space-4)",
+              letterSpacing: "-0.03em",
+              lineHeight: 1,
             }}
           >
             PubliScore
           </h1>
-          <p style={{ color: "var(--muted-foreground)", fontSize: "1.125rem", fontWeight: 500 }}>
-            Media Kits Profissionais para Criadores
+          <p 
+            style={{ 
+              color: "var(--foreground-muted)", 
+              fontSize: "var(--text-xl)", 
+              fontWeight: 500,
+              maxWidth: "400px",
+              margin: "0 auto",
+              lineHeight: "var(--leading-relaxed)",
+            }}
+          >
+            Media Kits <span style={{ color: "var(--primary)" }}>Profissionais</span> para Criadores de Conteúdo
           </p>
         </div>
 
+        {/* Features Pills */}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            gap: "var(--space-3)",
+            flexWrap: "wrap",
+            animation: "fadeInUp 0.6s ease forwards",
+            animationDelay: "0.1s",
+            opacity: 0,
+          }}
+        >
+          {[
+            { icon: <Youtube size={14} />, text: "Sync YouTube" },
+            { icon: <Zap size={14} />, text: "IA Narrativa" },
+            { icon: <BarChart3 size={14} />, text: "Métricas Live" },
+          ].map((item, i) => (
+            <div
+              key={i}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "var(--space-2)",
+                padding: "var(--space-2) var(--space-4)",
+                background: "var(--background-secondary)",
+                borderRadius: "var(--radius-full)",
+                border: "1px solid var(--border)",
+                fontSize: "var(--text-sm)",
+                color: "var(--foreground-secondary)",
+              }}
+            >
+              {item.icon}
+              {item.text}
+            </div>
+          ))}
+        </div>
+
+        {/* Form Card */}
         <div
           className="glass-panel"
           style={{
-            padding: "3rem",
-            borderRadius: "2rem",
+            padding: "var(--space-10)",
+            borderRadius: "var(--radius-2xl)",
             display: "flex",
             flexDirection: "column",
-            gap: "2rem",
-            boxShadow: "0 20px 40px -10px rgba(0,0,0,0.05)",
+            gap: "var(--space-8)",
+            animation: "fadeInUp 0.6s ease forwards",
+            animationDelay: "0.2s",
+            opacity: 0,
           }}
         >
           <div style={{ textAlign: "center" }}>
-            <h2 style={{ fontSize: "1.75rem", marginBottom: "0.5rem", color: "var(--foreground)" }}>
-              Começar Agora
+            <h2 
+              style={{ 
+                fontSize: "var(--text-2xl)", 
+                marginBottom: "var(--space-2)", 
+                color: "var(--foreground)",
+                fontWeight: 700,
+              }}
+            >
+              Criar Meu Media Kit
             </h2>
-            <p style={{ color: "var(--muted-foreground)", fontSize: "0.875rem" }}>
-              Crie sua URL única e comece a rastrear suas métricas.
+            <p 
+              style={{ 
+                color: "var(--foreground-muted)", 
+                fontSize: "var(--text-sm)",
+              }}
+            >
+              Comece grátis em menos de 1 minuto
             </p>
           </div>
 
           <form
             onSubmit={handleSubmit}
-            style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}
+            style={{ display: "flex", flexDirection: "column", gap: "var(--space-5)" }}
           >
             <Input
               label="Nome Completo"
-              placeholder="ex: Jane Doe"
+              placeholder="Como você quer ser chamado"
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               required
+              icon={<User size={18} />}
             />
 
             <Input
-              label="Endereço de E-mail"
+              label="E-mail"
               type="email"
-              placeholder="jane@exemplo.com"
+              placeholder="seu@email.com"
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              icon={<Mail size={18} />}
             />
 
             <Input
-              label="ID do Canal do YouTube (Opcional)"
-              placeholder="ex: UC... ou @handle"
-              value={formData.youtubeChannelId || ""}
+              label="Canal do YouTube (opcional)"
+              placeholder="@seucanal ou UC..."
+              value={formData.youtubeChannelId}
               onChange={(e) => setFormData({ ...formData, youtubeChannelId: e.target.value })}
+              icon={<Youtube size={18} />}
             />
 
             <div>
               <Input
-                label="Sua URL Única (Slug)"
-                placeholder="janedoe"
+                label="Sua URL Única"
+                placeholder="seuNome"
                 value={formData.slug}
                 onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
                 required
+                icon={<Link size={18} />}
               />
-              <p
+              <div
                 style={{
-                  fontSize: "0.75rem",
-                  color: "var(--muted-foreground)",
-                  marginTop: "0.5rem",
-                  fontWeight: 500,
+                  marginTop: "var(--space-2)",
+                  padding: "var(--space-2) var(--space-3)",
+                  background: "var(--background-tertiary)",
+                  borderRadius: "var(--radius-md)",
+                  display: "inline-block",
                 }}
               >
-                publiscore.com/{formData.slug || "seu-nome"}
-              </p>
+                <span style={{ 
+                  fontSize: "var(--text-sm)", 
+                  color: "var(--foreground-muted)",
+                }}>
+                  publiscore.com/
+                </span>
+                <span style={{ 
+                  fontSize: "var(--text-sm)", 
+                  color: "var(--primary)",
+                  fontWeight: 600,
+                }}>
+                  {formData.slug || "seu-nome"}
+                </span>
+              </div>
             </div>
 
             {error && (
-              <div style={{ color: "#ef4444", fontSize: "0.875rem", textAlign: "center" }}>
+              <div 
+                style={{ 
+                  color: "var(--error)", 
+                  fontSize: "var(--text-sm)", 
+                  textAlign: "center",
+                  background: "var(--error-light)",
+                  padding: "var(--space-3)",
+                  borderRadius: "var(--radius-md)",
+                  border: "1px solid rgba(239, 68, 68, 0.3)",
+                }}
+              >
                 {error}
               </div>
             )}
 
-            <Button type="submit" fullWidth style={{ marginTop: "0.5rem", height: "3.5rem", borderRadius: "1rem" }} disabled={isLoading}>
-              {isLoading ? "Criando..." : "Criar Media Kit"}
+            <Button 
+              type="submit" 
+              fullWidth 
+              size="lg"
+              variant="glow"
+              loading={isLoading}
+              style={{ marginTop: "var(--space-2)" }}
+            >
+              {isLoading ? "Criando..." : "Criar Media Kit Grátis"}
             </Button>
           </form>
         </div>
 
+        {/* Footer */}
         <p
           style={{
             textAlign: "center",
-            fontSize: "0.875rem",
-            color: "var(--muted-foreground)",
+            fontSize: "var(--text-sm)",
+            color: "var(--foreground-muted)",
             opacity: 0.6,
           }}
         >
-          &copy; {new Date().getFullYear()} PubliScore. Todos os direitos reservados.
+          © {new Date().getFullYear()} PubliScore • Feito para Criadores
         </p>
       </main>
     </div>

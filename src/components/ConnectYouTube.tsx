@@ -18,18 +18,15 @@ export function ConnectYouTube({ slug, onSuccess }: ConnectYouTubeProps) {
     const router = useRouter();
 
     useEffect(() => {
-        // Listener for Auth Changes (Redirect handling)
         const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
             console.log("🔐 Auth Event:", event);
 
-            // On sign in (happens after redirect hash parse), check for token
             if (event === "SIGNED_IN" || event === "INITIAL_SESSION") {
                 if (session?.provider_token) {
-                    console.log("✅ Provider Token found!", session.provider_token.substring(0, 5) + "...");
+                    console.log("✅ Provider Token found!");
                     handleVerification(session.provider_token);
                 } else {
                     console.log("ℹ️ Session found but NO provider_token.");
-                    // Check if we have hash but no token? 
                     if (window.location.hash.includes("access_token")) {
                         setDebugMsg("Hash present but token missing in session.");
                     }
@@ -37,7 +34,6 @@ export function ConnectYouTube({ slug, onSuccess }: ConnectYouTubeProps) {
             }
         });
 
-        // Fallback: Check manual session if event didn't trigger relevant state
         const checkManual = async () => {
             const { data: { session } } = await supabase.auth.getSession();
             if (session?.provider_token) {
@@ -97,9 +93,30 @@ export function ConnectYouTube({ slug, onSuccess }: ConnectYouTubeProps) {
         }
     };
 
+    const baseButtonStyle: React.CSSProperties = {
+        display: "inline-flex",
+        alignItems: "center",
+        gap: "var(--space-2)",
+        padding: "var(--space-2) var(--space-4)",
+        borderRadius: "var(--radius-full)",
+        fontSize: "var(--text-sm)",
+        fontWeight: 600,
+        cursor: "pointer",
+        transition: "all var(--transition-base)",
+        border: "none",
+    };
+
     if (status === "success") {
         return (
-            <div className="flex items-center gap-2 text-green-600 bg-green-50 px-3 py-2 rounded-lg text-sm font-semibold border border-green-200">
+            <div 
+                style={{
+                    ...baseButtonStyle,
+                    background: "var(--success-light)",
+                    color: "var(--success)",
+                    cursor: "default",
+                    border: "1px solid rgba(16, 185, 129, 0.2)",
+                }}
+            >
                 <BadgeCheck size={16} />
                 Canal Verificado!
             </div>
@@ -108,8 +125,16 @@ export function ConnectYouTube({ slug, onSuccess }: ConnectYouTubeProps) {
 
     if (status === "verifying") {
         return (
-            <div className="flex items-center gap-2 text-blue-600 bg-blue-50 px-3 py-2 rounded-lg text-sm font-semibold border border-blue-200">
-                <Loader2 size={16} className="animate-spin" />
+            <div 
+                style={{
+                    ...baseButtonStyle,
+                    background: "var(--primary-light)",
+                    color: "var(--primary)",
+                    cursor: "default",
+                    border: "1px solid rgba(67, 97, 238, 0.2)",
+                }}
+            >
+                <Loader2 size={16} style={{ animation: "spin 1s linear infinite" }} />
                 Sincronizando...
             </div>
         );
@@ -117,15 +142,34 @@ export function ConnectYouTube({ slug, onSuccess }: ConnectYouTubeProps) {
 
     if (status === "error") {
         return (
-            <div className="flex flex-col gap-2">
+            <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-2)" }}>
                 <button
                     onClick={handleLogin}
-                    className="flex items-center gap-2 px-4 py-2 bg-red-100 hover:bg-red-200 text-red-700 text-sm font-bold rounded-full transition-all border border-red-200"
+                    style={{
+                        ...baseButtonStyle,
+                        background: "rgba(239, 68, 68, 0.1)",
+                        color: "var(--error)",
+                        border: "1px solid rgba(239, 68, 68, 0.2)",
+                    }}
+                    onMouseEnter={(e) => {
+                        e.currentTarget.style.background = "rgba(239, 68, 68, 0.15)";
+                    }}
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.background = "rgba(239, 68, 68, 0.1)";
+                    }}
                 >
                     <AlertCircle size={16} />
                     Tentar Novamente
                 </button>
-                {debugMsg && <span className="text-xs text-red-500">{debugMsg}</span>}
+                {debugMsg && (
+                    <span style={{ 
+                        fontSize: "var(--text-xs)", 
+                        color: "var(--error)",
+                        opacity: 0.8,
+                    }}>
+                        {debugMsg}
+                    </span>
+                )}
             </div>
         );
     }
@@ -134,9 +178,29 @@ export function ConnectYouTube({ slug, onSuccess }: ConnectYouTubeProps) {
         <button
             onClick={handleLogin}
             disabled={loading}
-            className="flex items-center gap-2 px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-full transition-all shadow-md hover:shadow-lg hover:scale-105"
+            style={{
+                ...baseButtonStyle,
+                background: "#FF0000",
+                color: "white",
+                boxShadow: "0 4px 12px rgba(255, 0, 0, 0.25)",
+                opacity: loading ? 0.7 : 1,
+            }}
+            onMouseEnter={(e) => {
+                if (!loading) {
+                    e.currentTarget.style.transform = "translateY(-1px)";
+                    e.currentTarget.style.boxShadow = "0 6px 16px rgba(255, 0, 0, 0.35)";
+                }
+            }}
+            onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "translateY(0)";
+                e.currentTarget.style.boxShadow = "0 4px 12px rgba(255, 0, 0, 0.25)";
+            }}
         >
-            {loading ? <Loader2 size={14} className="animate-spin" /> : <Youtube size={14} />}
+            {loading ? (
+                <Loader2 size={14} style={{ animation: "spin 1s linear infinite" }} />
+            ) : (
+                <Youtube size={14} />
+            )}
             Conectar Dados Oficiais
         </button>
     );
