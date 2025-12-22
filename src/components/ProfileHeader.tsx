@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { MapPin, Youtube, Instagram, FileDown, RefreshCw, Pencil, Check, X } from "lucide-react";
+import { MapPin, Youtube, Instagram, FileDown, RefreshCw, Pencil, Check, X, ChevronDown, ChevronUp } from "lucide-react";
 import { updateYouTubeMetrics, updateProfileAvatar } from "@/lib/actions";
 
 interface ProfileHeaderProps {
@@ -28,7 +28,15 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
     const [isEditingAvatar, setIsEditingAvatar] = useState(false);
     const [avatarInput, setAvatarInput] = useState("");
     const [isSavingAvatar, setIsSavingAvatar] = useState(false);
+    const [isBioExpanded, setIsBioExpanded] = useState(false);
     const avatarContainerRef = useRef<HTMLDivElement>(null);
+    
+    // Limite de caracteres para truncar a bio
+    const BIO_CHAR_LIMIT = 200;
+    const shouldTruncate = bio.length > BIO_CHAR_LIMIT;
+    const displayBio = shouldTruncate && !isBioExpanded 
+        ? bio.slice(0, BIO_CHAR_LIMIT).trim() + "..." 
+        : bio;
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -265,7 +273,38 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                     color: "var(--foreground-secondary)",
                     fontSize: "var(--text-lg)",
                 }}>
-                    {bio}
+                    {displayBio}
+                    {shouldTruncate && (
+                        <button
+                            onClick={() => setIsBioExpanded(!isBioExpanded)}
+                            style={{
+                                background: "none",
+                                border: "none",
+                                color: "var(--primary)",
+                                cursor: "pointer",
+                                fontWeight: 600,
+                                fontSize: "var(--text-sm)",
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: "var(--space-1)",
+                                marginLeft: "var(--space-2)",
+                                padding: 0,
+                                transition: "opacity var(--transition-base)",
+                            }}
+                            onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.8")}
+                            onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
+                        >
+                            {isBioExpanded ? (
+                                <>
+                                    Ver menos <ChevronUp size={16} />
+                                </>
+                            ) : (
+                                <>
+                                    Ver mais <ChevronDown size={16} />
+                                </>
+                            )}
+                        </button>
+                    )}
                 </p>
             </div>
 

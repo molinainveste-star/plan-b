@@ -152,11 +152,7 @@ export function validateInput<T>(
     const result = schema.safeParse(data);
     
     if (!result.success) {
-<<<<<<< HEAD
         const firstError = result.error.issues[0];
-=======
-        const firstError = result.error.errors[0];
->>>>>>> feature/redesign-alura-style
         return {
             success: false,
             error: firstError?.message || "Dados inválidos",
