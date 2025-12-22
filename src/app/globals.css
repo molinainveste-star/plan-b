@@ -82,6 +82,7 @@
 
   /* ============ GRADIENTS - Alura Style ============ */
   --gradient-primary: linear-gradient(135deg, #00D4FF 0%, #7C3AED 100%);
+  --gradient-primary-soft: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(124, 58, 237, 0.1) 100%);
   --gradient-accent: linear-gradient(135deg, #7C3AED 0%, #EC4899 100%);
   --gradient-warm: linear-gradient(135deg, #F97316 0%, #EC4899 100%);
   --gradient-surface: linear-gradient(180deg, #0D1117 0%, #161B22 100%);
