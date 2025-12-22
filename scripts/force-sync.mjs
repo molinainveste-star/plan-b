@@ -52,6 +52,8 @@ async function generateBioWithAI(channelName, niche, subscriberCount, videoTitle
             - Tom profissional mas acessível
             - Mencione o nicho e o tamanho da audiência
             - NÃO use emojis
+            - NÃO comece com o nome do canal (ex: "Renato Cariani:" ou "Canal X:")
+            - Comece diretamente descrevendo o canal (ex: "O canal que..." ou "Criador de conteúdo que...")
             - Escreva em português brasileiro
             - Retorne APENAS o texto da bio, nada mais
         `;
