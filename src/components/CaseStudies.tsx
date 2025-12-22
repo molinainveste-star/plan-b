@@ -246,14 +246,19 @@ export const CaseStudies: React.FC<CaseStudiesProps> = ({
                             <div style={{ 
                                 display: "flex", 
                                 justifyContent: "center", 
+                                alignItems: "center",
                                 marginBottom: "var(--space-2)",
+                                height: "40px",
+                                width: "100%",
                             }}>
                                 <img
                                     src={brandCase.logoUrl}
                                     alt={brandCase.brandName}
                                     style={{
-                                        height: "28px",
-                                        maxWidth: "100px",
+                                        maxHeight: "32px",
+                                        maxWidth: "120px",
+                                        width: "auto",
+                                        height: "auto",
                                         objectFit: "contain",
                                         filter: "grayscale(100%)",
                                         opacity: 0.6,
