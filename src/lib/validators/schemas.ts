@@ -123,10 +123,10 @@ export const updatePricingPackagesSchema = z.object({
 export const caseStudySchema = z.object({
     id: z.string().optional(),
     brandName: z.string().min(1, "Nome da marca é obrigatório").max(100),
-    logoUrl: z.string().max(500).optional(),
-    videoUrl: z.string().max(500).optional(),
+    brandLogo: z.string().url("URL do logo inválida").max(500).optional(),
     description: z.string().max(1000).optional(),
-    metrics: z.string().max(500).optional(),
+    results: z.string().max(500).optional(),
+    testimonial: z.string().max(1000).optional(),
 });
 
 export const updateCaseStudiesSchema = z.object({
@@ -152,7 +152,7 @@ export function validateInput<T>(
     const result = schema.safeParse(data);
     
     if (!result.success) {
-        const firstError = result.error.issues[0];
+        const firstError = result.error.errors[0];
         return {
             success: false,
             error: firstError?.message || "Dados inválidos",

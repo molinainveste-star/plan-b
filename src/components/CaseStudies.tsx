@@ -121,118 +121,102 @@ export const CaseStudies: React.FC<CaseStudiesProps> = ({
                 opacity: 0,
             }}
         >
-            {/* Section Header com botão de edição */}
-            <div style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                marginBottom: "var(--space-10)",
-                position: "relative",
-            }}>
-                <div style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    width: "100%",
-                    position: "relative",
-                }}>
-                    <h3 style={{
-                        fontSize: "var(--text-3xl)",
-                        fontWeight: 700,
-                        marginBottom: "var(--space-2)",
-                        color: "var(--foreground)",
-                        letterSpacing: "var(--tracking-tight)",
-                        margin: 0,
-                    }}>
-                        Vitrine de Sucesso
-                    </h3>
-
-                    {isOwner && (
-                        <div 
-                            style={{ 
-                                position: "absolute", 
-                                right: 0, 
-                                zIndex: 10 
-                            }} 
-                            className="no-print"
+            {/* Edit Controls */}
+            {isOwner && (
+                <div 
+                    style={{ 
+                        position: "absolute", 
+                        top: "-3rem", 
+                        right: 0, 
+                        zIndex: 10 
+                    }} 
+                    className="no-print"
+                >
+                    {!isEditing ? (
+                        <button
+                            onClick={() => setIsEditing(true)}
+                            style={{
+                                padding: "var(--space-2) var(--space-4)",
+                                borderRadius: "var(--radius-md)",
+                                border: "1px solid var(--border)",
+                                background: "var(--card)",
+                                color: "var(--foreground)",
+                                cursor: "pointer",
+                                fontSize: "var(--text-sm)",
+                                fontWeight: 500,
+                                display: "flex",
+                                alignItems: "center",
+                                gap: "var(--space-2)",
+                                transition: "all var(--transition-base)",
+                            }}
+                            onMouseEnter={(e) => {
+                                e.currentTarget.style.borderColor = "var(--primary)";
+                            }}
+                            onMouseLeave={(e) => {
+                                e.currentTarget.style.borderColor = "var(--border)";
+                            }}
                         >
-                            {!isEditing ? (
-                                <button
-                                    onClick={() => setIsEditing(true)}
-                                    style={{
-                                        padding: "var(--space-2) var(--space-4)",
-                                        borderRadius: "var(--radius-md)",
-                                        border: "1px solid var(--border)",
-                                        background: "var(--card)",
-                                        color: "var(--foreground)",
-                                        cursor: "pointer",
-                                        fontSize: "var(--text-sm)",
-                                        fontWeight: 500,
-                                        display: "flex",
-                                        alignItems: "center",
-                                        gap: "var(--space-2)",
-                                        transition: "all var(--transition-base)",
-                                    }}
-                                    onMouseEnter={(e) => {
-                                        e.currentTarget.style.borderColor = "var(--primary)";
-                                    }}
-                                    onMouseLeave={(e) => {
-                                        e.currentTarget.style.borderColor = "var(--border)";
-                                    }}
-                                >
-                                    ✏️ Editar Cases
-                                </button>
-                            ) : (
-                                <div style={{ display: "flex", gap: "var(--space-2)" }}>
-                                    <button
-                                        onClick={() => setIsEditing(false)}
-                                        style={{
-                                            padding: "var(--space-2) var(--space-4)",
-                                            borderRadius: "var(--radius-md)",
-                                            border: "none",
-                                            background: "var(--secondary)",
-                                            color: "var(--foreground)",
-                                            cursor: "pointer",
-                                            fontWeight: 500,
-                                            fontSize: "var(--text-sm)",
-                                        }}
-                                    >
-                                        Cancelar
-                                    </button>
-                                    <button
-                                        onClick={handleSave}
-                                        disabled={isSaving}
-                                        style={{
-                                            padding: "var(--space-2) var(--space-4)",
-                                            borderRadius: "var(--radius-md)",
-                                            border: "none",
-                                            background: "var(--primary)",
-                                            color: "white",
-                                            cursor: "pointer",
-                                            fontWeight: 500,
-                                            fontSize: "var(--text-sm)",
-                                            opacity: isSaving ? 0.7 : 1,
-                                        }}
-                                    >
-                                        {isSaving ? "Salvando..." : "Salvar"}
-                                    </button>
-                                </div>
-                            )}
+                            ✏️ Editar Cases
+                        </button>
+                    ) : (
+                        <div style={{ display: "flex", gap: "var(--space-2)" }}>
+                            <button
+                                onClick={() => setIsEditing(false)}
+                                style={{
+                                    padding: "var(--space-2) var(--space-4)",
+                                    borderRadius: "var(--radius-md)",
+                                    border: "none",
+                                    background: "var(--secondary)",
+                                    color: "var(--foreground)",
+                                    cursor: "pointer",
+                                    fontWeight: 500,
+                                    fontSize: "var(--text-sm)",
+                                }}
+                            >
+                                Cancelar
+                            </button>
+                            <button
+                                onClick={handleSave}
+                                disabled={isSaving}
+                                style={{
+                                    padding: "var(--space-2) var(--space-4)",
+                                    borderRadius: "var(--radius-md)",
+                                    border: "none",
+                                    background: "var(--primary)",
+                                    color: "white",
+                                    cursor: "pointer",
+                                    fontWeight: 500,
+                                    fontSize: "var(--text-sm)",
+                                    opacity: isSaving ? 0.7 : 1,
+                                }}
+                            >
+                                {isSaving ? "Salvando..." : "Salvar"}
+                            </button>
                         </div>
                     )}
                 </div>
+            )}
 
-                <p style={{
-                    fontSize: "var(--text-base)",
-                    color: "var(--muted-foreground)",
-                    marginTop: "var(--space-2)",
-                    maxWidth: "600px",
-                    marginLeft: "auto",
-                    marginRight: "auto",
-                }}>
-                    Marcas que confiaram e os resultados que alcançamos juntos.
-                </p>
-            </div>
+            {/* Section Header */}
+            <h3 style={{
+                fontSize: "var(--text-3xl)",
+                fontWeight: 700,
+                marginBottom: "var(--space-2)",
+                color: "var(--foreground)",
+                letterSpacing: "var(--tracking-tight)",
+            }}>
+                Vitrine de Sucesso
+            </h3>
+            <p style={{
+                fontSize: "var(--text-base)",
+                color: "var(--muted-foreground)",
+                marginBottom: "var(--space-10)",
+                maxWidth: "600px",
+                marginLeft: "auto",
+                marginRight: "auto",
+            }}>
+                Marcas que confiaram e os resultados que alcançamos juntos.
+            </p>
 
             {/* Cases Grid */}
             <div style={{

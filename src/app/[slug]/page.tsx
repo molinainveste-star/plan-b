@@ -18,16 +18,6 @@ export default async function MediaKitPage({ params }: { params: Promise<{ slug:
 
     if (!profile) {
         const mockKit = getMediaKit(slug);
-        // Mock video data para demonstração
-        const mockVideos = [
-            { video_id: "dQw4w9WgXcQ", title: "Como começar a criar conteúdo em 2024", view_count: 125000, like_count: 8500, comment_count: 420, published_at: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString() },
-            { video_id: "9bZkp7q19f0", title: "Minha rotina matinal de produtividade", view_count: 89000, like_count: 6200, comment_count: 310, published_at: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString() },
-            { video_id: "kJQP7kiw5Fk", title: "Tour pelo meu escritório home office", view_count: 156000, like_count: 12000, comment_count: 580, published_at: new Date(Date.now() - 21 * 24 * 60 * 60 * 1000).toISOString() },
-            { video_id: "RgKAFK5djSk", title: "5 dicas para crescer no YouTube", view_count: 203000, like_count: 15800, comment_count: 920, published_at: new Date(Date.now() - 28 * 24 * 60 * 60 * 1000).toISOString() },
-            { video_id: "OPf0YbXqDm0", title: "Q&A: Respondendo suas perguntas", view_count: 67000, like_count: 4800, comment_count: 890, published_at: new Date(Date.now() - 35 * 24 * 60 * 60 * 1000).toISOString() },
-            { video_id: "fJ9rUzIMcZQ", title: "Colaboração especial com @creator", view_count: 298000, like_count: 22000, comment_count: 1200, published_at: new Date(Date.now() - 42 * 24 * 60 * 60 * 1000).toISOString() },
-        ];
-
         profile = {
             username: slug,
             full_name: mockKit.name,
@@ -43,7 +33,7 @@ export default async function MediaKitPage({ params }: { params: Promise<{ slug:
                 icon: m.icon
             })),
             social_accounts: mockKit.socials,
-            video_performance: mockVideos,
+            video_performance: [],
             custom_story: null,
             custom_pitch: null,
             brand_cases: [],

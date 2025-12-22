@@ -132,81 +132,72 @@ export const PricingTable: React.FC<PricingTableProps> = ({
                 opacity: 0,
             }}
         >
-            {/* Header com título e botão de edição */}
-            <div style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                marginBottom: "var(--space-10)",
-                position: "relative",
-            }}>
-                <h3 style={{
-                    textAlign: "center",
-                    fontSize: "var(--text-3xl)",
-                    fontWeight: 800,
-                    color: "var(--foreground)",
-                    margin: 0,
-                }}>
-                    Pacotes de <span className="text-gradient">Parceria</span>
-                </h3>
-
-                {isOwner && (
-                    <div style={{ position: "absolute", right: 0, zIndex: 10 }} className="no-print">
-                        {!isEditing ? (
+            {isOwner && (
+                <div style={{ position: "absolute", top: "-3rem", right: 0, zIndex: 10 }} className="no-print">
+                    {!isEditing ? (
+                        <button
+                            onClick={() => setIsEditing(true)}
+                            className="glass-panel"
+                            style={{
+                                padding: "var(--space-2) var(--space-4)",
+                                borderRadius: "var(--radius-full)",
+                                border: "none",
+                                color: "var(--foreground)",
+                                cursor: "pointer",
+                                fontSize: "var(--text-sm)",
+                                fontWeight: 600,
+                            }}
+                        >
+                            ✏️ Editar
+                        </button>
+                    ) : (
+                        <div style={{ display: "flex", gap: "var(--space-2)" }}>
                             <button
-                                onClick={() => setIsEditing(true)}
-                                className="glass-panel"
+                                onClick={() => setIsEditing(false)}
                                 style={{
                                     padding: "var(--space-2) var(--space-4)",
                                     borderRadius: "var(--radius-full)",
                                     border: "none",
+                                    background: "var(--background-tertiary)",
                                     color: "var(--foreground)",
                                     cursor: "pointer",
-                                    fontSize: "var(--text-sm)",
                                     fontWeight: 600,
+                                    fontSize: "var(--text-sm)",
                                 }}
                             >
-                                ✏️ Editar
+                                Cancelar
                             </button>
-                        ) : (
-                            <div style={{ display: "flex", gap: "var(--space-2)" }}>
-                                <button
-                                    onClick={() => setIsEditing(false)}
-                                    style={{
-                                        padding: "var(--space-2) var(--space-4)",
-                                        borderRadius: "var(--radius-full)",
-                                        border: "none",
-                                        background: "var(--background-tertiary)",
-                                        color: "var(--foreground)",
-                                        cursor: "pointer",
-                                        fontWeight: 600,
-                                        fontSize: "var(--text-sm)",
-                                    }}
-                                >
-                                    Cancelar
-                                </button>
-                                <button
-                                    onClick={handleSave}
-                                    disabled={isSaving}
-                                    style={{
-                                        padding: "var(--space-2) var(--space-4)",
-                                        borderRadius: "var(--radius-full)",
-                                        border: "none",
-                                        background: "var(--primary)",
-                                        color: "var(--background)",
-                                        cursor: "pointer",
-                                        fontWeight: 600,
-                                        fontSize: "var(--text-sm)",
-                                        opacity: isSaving ? 0.7 : 1,
-                                    }}
-                                >
-                                    {isSaving ? "Salvando..." : "Salvar"}
-                                </button>
-                            </div>
-                        )}
-                    </div>
-                )}
-            </div>
+                            <button
+                                onClick={handleSave}
+                                disabled={isSaving}
+                                style={{
+                                    padding: "var(--space-2) var(--space-4)",
+                                    borderRadius: "var(--radius-full)",
+                                    border: "none",
+                                    background: "var(--primary)",
+                                    color: "var(--background)",
+                                    cursor: "pointer",
+                                    fontWeight: 600,
+                                    fontSize: "var(--text-sm)",
+                                    opacity: isSaving ? 0.7 : 1,
+                                }}
+                            >
+                                {isSaving ? "Salvando..." : "Salvar"}
+                            </button>
+                        </div>
+                    )}
+                </div>
+            )}
+
+            <h3 style={{
+                textAlign: "center",
+                fontSize: "var(--text-3xl)",
+                fontWeight: 800,
+                marginBottom: "var(--space-10)",
+                color: "var(--foreground)",
+            }}>
+                Pacotes de <span className="text-gradient">Parceria</span>
+            </h3>
 
             <div style={{
                 display: "grid",

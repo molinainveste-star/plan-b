@@ -1,6 +1,10 @@
 "use server";
 
+<<<<<<< HEAD
 import { refineStoryWithAI as refineStory, type StoryGenerationContext } from "@/lib/ai/gemini";
+=======
+import { refineStoryWithAI as refineStory, type StoryGenerationContext } from "@/lib/ai";
+>>>>>>> feature/redesign-alura-style
 
 /**
  * Re-export da função de refinamento de história
@@ -13,3 +17,4 @@ export async function refineStoryWithAI(
 ) {
     return refineStory(story, pitch, context);
 }
+
