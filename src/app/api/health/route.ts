@@ -28,6 +28,15 @@ interface CheckResult {
 }
 
 const startTime = Date.now();
+const TIMEOUT_MS = 5000;
+
+// Helper para timeout robusto
+async function withTimeout<T>(promise: Promise<T>, ms: number, fallback: T): Promise<T> {
+    const timeout = new Promise<T>((resolve) => {
+        setTimeout(() => resolve(fallback), ms);
+    });
+    return Promise.race([promise, timeout]);
+}
 
 async function checkSupabase(): Promise<CheckResult> {
     const start = Date.now();
@@ -37,15 +46,16 @@ async function checkSupabase(): Promise<CheckResult> {
             return { status: 'error', message: 'Service role key missing' };
         }
         
-        const { error } = await supabaseAdmin
-            .from('profiles')
-            .select('id')
-            .limit(1);
+        const result = await withTimeout(
+            supabaseAdmin.from('profiles').select('id').limit(1),
+            TIMEOUT_MS,
+            { error: { message: 'Timeout' } }
+        );
         
         const latency = Date.now() - start;
         
-        if (error) {
-            return { status: 'error', latency, message: error.message };
+        if (result.error) {
+            return { status: 'error', latency, message: result.error.message };
         }
         
         return { status: latency > 1000 ? 'warning' : 'ok', latency };
@@ -68,12 +78,15 @@ async function checkYouTubeAPI(): Promise<CheckResult> {
     const start = Date.now();
     
     try {
-        // Faz uma request mínima para verificar se a key é válida
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), TIMEOUT_MS);
+        
         const response = await fetch(
             `https://www.googleapis.com/youtube/v3/videos?part=id&id=dQw4w9WgXcQ&key=${apiKey}`,
-            { signal: AbortSignal.timeout(5000) }
+            { signal: controller.signal }
         );
         
+        clearTimeout(timeoutId);
         const latency = Date.now() - start;
         
         if (!response.ok) {
@@ -89,11 +102,14 @@ async function checkYouTubeAPI(): Promise<CheckResult> {
         
         return { status: latency > 2000 ? 'warning' : 'ok', latency };
     } catch (err) {
-        return { 
-            status: 'error', 
-            latency: Date.now() - start,
-            message: err instanceof Error ? err.message : 'Unknown error' 
-        };
+        const latency = Date.now() - start;
+        const message = err instanceof Error ? err.message : 'Unknown error';
+        
+        if (message.includes('aborted')) {
+            return { status: 'error', latency, message: 'Timeout' };
+        }
+        
+        return { status: 'error', latency, message };
     }
 }
 
@@ -107,28 +123,31 @@ async function checkGeminiAPI(): Promise<CheckResult> {
     const start = Date.now();
     
     try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), TIMEOUT_MS);
+        
         const response = await fetch(
             `https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`,
-            { signal: AbortSignal.timeout(5000) }
+            { signal: controller.signal }
         );
         
+        clearTimeout(timeoutId);
         const latency = Date.now() - start;
         
         if (!response.ok) {
-            return { 
-                status: 'error', 
-                latency, 
-                message: `HTTP ${response.status}` 
-            };
+            return { status: 'error', latency, message: `HTTP ${response.status}` };
         }
         
         return { status: latency > 2000 ? 'warning' : 'ok', latency };
     } catch (err) {
-        return { 
-            status: 'error', 
-            latency: Date.now() - start,
-            message: err instanceof Error ? err.message : 'Unknown error' 
-        };
+        const latency = Date.now() - start;
+        const message = err instanceof Error ? err.message : 'Unknown error';
+        
+        if (message.includes('aborted')) {
+            return { status: 'error', latency, message: 'Timeout' };
+        }
+        
+        return { status: 'error', latency, message };
     }
 }
 
@@ -140,25 +159,17 @@ function checkEnvironment(): CheckResult {
         'YOUTUBE_API_KEY',
     ];
     
-    const optionalVars = [
-        'GEMINI_API_KEY',
-    ];
+    const optionalVars = ['GEMINI_API_KEY'];
     
     const missing = requiredVars.filter(v => !process.env[v]);
     const missingOptional = optionalVars.filter(v => !process.env[v]);
     
     if (missing.length > 0) {
-        return { 
-            status: 'error', 
-            message: `Missing required: ${missing.join(', ')}` 
-        };
+        return { status: 'error', message: `Missing required: ${missing.join(', ')}` };
     }
     
     if (missingOptional.length > 0) {
-        return { 
-            status: 'warning', 
-            message: `Missing optional: ${missingOptional.join(', ')}` 
-        };
+        return { status: 'warning', message: `Missing optional: ${missingOptional.join(', ')}` };
     }
     
     return { status: 'ok' };
@@ -172,10 +183,8 @@ export async function GET() {
     ]);
     
     const environment = checkEnvironment();
-    
     const checks = { supabase, youtube_api: youtube, gemini_api: gemini, environment };
     
-    // Determina status geral
     const allChecks = Object.values(checks);
     const hasError = allChecks.some(c => c.status === 'error');
     const hasWarning = allChecks.some(c => c.status === 'warning');
@@ -192,8 +201,5 @@ export async function GET() {
         checks,
     };
     
-    const httpStatus = overallStatus === 'unhealthy' ? 503 : 200;
-    
-    return NextResponse.json(health, { status: httpStatus });
+    return NextResponse.json(health, { status: overallStatus === 'unhealthy' ? 503 : 200 });
 }
-
