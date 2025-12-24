@@ -3,8 +3,14 @@
 /**
  * Server Actions - Ponto de entrada principal
  * Re-exports das funções dos services
+ * 
+ * Inclui:
+ * - Rate limiting para proteção contra abuse
+ * - Cache de YouTube para resiliência
+ * - Logging estruturado
  */
 
+import { headers } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import {
@@ -28,6 +34,9 @@ import {
     buildYouTubeSocialUrl,
 } from "@/lib/youtube";
 import { discoverNicheWithAI, refineStoryWithAI as refineStoryAI } from "@/lib/ai/gemini";
+import { rateLimit } from "@/lib/security";
+import { cacheYouTubeData, getCachedYouTubeData } from "@/lib/cache";
+import { logger } from "@/lib/monitoring";
 
 // ===========================================
 // TYPES
@@ -44,13 +53,27 @@ export interface CreateProfileData {
 // ===========================================
 
 export async function createProfile(data: CreateProfileData) {
+    // Rate limiting
+    const headersList = await headers();
+    const limit = await rateLimit('createProfile', headersList);
+    if (!limit.allowed) {
+        logger.warn('Rate limit exceeded for createProfile', { 
+            action: 'createProfile',
+            metadata: { resetIn: limit.resetIn }
+        });
+        return { 
+            success: false, 
+            error: `Muitas tentativas. Aguarde ${Math.ceil(limit.resetIn / 1000)} segundos.` 
+        };
+    }
+
     const validation = validateInput(createProfileSchema, data);
     if (!validation.success) {
         return { success: false, error: validation.error };
     }
     const validData = validation.data;
 
-    console.log(`🚀 Creating profile for: ${validData.slug}...`);
+    logger.info(`Creating profile: ${validData.slug}`, { action: 'createProfile', slug: validData.slug });
 
     // Check if slug already exists
     const { data: existingUser } = await supabaseAdmin
@@ -191,23 +214,97 @@ export async function updateProfileCaseStudies(slug: string, cases: unknown[]) {
 // ===========================================
 
 export async function updateYouTubeMetrics(slug: string, input: string) {
+    // Rate limiting
+    const headersList = await headers();
+    const limit = await rateLimit('updateYouTubeMetrics', headersList);
+    if (!limit.allowed) {
+        logger.warn('Rate limit exceeded for updateYouTubeMetrics', { 
+            action: 'updateYouTubeMetrics',
+            slug,
+            metadata: { resetIn: limit.resetIn }
+        });
+        return { 
+            success: false, 
+            error: `Muitas sincronizações. Aguarde ${Math.ceil(limit.resetIn / 1000)} segundos.` 
+        };
+    }
+
     const validation = validateInput(updateYouTubeMetricsSchema, { slug, input });
     if (!validation.success) {
-        console.error(`❌ Validation Error: ${validation.error}`);
+        logger.warn(`Validation failed: ${validation.error}`, { action: 'updateYouTubeMetrics', slug });
         return { success: false, error: validation.error };
     }
     const { slug: validSlug, input: validInput } = validation.data;
 
     const apiKey = process.env.YOUTUBE_API_KEY;
     if (!apiKey) {
-        console.error("❌ YOUTUBE_API_KEY is missing");
+        logger.error("YOUTUBE_API_KEY is missing", null, { action: 'updateYouTubeMetrics' });
         return { success: false, error: "YouTube API Key não configurada" };
     }
 
+    const timer = logger.timer('updateYouTubeMetrics');
+
     try {
-        const metricsResult = await fetchCompleteYouTubeMetrics(validInput, apiKey);
+        let metricsResult = await fetchCompleteYouTubeMetrics(validInput, apiKey);
+        
+        // Fallback para cache se API falhar
         if (!metricsResult) {
-            return { success: false, error: "Canal não encontrado" };
+            logger.warn('YouTube API failed, trying cache fallback', { action: 'updateYouTubeMetrics', slug });
+            const cached = await getCachedYouTubeData(validInput);
+            
+            if (cached) {
+                logger.info('Using cached YouTube data', { action: 'updateYouTubeMetrics', slug });
+                // Recria metricsResult a partir do cache
+                metricsResult = {
+                    channel: cached.channel,
+                    videos: cached.videos,
+                    avgViews: 0,
+                    engagementRate: 0,
+                    videosInLast30Days: 0,
+                    viewsInLast30Days: 0,
+                    latestThumbnails: [],
+                    allTitlesAndTags: cached.videos.map(v => v.title).join(' '),
+                };
+                
+                // Recalcula métricas do cache
+                if (cached.videos.length > 0) {
+                    const thirtyDaysAgo = new Date();
+                    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+                    
+                    let totalViewsForAvg = 0;
+                    let totalEngagementForAvg = 0;
+                    
+                    cached.videos.forEach((video, index) => {
+                        const publishedAt = new Date(video.published_at);
+                        
+                        if (index < 3 && video.thumbnail_url) {
+                            metricsResult!.latestThumbnails.push(video.thumbnail_url);
+                        }
+                        
+                        if (publishedAt > thirtyDaysAgo) {
+                            metricsResult!.videosInLast30Days++;
+                            metricsResult!.viewsInLast30Days += video.view_count;
+                        }
+                        
+                        if (index < 10) {
+                            totalViewsForAvg += video.view_count;
+                            totalEngagementForAvg += video.like_count + video.comment_count;
+                        }
+                    });
+                    
+                    const avgCount = Math.min(cached.videos.length, 10);
+                    metricsResult.avgViews = avgCount > 0 ? Math.round(totalViewsForAvg / avgCount) : 0;
+                    metricsResult.engagementRate = totalViewsForAvg > 0 
+                        ? (totalEngagementForAvg / totalViewsForAvg) * 100 
+                        : 0;
+                }
+            } else {
+                timer.error(new Error('Channel not found'), 'YouTube sync failed');
+                return { success: false, error: "Canal não encontrado" };
+            }
+        } else {
+            // Salva no cache para uso futuro
+            await cacheYouTubeData(validInput, metricsResult.channel, metricsResult.videos);
         }
 
         const { channel, videos, avgViews, engagementRate, videosInLast30Days, viewsInLast30Days, latestThumbnails, allTitlesAndTags } = metricsResult;
@@ -291,11 +388,13 @@ export async function updateYouTubeMetrics(slug: string, input: string) {
         await supabaseAdmin.from("metrics").delete().eq("profile_id", profile.id);
         await supabaseAdmin.from("metrics").insert(metrics);
 
-        console.log("✅ Metrics saved successfully.");
+        timer.end('YouTube metrics synced successfully');
+        logger.info("Metrics saved successfully", { action: 'updateYouTubeMetrics', slug: validSlug });
         return { success: true };
 
     } catch (error) {
-        console.error("❌ Unexpected error fetching YouTube data:", error);
+        timer.error(error, 'YouTube sync failed unexpectedly');
+        logger.error("Unexpected error fetching YouTube data", error, { action: 'updateYouTubeMetrics', slug });
         return { success: false, error: "Erro inesperado" };
     }
 }

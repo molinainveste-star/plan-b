@@ -25,6 +25,7 @@ interface ProfileHeaderProps {
         story?: string;
         pricing?: Array<{ name: string; price: string; features: string[]; popular?: boolean }>;
         cases?: Array<{ brand: string; title: string; description: string; metrics: string[] }>;
+        featuredVideos?: Array<{ title: string; views: string; likes: string; videoId: string }>;
     };
 }
 
@@ -62,6 +63,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
             socials: socials.map(s => ({ platform: s.platform, handle: s.handle })),
             pricing: pdfData?.pricing,
             cases: pdfData?.cases,
+            featuredVideos: pdfData?.featuredVideos,
         };
         setPdfData(data);
     }, [name, bio, avatarUrl, location, niche, pdfData, socials, setPdfData]);
@@ -98,6 +100,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                 socials: socials.map(s => ({ platform: s.platform, handle: s.handle })),
                 pricing: pdfData?.pricing,
                 cases: pdfData?.cases,
+                featuredVideos: pdfData?.featuredVideos,
             };
             await downloadMediaKitPDF(data, `${name.replace(/\s+/g, "-").toLowerCase()}-media-kit.pdf`);
         } finally {

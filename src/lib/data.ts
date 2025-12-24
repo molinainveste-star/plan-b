@@ -1,7 +1,9 @@
-import { supabase } from "@/lib/supabase";
+import { supabaseAdmin } from "@/lib/supabase/admin";
 
 export async function getProfileBySlug(slug: string) {
-    const { data, error } = await supabase
+    // Usa admin client para bypass de RLS (dados são públicos de qualquer forma)
+    // Busca case-insensitive usando ilike
+    const { data, error } = await supabaseAdmin
         .from("profiles")
         .select(`
             *,
@@ -9,27 +11,8 @@ export async function getProfileBySlug(slug: string) {
             social_accounts (*),
             video_performance (*)
         `)
-        .eq("username", slug)
+        .ilike("username", slug)
         .single();
-
-    // If not found, try lowercase slug (robustness for case sensitivity)
-    if (error && error.code === 'PGRST116' && slug !== slug.toLowerCase()) {
-        console.log(`⚠️ Profile not found for '${slug}', trying '${slug.toLowerCase()}'...`);
-        const { data: retryData, error: retryError } = await supabase
-            .from("profiles")
-            .select(`
-                *,
-                metrics (*),
-                social_accounts (*),
-                video_performance (*)
-            `)
-            .eq("username", slug.toLowerCase())
-            .single();
-
-        if (!retryError && retryData) {
-            return retryData;
-        }
-    }
 
     if (error) {
         // Ignore "Row not found" error when using .single()

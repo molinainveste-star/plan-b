@@ -117,10 +117,10 @@ const styles = StyleSheet.create({
   },
   // Bio
   bio: {
-    fontSize: 9,
+    fontSize: 11,
     color: colors.foregroundSecondary,
-    lineHeight: 1.5,
-    marginBottom: 12,
+    lineHeight: 1.6,
+    marginBottom: 14,
   },
   // Metrics Grid
   metricsGrid: {
@@ -230,15 +230,15 @@ const styles = StyleSheet.create({
   // Story
   storyBox: {
     backgroundColor: colors.backgroundSecondary,
-    padding: 12,
-    borderRadius: 6,
-    borderLeftWidth: 3,
+    padding: 14,
+    borderRadius: 8,
+    borderLeftWidth: 4,
     borderLeftColor: colors.accent,
   },
   storyText: {
-    fontSize: 8,
+    fontSize: 10,
     color: colors.foregroundSecondary,
-    lineHeight: 1.5,
+    lineHeight: 1.6,
   },
   // Footer
   footer: {
@@ -262,16 +262,16 @@ const styles = StyleSheet.create({
     color: colors.primary,
     fontWeight: "bold",
   },
-  // Pricing
+  // Pricing - Layout igual ao site
   pricingGrid: {
     flexDirection: "row",
-    gap: 6,
+    gap: 10,
   },
   pricingCard: {
     flex: 1,
     backgroundColor: colors.backgroundSecondary,
-    padding: 10,
-    borderRadius: 5,
+    padding: 16,
+    borderRadius: 12,
     borderWidth: 1,
     borderColor: colors.border,
   },
@@ -279,36 +279,95 @@ const styles = StyleSheet.create({
     borderColor: colors.primary,
     borderWidth: 2,
   },
+  pricingPopularBadge: {
+    backgroundColor: colors.primary,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 10,
+    alignSelf: "center",
+    marginBottom: 8,
+  },
+  pricingPopularBadgeText: {
+    fontSize: 6,
+    fontWeight: "bold",
+    color: colors.background,
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
+  },
   pricingName: {
+    fontSize: 12,
+    fontWeight: "bold",
+    color: colors.foreground,
+    marginBottom: 6,
+  },
+  pricingPrice: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: colors.primary,
+    marginBottom: 12,
+  },
+  pricingPriceUnit: {
+    fontSize: 9,
+    fontWeight: "normal",
+    color: colors.foregroundMuted,
+  },
+  pricingFeatureRow: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    marginBottom: 6,
+    gap: 6,
+  },
+  pricingFeatureCheck: {
+    width: 14,
+    height: 14,
+    borderRadius: 7,
+    backgroundColor: "#10B98130",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  pricingFeatureCheckText: {
+    fontSize: 8,
+    color: colors.success,
+    fontWeight: "bold",
+  },
+  pricingFeatureText: {
+    fontSize: 9,
+    color: colors.foregroundSecondary,
+    flex: 1,
+    lineHeight: 1.4,
+  },
+  pricingButton: {
+    marginTop: 12,
+    paddingVertical: 10,
+    borderRadius: 8,
+    backgroundColor: colors.backgroundTertiary,
+    alignItems: "center",
+  },
+  pricingButtonPopular: {
+    backgroundColor: colors.primary,
+  },
+  pricingButtonText: {
     fontSize: 9,
     fontWeight: "bold",
     color: colors.foreground,
-    marginBottom: 2,
   },
-  pricingPrice: {
-    fontSize: 12,
-    fontWeight: "bold",
-    color: colors.primary,
-    marginBottom: 5,
-  },
-  pricingFeature: {
-    fontSize: 6,
-    color: colors.foregroundMuted,
-    marginBottom: 2,
+  pricingButtonTextPopular: {
+    color: colors.background,
   },
   // Cases / Vitrine de Sucesso
   casesGrid: {
     flexDirection: "row",
     flexWrap: "wrap",
-    gap: 8,
+    gap: 12,
   },
   caseCard: {
     width: "48%",
     backgroundColor: colors.backgroundSecondary,
-    borderRadius: 6,
+    borderRadius: 10,
     borderWidth: 1,
     borderColor: colors.border,
     overflow: "hidden",
+    minHeight: 110,
   },
   caseImage: {
     width: "100%",
@@ -316,41 +375,109 @@ const styles = StyleSheet.create({
     backgroundColor: colors.backgroundTertiary,
   },
   caseContent: {
-    padding: 8,
+    padding: 12,
   },
   caseBrand: {
-    fontSize: 8,
+    fontSize: 10,
     fontWeight: "bold",
     color: colors.primary,
-    marginBottom: 2,
+    marginBottom: 4,
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
   },
   caseTitle: {
-    fontSize: 8,
+    fontSize: 10,
     fontWeight: "bold",
     color: colors.foreground,
-    marginBottom: 3,
+    marginBottom: 6,
   },
   caseDescription: {
-    fontSize: 7,
-    color: colors.foregroundMuted,
-    lineHeight: 1.4,
-    marginBottom: 4,
+    fontSize: 8,
+    color: colors.foregroundSecondary,
+    lineHeight: 1.6,
+    marginBottom: 8,
   },
   caseMetrics: {
     flexDirection: "row",
-    gap: 4,
+    gap: 6,
     flexWrap: "wrap",
   },
   caseMetricBadge: {
     backgroundColor: colors.backgroundTertiary,
-    paddingHorizontal: 5,
-    paddingVertical: 2,
-    borderRadius: 6,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: colors.success,
   },
   caseMetricText: {
-    fontSize: 6,
+    fontSize: 8,
     color: colors.success,
     fontWeight: "bold",
+  },
+  // Featured Videos
+  videosSection: {
+    marginBottom: 16,
+  },
+  videosHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 8,
+  },
+  videosSubtitle: {
+    fontSize: 7,
+    color: colors.foregroundMuted,
+  },
+  videosGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 8,
+  },
+  videoCard: {
+    width: "31%",
+    backgroundColor: colors.backgroundSecondary,
+    borderRadius: 6,
+    overflow: "hidden",
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  videoThumbnail: {
+    width: "100%",
+    height: 50,
+    backgroundColor: colors.backgroundTertiary,
+  },
+  videoContent: {
+    padding: 6,
+  },
+  videoTitle: {
+    fontSize: 7,
+    fontWeight: "bold",
+    color: colors.foreground,
+    marginBottom: 4,
+    lineHeight: 1.3,
+  },
+  videoStats: {
+    flexDirection: "row",
+    gap: 8,
+  },
+  videoStat: {
+    fontSize: 6,
+    color: colors.foregroundMuted,
+  },
+  videoTopBadge: {
+    position: "absolute",
+    top: 3,
+    left: 3,
+    backgroundColor: colors.accent,
+    paddingHorizontal: 4,
+    paddingVertical: 2,
+    borderRadius: 4,
+  },
+  videoTopBadgeText: {
+    fontSize: 5,
+    fontWeight: "bold",
+    color: colors.foreground,
   },
   // Page number
   pageNumber: {
@@ -393,6 +520,12 @@ interface MediaKitData {
     description: string;
     metrics: string[];
   }>;
+  featuredVideos?: Array<{
+    title: string;
+    views: string;
+    likes: string;
+    videoId: string;
+  }>;
 }
 
 // Componente do documento PDF
@@ -414,7 +547,7 @@ const MediaKitDocument: React.FC<{ data: MediaKitData; avatarBase64?: string }> 
         <View style={styles.headerInfo}>
           <Text style={styles.name}>{data.name}</Text>
           <Text style={styles.tagline}>
-            📍 {data.location} • {data.niche}
+            {data.location} • {data.niche}
           </Text>
           <View style={styles.badgeRow}>
             {data.socials?.slice(0, 3).map((social, i) => (
@@ -432,7 +565,7 @@ const MediaKitDocument: React.FC<{ data: MediaKitData; avatarBase64?: string }> 
       {data.bio && (
         <View style={styles.section}>
           <Text style={styles.bio}>
-            {data.bio.length > 300 ? data.bio.slice(0, 300) + "..." : data.bio}
+            {data.bio}
           </Text>
         </View>
       )}
@@ -455,7 +588,45 @@ const MediaKitDocument: React.FC<{ data: MediaKitData; avatarBase64?: string }> 
         </View>
       </View>
 
-      {/* Story (resumida) */}
+      {/* Featured Videos - Destaques Recentes */}
+      {data.featuredVideos && data.featuredVideos.length > 0 && (
+        <View style={styles.videosSection}>
+          <View style={styles.videosHeader}>
+            <Text style={styles.sectionTitle}>
+              Destaques <Text style={styles.sectionTitleAccent}>Recentes</Text>
+            </Text>
+            <Text style={styles.videosSubtitle}>Ordenado por engajamento</Text>
+          </View>
+          <View style={styles.videosGrid}>
+            {data.featuredVideos.slice(0, 6).map((video, index) => (
+              <View key={index} style={styles.videoCard}>
+                {video.videoId && (
+                  <Image
+                    src={`https://img.youtube.com/vi/${video.videoId}/mqdefault.jpg`}
+                    style={styles.videoThumbnail}
+                  />
+                )}
+                {index === 0 && (
+                  <View style={styles.videoTopBadge}>
+                    <Text style={styles.videoTopBadgeText}>TOP</Text>
+                  </View>
+                )}
+                <View style={styles.videoContent}>
+                  <Text style={styles.videoTitle}>
+                    {video.title.length > 40 ? video.title.slice(0, 40) + "..." : video.title}
+                  </Text>
+                  <View style={styles.videoStats}>
+                    <Text style={styles.videoStat}>{video.views} views</Text>
+                    <Text style={styles.videoStat}>{video.likes} likes</Text>
+                  </View>
+                </View>
+              </View>
+            ))}
+          </View>
+        </View>
+      )}
+
+      {/* Story (completa - quebra automática pelo estilo) */}
       {data.story && (
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>
@@ -463,7 +634,7 @@ const MediaKitDocument: React.FC<{ data: MediaKitData; avatarBase64?: string }> 
           </Text>
           <View style={styles.storyBox}>
             <Text style={styles.storyText}>
-              {data.story.length > 500 ? data.story.slice(0, 500) + "..." : data.story}
+              {data.story}
             </Text>
           </View>
         </View>
@@ -547,7 +718,7 @@ const MediaKitDocument: React.FC<{ data: MediaKitData; avatarBase64?: string }> 
     {/* Página 2 - Pacotes + Vitrine de Sucesso */}
     {(data.pricing && data.pricing.length > 0) || (data.cases && data.cases.length > 0) ? (
       <Page size="A4" style={styles.page}>
-        {/* Pricing */}
+        {/* Pricing - Layout igual ao site */}
         {data.pricing && data.pricing.length > 0 && (
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>
@@ -559,12 +730,23 @@ const MediaKitDocument: React.FC<{ data: MediaKitData; avatarBase64?: string }> 
                   key={i}
                   style={pkg.popular ? [styles.pricingCard, styles.pricingCardPopular] : styles.pricingCard}
                 >
+                  {pkg.popular && (
+                    <View style={styles.pricingPopularBadge}>
+                      <Text style={styles.pricingPopularBadgeText}>Mais Escolhido</Text>
+                    </View>
+                  )}
                   <Text style={styles.pricingName}>{pkg.name}</Text>
-                  <Text style={styles.pricingPrice}>{pkg.price}</Text>
+                  <Text style={styles.pricingPrice}>
+                    {pkg.price}
+                    <Text style={styles.pricingPriceUnit}>/un</Text>
+                  </Text>
                   {pkg.features.slice(0, 5).map((feature, j) => (
-                    <Text key={j} style={styles.pricingFeature}>
-                      ✓ {feature}
-                    </Text>
+                    <View key={j} style={styles.pricingFeatureRow}>
+                      <View style={styles.pricingFeatureCheck}>
+                        <Text style={styles.pricingFeatureCheckText}>✓</Text>
+                      </View>
+                      <Text style={styles.pricingFeatureText}>{feature}</Text>
+                    </View>
                   ))}
                 </View>
               ))}
@@ -618,20 +800,39 @@ const MediaKitDocument: React.FC<{ data: MediaKitData; avatarBase64?: string }> 
   </Document>
 );
 
-// Função para converter URL de imagem em base64
+// Função para converter URL de imagem em base64 (com fallback para proxy CORS)
 async function imageUrlToBase64(url: string): Promise<string | null> {
   try {
-    const response = await fetch(url, {
-      mode: 'cors',
-      credentials: 'omit',
-    });
-    
-    if (!response.ok) {
-      console.warn("Falha ao carregar imagem:", url);
+    // Lista de proxies CORS para tentar
+    const proxyUrls = [
+      url, // Tenta direto primeiro
+      `https://corsproxy.io/?${encodeURIComponent(url)}`,
+      `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+    ];
+
+    let blob: Blob | null = null;
+
+    for (const proxyUrl of proxyUrls) {
+      try {
+        const response = await fetch(proxyUrl, {
+          mode: 'cors',
+          credentials: 'omit',
+        });
+        
+        if (response.ok) {
+          blob = await response.blob();
+          if (blob.size > 0) break;
+        }
+      } catch {
+        continue;
+      }
+    }
+
+    if (!blob || blob.size === 0) {
+      console.warn("Falha ao carregar imagem após todas tentativas:", url);
       return null;
     }
     
-    const blob = await response.blob();
     return new Promise((resolve) => {
       const reader = new FileReader();
       reader.onloadend = () => resolve(reader.result as string);

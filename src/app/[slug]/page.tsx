@@ -12,6 +12,10 @@ import { getMediaKit } from "@/lib/mockData";
 import { generateAIStory } from "@/lib/ai";
 import { BadgeCheck, Sparkles } from "lucide-react";
 
+// Força renderização dinâmica - sem cache
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export default async function MediaKitPage({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params;
     let profile = await getProfileBySlug(slug);
@@ -60,15 +64,27 @@ export default async function MediaKitPage({ params }: { params: Promise<{ slug:
     })) || [];
 
     // Todos os vídeos ordenados por data (para o gráfico)
-    const videoData = profile.video_performance?.sort((a: any, b: any) =>
-        new Date(a.published_at).getTime() - new Date(b.published_at).getTime()
-    ) || [];
+    // Usa os vídeos reais do perfil - não usa mock para evitar dados de outro canal
+    const rawVideoPerformance = profile.video_performance || [];
+    
+    console.log('🔍 DEBUG slug:', slug);
+    console.log('🔍 DEBUG profile.username:', profile.username);
+    console.log('🎬 DEBUG video_performance:', rawVideoPerformance?.length || 0, 'videos');
+    if (rawVideoPerformance.length > 0) {
+        console.log('🎬 Primeiro video:', rawVideoPerformance[0]?.title);
+    }
+    const videoData = rawVideoPerformance.length > 0 
+        ? [...rawVideoPerformance].sort((a: any, b: any) =>
+            new Date(a.published_at).getTime() - new Date(b.published_at).getTime()
+        ) 
+        : [];
+    console.log('📊 DEBUG videoData:', videoData.length, 'videos');
 
     // Vídeos dos últimos 30 dias, ordenados por engajamento (para destaques)
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
     
-    const featuredVideos = profile.video_performance
+    const featuredVideos = rawVideoPerformance
         ?.filter((v: any) => new Date(v.published_at) >= thirtyDaysAgo)
         .map((v: any) => ({
             ...v,
@@ -80,7 +96,7 @@ export default async function MediaKitPage({ params }: { params: Promise<{ slug:
     
     // Se não houver vídeos nos últimos 30 dias, usa os mais engajados de sempre
     const displayVideos = featuredVideos.length > 0 ? featuredVideos : 
-        (profile.video_performance || [])
+        rawVideoPerformance
             .map((v: any) => ({
                 ...v,
                 engagementScore: (v.view_count || 0) + (v.like_count || 0) * 100 + (v.comment_count || 0) * 500
@@ -173,17 +189,37 @@ export default async function MediaKitPage({ params }: { params: Promise<{ slug:
                             countries: countryData,
                         },
                         story: finalStory,
-                        pricing: profile.pricing_packages?.map((p: any) => ({
-                            name: p.name,
-                            price: p.price,
-                            features: p.features || [],
-                            popular: p.popular,
-                        })),
-                        cases: profile.brand_cases?.map((c: any) => ({
-                            brand: c.brand_name || c.brand || "Marca",
-                            title: c.title || c.campaign_name || "Campanha",
-                            description: c.description || c.results || "",
-                            metrics: Array.isArray(c.metrics) ? c.metrics : (c.metrics ? [String(c.metrics)] : []),
+                        pricing: (profile.pricing_packages && profile.pricing_packages.length > 0) 
+                            ? profile.pricing_packages.map((p: any) => ({
+                                name: p.title || p.name || "Pacote",
+                                price: p.price || "A consultar",
+                                features: p.features || [],
+                                popular: p.isPopular || p.popular || false,
+                            }))
+                            : [
+                                { name: "Shorts / Reels", price: "R$ 3.500", features: ["Vídeo vertical de até 60s", "Postagem no YouTube Shorts e Reels", "Link na Bio por 24h", "Direitos de uso por 30 dias"], popular: false },
+                                { name: "Vídeo Dedicado", price: "R$ 8.000", features: ["Vídeo completo (8-12 min)", "Roteiro exclusivo", "Menção na descrição e comentário fixado", "Direitos de uso vitalícios"], popular: true },
+                                { name: "Combo 360", price: "R$ 12.000", features: ["1 Vídeo Dedicado", "2 Shorts/Reels de corte", "Postagem em Comunidade", "Story no Instagram com Link"], popular: false },
+                            ],
+                        cases: (profile.brand_cases && profile.brand_cases.length > 0)
+                            ? profile.brand_cases.map((c: any) => ({
+                                brand: c.brandName || c.brand_name || c.brand || "Marca",
+                                title: c.title || c.campaign_name || "Campanha",
+                                description: c.description || c.results || "",
+                                metrics: Array.isArray(c.metrics) 
+                                    ? c.metrics.map((m: any) => String(m))
+                                    : (c.metrics ? String(c.metrics).split("•").map((m: string) => m.trim()).filter(Boolean) : []),
+                            }))
+                            : [
+                                { brand: "Nike", title: "Lançamento Air Max", description: "Foco em lifestyle urbano e alta performance.", metrics: ["1.2M Views", "15% CTR"] },
+                                { brand: "Samsung", title: "Review Galaxy S24", description: "Demonstração de recursos de IA e câmera.", metrics: ["850k Views", "8k Comentários"] },
+                                { brand: "Coca-Cola", title: "Campanha de Natal", description: "Conexão emocional e partilha.", metrics: ["2.5M Alcance", "Viralizou no TikTok"] },
+                            ],
+                        featuredVideos: displayVideos.slice(0, 6).map((v: any) => ({
+                            title: v.title || "Vídeo",
+                            views: new Intl.NumberFormat('pt-BR', { notation: "compact" }).format(v.view_count || 0),
+                            likes: new Intl.NumberFormat('pt-BR', { notation: "compact" }).format(v.like_count || 0),
+                            videoId: v.video_id,
                         })),
                     }}
                 />

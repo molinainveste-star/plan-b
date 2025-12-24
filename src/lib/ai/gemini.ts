@@ -1,5 +1,6 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { buildNicheDiscoveryPrompt, buildStoryGenerationPrompt } from "./prompts";
+import { logger } from "@/lib/monitoring";
 
 // Modelos em ordem de preferência
 const GEMINI_MODELS = ["gemini-2.0-flash", "gemini-1.5-flash", "gemini-flash-latest"];
@@ -15,6 +16,35 @@ export interface StoryGenerationContext {
 export interface StoryResult {
     story: string;
     pitch: string;
+}
+
+/**
+ * Fallback estático quando AI falha completamente
+ */
+const FALLBACK_STORIES: Record<string, StoryResult> = {
+    default: {
+        story: "Criador de conteúdo digital com presença consolidada no YouTube. Construindo uma comunidade engajada através de conteúdo autêntico e consistente, entregando valor real para uma audiência que confia e interage ativamente.",
+        pitch: "Audiência qualificada e engajamento genuíno. Ideal para marcas que buscam conexão autêntica com seu público-alvo através de conteúdo de qualidade.",
+    },
+    Tech: {
+        story: "Especialista em tecnologia com paixão por simplificar o complexo. Transformando inovações em conteúdo acessível para uma audiência tech-savvy que busca conhecimento prático e reviews honestos.",
+        pitch: "Público altamente qualificado em tech. Perfeito para marcas de tecnologia, SaaS e produtos digitais que buscam credibilidade e conversão.",
+    },
+    Games: {
+        story: "Gamer dedicado construindo uma comunidade vibrante de entusiastas. Gameplay envolvente, reviews sinceros e entretenimento de qualidade para uma audiência apaixonada por jogos.",
+        pitch: "Comunidade gamer ativa e leal. Ideal para publishers, hardware gaming e marcas que querem conectar com o público jovem e engajado.",
+    },
+    Lifestyle: {
+        story: "Influenciador de estilo de vida inspirando através de conteúdo autêntico. Compartilhando experiências, dicas e momentos que ressoam com uma audiência que busca inspiração diária.",
+        pitch: "Audiência aspiracional e conectada. Perfeito para marcas de lifestyle, moda, beleza e produtos que valorizam estilo e autenticidade.",
+    },
+};
+
+function getFallbackStory(niche?: string): StoryResult {
+    if (niche && FALLBACK_STORIES[niche]) {
+        return FALLBACK_STORIES[niche];
+    }
+    return FALLBACK_STORIES.default;
 }
 
 /**
@@ -72,7 +102,7 @@ export async function discoverNicheWithAI(
             }
         }
     } catch (e) {
-        console.error("AI Niche Discovery Error:", e);
+        logger.error("AI Niche Discovery failed", e, { action: 'discoverNicheWithAI' });
     }
 
     return "Geral";
@@ -102,6 +132,8 @@ export async function refineStoryWithAI(
         };
     }
 
+    const timer = logger.timer('refineStoryWithAI');
+    
     try {
         const genAI = new GoogleGenerativeAI(apiKey);
         let lastError: any;
@@ -110,7 +142,7 @@ export async function refineStoryWithAI(
 
         for (const modelName of GEMINI_MODELS) {
             try {
-                console.log(`🤖 Senior PR Strategist analyzing with: ${modelName}...`);
+                logger.info(`AI generating story with model: ${modelName}`, { action: 'refineStoryWithAI' });
                 const model = genAI.getGenerativeModel({ model: modelName });
 
                 const result = await model.generateContent(prompt);
@@ -120,9 +152,11 @@ export async function refineStoryWithAI(
                 const jsonMatch = text.match(/\{[\s\S]*\}/);
                 if (jsonMatch) {
                     try {
-                        return JSON.parse(jsonMatch[0]) as StoryResult;
+                        const parsed = JSON.parse(jsonMatch[0]) as StoryResult;
+                        timer.end('AI story generated successfully');
+                        return parsed;
                     } catch (parseError) {
-                        console.error("❌ JSON Parse Error:", text);
+                        logger.warn(`JSON parse failed for model ${modelName}`, { action: 'refineStoryWithAI' });
                         continue;
                     }
                 }
@@ -130,7 +164,7 @@ export async function refineStoryWithAI(
                 throw new Error("Formato de resposta inesperado.");
             } catch (err: any) {
                 lastError = err;
-                console.warn(`❌ Error with model ${modelName}:`, err.message);
+                logger.warn(`Model ${modelName} failed: ${err.message}`, { action: 'refineStoryWithAI' });
                 if (err.message?.includes("API_KEY_INVALID")) throw err;
                 continue;
             }
@@ -138,8 +172,14 @@ export async function refineStoryWithAI(
 
         throw lastError || new Error("Todos os modelos de IA falharam.");
     } catch (error: any) {
-        console.error("❌ Gemini AI Final Error:", error.message);
-        throw new Error(`Erro na IA: ${error.message || "Problema desconhecido"}`);
+        timer.error(error, 'All AI models failed');
+        
+        // FALLBACK: Retorna história estática em vez de falhar
+        logger.warn('Using fallback story due to AI failure', { 
+            action: 'refineStoryWithAI',
+            metadata: { niche: context?.niche }
+        });
+        return getFallbackStory(context?.niche);
     }
 }
 
