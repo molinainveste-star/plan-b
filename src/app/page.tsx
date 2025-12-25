@@ -1,342 +1,366 @@
 "use client";
 
-import React, { useState } from "react";
-import { useRouter } from "next/navigation";
-import { Input } from "@/components/Input";
-import { Button } from "@/components/Button";
-import { createProfile } from "@/lib/actions";
-import { User, Mail, Youtube, Link, Sparkles, Zap, BarChart3 } from "lucide-react";
+import React, { useState, useEffect } from "react";
+
+// Data de lançamento - 29 de Janeiro de 2026
+const LAUNCH_DATE = new Date("2026-01-29T00:00:00");
+
+interface TimeLeft {
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+}
+
+function calculateTimeLeft(): TimeLeft {
+  const difference = LAUNCH_DATE.getTime() - new Date().getTime();
+  
+  if (difference <= 0) {
+    return { days: 0, hours: 0, minutes: 0, seconds: 0 };
+  }
+
+  return {
+    days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+    hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+    minutes: Math.floor((difference / 1000 / 60) % 60),
+    seconds: Math.floor((difference / 1000) % 60),
+  };
+}
+
+function TimeBlock({ value, label }: { value: number; label: string }) {
+  return (
+    <div style={{
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      gap: "8px",
+    }}>
+      <div style={{
+        background: "rgba(0, 212, 255, 0.1)",
+        border: "1px solid rgba(0, 212, 255, 0.2)",
+        borderRadius: "16px",
+        padding: "20px 28px",
+        minWidth: "100px",
+        backdropFilter: "blur(10px)",
+      }}>
+        <span style={{
+          fontSize: "clamp(2.5rem, 8vw, 4rem)",
+          fontWeight: 800,
+          fontFamily: "var(--font-heading)",
+          background: "linear-gradient(135deg, #00D4FF 0%, #7C3AED 100%)",
+          WebkitBackgroundClip: "text",
+          WebkitTextFillColor: "transparent",
+          backgroundClip: "text",
+        }}>
+          {String(value).padStart(2, "0")}
+        </span>
+      </div>
+      <span style={{
+        fontSize: "0.875rem",
+        color: "#8B949E",
+        textTransform: "uppercase",
+        letterSpacing: "2px",
+        fontWeight: 500,
+      }}>
+        {label}
+      </span>
+    </div>
+  );
+}
 
 export default function Home() {
-  const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    slug: "",
-    youtubeChannelId: "",
-  });
+  const [timeLeft, setTimeLeft] = useState<TimeLeft>(calculateTimeLeft());
+  const [email, setEmail] = useState("");
+  const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeLeft(calculateTimeLeft());
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
-    setError(null);
-
-    if (!formData.name || !formData.slug) {
-      setError("Nome e URL única são obrigatórios.");
-      setIsLoading(false);
-      return;
-    }
-
-    try {
-      const result = await createProfile(formData);
-      if (result.success) {
-        router.push(`/${result.slug}`);
-      } else {
-        setError(result.error || "Algo deu errado.");
-      }
-    } catch (err) {
-      setError("Falha ao criar perfil.");
-    } finally {
-      setIsLoading(false);
-    }
+    // Aqui você pode integrar com Mailchimp, ConvertKit, etc.
+    console.log("Email cadastrado:", email);
+    setSubmitted(true);
   };
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
+    <div style={{
+      minHeight: "100vh",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center",
+      padding: "24px",
+      background: "#0D1117",
+      position: "relative",
+      overflow: "hidden",
+    }}>
+      {/* Background Effects */}
+      <div style={{
+        position: "absolute",
+        top: "-20%",
+        left: "-10%",
+        width: "600px",
+        height: "600px",
+        background: "radial-gradient(circle, rgba(124, 58, 237, 0.15) 0%, transparent 60%)",
+        filter: "blur(80px)",
+        pointerEvents: "none",
+      }} />
+      <div style={{
+        position: "absolute",
+        bottom: "-20%",
+        right: "-10%",
+        width: "600px",
+        height: "600px",
+        background: "radial-gradient(circle, rgba(0, 212, 255, 0.12) 0%, transparent 60%)",
+        filter: "blur(80px)",
+        pointerEvents: "none",
+      }} />
+      
+      {/* Grid pattern */}
+      <div style={{
+        position: "absolute",
+        inset: 0,
+        backgroundImage: `
+          linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px)
+        `,
+        backgroundSize: "60px 60px",
+        pointerEvents: "none",
+      }} />
+
+      {/* Content */}
+      <main style={{
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        justifyContent: "center",
-        padding: "var(--space-6)",
-        background: "var(--background)",
+        gap: "48px",
+        maxWidth: "800px",
+        textAlign: "center",
         position: "relative",
-        overflow: "hidden",
-      }}
-    >
-      {/* Background Effects */}
-      <div
-        style={{
-          position: "absolute",
-          top: "-30%",
-          left: "-20%",
-          width: "800px",
-          height: "800px",
-          background: "radial-gradient(circle, rgba(0, 212, 255, 0.15) 0%, transparent 60%)",
-          filter: "blur(60px)",
-          pointerEvents: "none",
-        }}
-      />
-      <div
-        style={{
-          position: "absolute",
-          bottom: "-30%",
-          right: "-20%",
-          width: "700px",
-          height: "700px",
-          background: "radial-gradient(circle, rgba(124, 58, 237, 0.12) 0%, transparent 60%)",
-          filter: "blur(60px)",
-          pointerEvents: "none",
-        }}
-      />
-      <div
-        className="bg-grid"
-        style={{
-          position: "absolute",
-          inset: 0,
-          opacity: 0.4,
-          pointerEvents: "none",
-        }}
-      />
-
-      <main
-        style={{
-          width: "100%",
-          maxWidth: "500px",
+        zIndex: 1,
+      }}>
+        {/* Logo */}
+        <div style={{
           display: "flex",
           flexDirection: "column",
-          gap: "var(--space-10)",
-          position: "relative",
-          zIndex: 1,
-        }}
-      >
-        {/* Hero Section */}
-        <div 
-          style={{ 
-            textAlign: "center",
-            animation: "fadeInUp 0.6s ease forwards",
-          }}
-        >
-          <div
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "var(--space-2)",
-              padding: "var(--space-2) var(--space-4)",
-              background: "var(--primary-light)",
-              borderRadius: "var(--radius-full)",
-              marginBottom: "var(--space-6)",
-              border: "1px solid rgba(0, 212, 255, 0.2)",
-            }}
-          >
-            <Sparkles size={14} style={{ color: "var(--primary)" }} />
-            <span style={{ 
-              fontSize: "var(--text-sm)", 
-              color: "var(--primary)",
-              fontWeight: 600,
-            }}>
-              Powered by AI
-            </span>
-          </div>
-
-          <h1
-            className="text-gradient"
-            style={{
-              fontSize: "clamp(3rem, 10vw, 4.5rem)",
-              fontWeight: 900,
-              marginBottom: "var(--space-4)",
-              letterSpacing: "-0.03em",
-              lineHeight: 1,
-              fontFamily: "var(--font-heading)",
-            }}
-          >
+          alignItems: "center",
+          gap: "16px",
+        }}>
+          <h1 style={{
+            fontSize: "clamp(3rem, 12vw, 5rem)",
+            fontWeight: 900,
+            fontFamily: "var(--font-heading)",
+            background: "linear-gradient(135deg, #00D4FF 0%, #7C3AED 100%)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            backgroundClip: "text",
+            letterSpacing: "-0.03em",
+            lineHeight: 1,
+            margin: 0,
+          }}>
             Provly
           </h1>
-          <p 
-            style={{ 
-              color: "var(--foreground-muted)", 
-              fontSize: "var(--text-2xl)", 
-              fontWeight: 600,
-              maxWidth: "400px",
-              margin: "0 auto",
-              lineHeight: "var(--leading-relaxed)",
-            }}
-          >
-            Prove seu <span style={{ color: "var(--primary)" }}>valor</span>.
+          <p style={{
+            fontSize: "clamp(1.25rem, 4vw, 1.75rem)",
+            color: "#C9D1D9",
+            fontWeight: 500,
+            margin: 0,
+          }}>
+            Prove seu valor.
           </p>
         </div>
 
-        {/* Features Pills */}
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            gap: "var(--space-3)",
-            flexWrap: "wrap",
-            animation: "fadeInUp 0.6s ease forwards",
-            animationDelay: "0.1s",
-            opacity: 0,
-          }}
-        >
-          {[
-            { icon: <Youtube size={14} />, text: "Sync YouTube" },
-            { icon: <Zap size={14} />, text: "IA Narrativa" },
-            { icon: <BarChart3 size={14} />, text: "Métricas Live" },
-          ].map((item, i) => (
-            <div
-              key={i}
-              style={{
+        {/* Badge */}
+        <div style={{
+          display: "inline-flex",
+          alignItems: "center",
+          gap: "8px",
+          padding: "8px 20px",
+          background: "rgba(0, 212, 255, 0.1)",
+          border: "1px solid rgba(0, 212, 255, 0.2)",
+          borderRadius: "100px",
+        }}>
+          <div style={{
+            width: "8px",
+            height: "8px",
+            borderRadius: "50%",
+            background: "#00D4FF",
+            animation: "pulse 2s ease-in-out infinite",
+          }} />
+          <span style={{
+            fontSize: "0.875rem",
+            color: "#00D4FF",
+            fontWeight: 600,
+            textTransform: "uppercase",
+            letterSpacing: "1px",
+          }}>
+            Em breve
+          </span>
+        </div>
+
+        {/* Description */}
+        <p style={{
+          fontSize: "1.125rem",
+          color: "#8B949E",
+          lineHeight: 1.7,
+          maxWidth: "500px",
+          margin: 0,
+        }}>
+          Media kits profissionais que transformam suas métricas em parcerias. 
+          Mostre para marcas porque vale a pena trabalhar com você.
+        </p>
+
+        {/* Countdown */}
+        <div style={{
+          display: "flex",
+          gap: "clamp(12px, 4vw, 24px)",
+          flexWrap: "wrap",
+          justifyContent: "center",
+        }}>
+          <TimeBlock value={timeLeft.days} label="Dias" />
+          <TimeBlock value={timeLeft.hours} label="Horas" />
+          <TimeBlock value={timeLeft.minutes} label="Min" />
+          <TimeBlock value={timeLeft.seconds} label="Seg" />
+        </div>
+
+        {/* Email Form */}
+        <div style={{
+          width: "100%",
+          maxWidth: "450px",
+        }}>
+          {!submitted ? (
+            <form onSubmit={handleSubmit} style={{
+              display: "flex",
+              gap: "12px",
+              flexDirection: "column",
+            }}>
+              <p style={{
+                fontSize: "0.9rem",
+                color: "#8B949E",
+                margin: "0 0 8px 0",
+              }}>
+                Seja o primeiro a saber quando lançarmos:
+              </p>
+              <div style={{
                 display: "flex",
-                alignItems: "center",
-                gap: "var(--space-2)",
-                padding: "var(--space-2) var(--space-4)",
-                background: "var(--background-secondary)",
-                borderRadius: "var(--radius-full)",
-                border: "1px solid var(--border)",
-                fontSize: "var(--text-sm)",
-                color: "var(--foreground-secondary)",
-              }}
-            >
-              {item.icon}
-              {item.text}
+                gap: "12px",
+                flexWrap: "wrap",
+                justifyContent: "center",
+              }}>
+                <input
+                  type="email"
+                  placeholder="seu@email.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  style={{
+                    flex: "1 1 250px",
+                    padding: "14px 20px",
+                    fontSize: "1rem",
+                    background: "rgba(22, 27, 34, 0.8)",
+                    border: "1px solid rgba(240, 246, 252, 0.1)",
+                    borderRadius: "12px",
+                    color: "#F0F6FC",
+                    outline: "none",
+                    transition: "border-color 0.2s",
+                  }}
+                  onFocus={(e) => e.target.style.borderColor = "rgba(0, 212, 255, 0.5)"}
+                  onBlur={(e) => e.target.style.borderColor = "rgba(240, 246, 252, 0.1)"}
+                />
+                <button
+                  type="submit"
+                  style={{
+                    padding: "14px 28px",
+                    fontSize: "1rem",
+                    fontWeight: 600,
+                    background: "linear-gradient(135deg, #00D4FF 0%, #7C3AED 100%)",
+                    border: "none",
+                    borderRadius: "12px",
+                    color: "#0D1117",
+                    cursor: "pointer",
+                    transition: "transform 0.2s, box-shadow 0.2s",
+                    whiteSpace: "nowrap",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = "translateY(-2px)";
+                    e.currentTarget.style.boxShadow = "0 10px 30px rgba(0, 212, 255, 0.3)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = "translateY(0)";
+                    e.currentTarget.style.boxShadow = "none";
+                  }}
+                >
+                  Me avise →
+                </button>
+              </div>
+            </form>
+          ) : (
+            <div style={{
+              padding: "20px",
+              background: "rgba(16, 185, 129, 0.1)",
+              border: "1px solid rgba(16, 185, 129, 0.3)",
+              borderRadius: "12px",
+            }}>
+              <p style={{
+                color: "#10B981",
+                fontWeight: 600,
+                margin: 0,
+              }}>
+                ✓ Pronto! Você será avisado quando lançarmos.
+              </p>
+            </div>
+          )}
+        </div>
+
+        {/* Features Preview */}
+        <div style={{
+          display: "flex",
+          gap: "24px",
+          flexWrap: "wrap",
+          justifyContent: "center",
+          marginTop: "16px",
+        }}>
+          {[
+            { icon: "📊", text: "Métricas em tempo real" },
+            { icon: "🤖", text: "Narrativa com IA" },
+            { icon: "📄", text: "Export PDF" },
+          ].map((feature, i) => (
+            <div key={i} style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              color: "#8B949E",
+              fontSize: "0.9rem",
+            }}>
+              <span>{feature.icon}</span>
+              <span>{feature.text}</span>
             </div>
           ))}
         </div>
 
-        {/* Form Card */}
-        <div
-          className="glass-panel"
-          style={{
-            padding: "var(--space-10)",
-            borderRadius: "var(--radius-2xl)",
-            display: "flex",
-            flexDirection: "column",
-            gap: "var(--space-8)",
-            animation: "fadeInUp 0.6s ease forwards",
-            animationDelay: "0.2s",
-            opacity: 0,
-          }}
-        >
-          <div style={{ textAlign: "center" }}>
-            <h2 
-              style={{ 
-                fontSize: "var(--text-2xl)", 
-                marginBottom: "var(--space-2)", 
-                color: "var(--foreground)",
-                fontWeight: 700,
-                fontFamily: "var(--font-heading)",
-              }}
-            >
-              Crie seu Provly
-            </h2>
-            <p 
-              style={{ 
-                color: "var(--foreground-muted)", 
-                fontSize: "var(--text-sm)",
-              }}
-            >
-              Media kits que transformam métricas em parcerias
-            </p>
-          </div>
-
-          <form
-            onSubmit={handleSubmit}
-            style={{ display: "flex", flexDirection: "column", gap: "var(--space-5)" }}
-          >
-            <Input
-              label="Nome Completo"
-              placeholder="Como você quer ser chamado"
-              value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              required
-              icon={<User size={18} />}
-            />
-
-            <Input
-              label="E-mail"
-              type="email"
-              placeholder="seu@email.com"
-              value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              icon={<Mail size={18} />}
-            />
-
-            <Input
-              label="Canal do YouTube (opcional)"
-              placeholder="@seucanal ou UC..."
-              value={formData.youtubeChannelId}
-              onChange={(e) => setFormData({ ...formData, youtubeChannelId: e.target.value })}
-              icon={<Youtube size={18} />}
-            />
-
-            <div>
-              <Input
-                label="Sua URL Única"
-                placeholder="seuNome"
-                value={formData.slug}
-                onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-                required
-                icon={<Link size={18} />}
-              />
-              <div
-                style={{
-                  marginTop: "var(--space-2)",
-                  padding: "var(--space-2) var(--space-3)",
-                  background: "var(--background-tertiary)",
-                  borderRadius: "var(--radius-md)",
-                  display: "inline-block",
-                }}
-              >
-                <span style={{ 
-                  fontSize: "var(--text-sm)", 
-                  color: "var(--foreground-muted)",
-                }}>
-                  provly.io/
-                </span>
-                <span style={{ 
-                  fontSize: "var(--text-sm)", 
-                  color: "var(--primary)",
-                  fontWeight: 600,
-                }}>
-                  {formData.slug || "seu-nome"}
-                </span>
-              </div>
-            </div>
-
-            {error && (
-              <div 
-                style={{ 
-                  color: "var(--error)", 
-                  fontSize: "var(--text-sm)", 
-                  textAlign: "center",
-                  background: "var(--error-light)",
-                  padding: "var(--space-3)",
-                  borderRadius: "var(--radius-md)",
-                  border: "1px solid rgba(239, 68, 68, 0.3)",
-                }}
-              >
-                {error}
-              </div>
-            )}
-
-            <Button 
-              type="submit" 
-              fullWidth 
-              size="lg"
-              variant="glow"
-              loading={isLoading}
-              style={{ marginTop: "var(--space-2)" }}
-            >
-              {isLoading ? "Criando..." : "Prove seu valor →"}
-            </Button>
-          </form>
-        </div>
-
         {/* Footer */}
-        <p
-          style={{
-            textAlign: "center",
-            fontSize: "var(--text-sm)",
-            color: "var(--foreground-muted)",
-            opacity: 0.6,
-          }}
-        >
-          © {new Date().getFullYear()} Provly • Prove seu valor
-        </p>
+        <footer style={{
+          marginTop: "32px",
+          color: "#484F58",
+          fontSize: "0.8rem",
+        }}>
+          © 2025 Provly • Prove seu valor
+        </footer>
       </main>
+
+      {/* Pulse animation */}
+      <style jsx global>{`
+        @keyframes pulse {
+          0%, 100% { opacity: 1; transform: scale(1); }
+          50% { opacity: 0.5; transform: scale(1.2); }
+        }
+      `}</style>
     </div>
   );
 }
