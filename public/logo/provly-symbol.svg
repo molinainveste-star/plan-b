@@ -1,0 +1,49 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Gradiente principal da marca -->
+    <linearGradient id="brandGradient" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#00D4FF"/>
+      <stop offset="100%" style="stop-color:#7C3AED"/>
+    </linearGradient>
+    
+    <!-- Glow effect -->
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Fundo arredondado -->
+  <rect width="512" height="512" rx="102" fill="#0D1117"/>
+  
+  <!-- Círculo sutil de fundo -->
+  <circle cx="256" cy="256" r="180" fill="#161B22" opacity="0.5"/>
+  
+  <!-- Símbolo: Check ascendente estilizado -->
+  <!-- Representa: Prova (check) + Crescimento (ascendente) + Dados (gráfico) -->
+  <g filter="url(#glow)">
+    <!-- Linha principal do check/gráfico ascendente -->
+    <path 
+      d="M 100 320 L 180 260 L 412 80" 
+      stroke="url(#brandGradient)" 
+      stroke-width="40" 
+      stroke-linecap="round" 
+      stroke-linejoin="round"
+      fill="none"
+    />
+  </g>
+  
+  <!-- Ponto de destaque no pico (representa o "proof point") -->
+  <circle cx="412" cy="80" r="28" fill="#00D4FF"/>
+  <circle cx="412" cy="80" r="14" fill="#0D1117"/>
+  
+  <!-- Linhas de base (representam métricas/dados) -->
+  <line x1="100" y1="400" x2="100" y2="320" stroke="#30363D" stroke-width="8" stroke-linecap="round"/>
+  <line x1="180" y1="400" x2="180" y2="260" stroke="#30363D" stroke-width="8" stroke-linecap="round"/>
+  <line x1="260" y1="400" x2="260" y2="200" stroke="#30363D" stroke-width="8" stroke-linecap="round" opacity="0.7"/>
+  <line x1="340" y1="400" x2="340" y2="140" stroke="#30363D" stroke-width="8" stroke-linecap="round" opacity="0.5"/>
+</svg>
+

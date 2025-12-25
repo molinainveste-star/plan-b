@@ -1,0 +1,20 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <!-- Versão monocromática branca (para fundos escuros) -->
+  
+  <!-- Fundo arredondado -->
+  <rect width="512" height="512" rx="102" fill="#0D1117"/>
+  
+  <!-- Check ascendente em branco -->
+  <path 
+    d="M 90 300 L 170 240 L 422 60" 
+    stroke="#FFFFFF" 
+    stroke-width="48" 
+    stroke-linecap="round" 
+    stroke-linejoin="round"
+    fill="none"
+  />
+  
+  <!-- Ponto -->
+  <circle cx="422" cy="60" r="32" fill="#FFFFFF"/>
+</svg>
+
