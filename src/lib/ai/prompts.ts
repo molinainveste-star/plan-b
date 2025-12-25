@@ -1,5 +1,5 @@
 /**
- * Prompts de IA do PubliScore
+ * Prompts de IA do Provly
  * 
  * Este arquivo mantém compatibilidade com o código existente,
  * re-exportando as funções do novo sistema de personas.

@@ -136,25 +136,26 @@ export default function Home() {
             className="text-gradient"
             style={{
               fontSize: "clamp(3rem, 10vw, 4.5rem)",
-              fontWeight: 800,
+              fontWeight: 900,
               marginBottom: "var(--space-4)",
               letterSpacing: "-0.03em",
               lineHeight: 1,
+              fontFamily: "var(--font-heading)",
             }}
           >
-            PubliScore
+            Provly
           </h1>
           <p 
             style={{ 
               color: "var(--foreground-muted)", 
-              fontSize: "var(--text-xl)", 
-              fontWeight: 500,
+              fontSize: "var(--text-2xl)", 
+              fontWeight: 600,
               maxWidth: "400px",
               margin: "0 auto",
               lineHeight: "var(--leading-relaxed)",
             }}
           >
-            Media Kits <span style={{ color: "var(--primary)" }}>Profissionais</span> para Criadores de Conteúdo
+            Prove seu <span style={{ color: "var(--primary)" }}>valor</span>.
           </p>
         </div>
 
@@ -216,9 +217,10 @@ export default function Home() {
                 marginBottom: "var(--space-2)", 
                 color: "var(--foreground)",
                 fontWeight: 700,
+                fontFamily: "var(--font-heading)",
               }}
             >
-              Criar Meu Media Kit
+              Crie seu Provly
             </h2>
             <p 
               style={{ 
@@ -226,7 +228,7 @@ export default function Home() {
                 fontSize: "var(--text-sm)",
               }}
             >
-              Comece grátis em menos de 1 minuto
+              Media kits que transformam métricas em parcerias
             </p>
           </div>
 
@@ -282,7 +284,7 @@ export default function Home() {
                   fontSize: "var(--text-sm)", 
                   color: "var(--foreground-muted)",
                 }}>
-                  publiscore.com/
+                  provly.io/
                 </span>
                 <span style={{ 
                   fontSize: "var(--text-sm)", 
@@ -318,7 +320,7 @@ export default function Home() {
               loading={isLoading}
               style={{ marginTop: "var(--space-2)" }}
             >
-              {isLoading ? "Criando..." : "Criar Media Kit Grátis"}
+              {isLoading ? "Criando..." : "Prove seu valor →"}
             </Button>
           </form>
         </div>
@@ -332,7 +334,7 @@ export default function Home() {
             opacity: 0.6,
           }}
         >
-          © {new Date().getFullYear()} PubliScore • Feito para Criadores
+          © {new Date().getFullYear()} Provly • Prove seu valor
         </p>
       </main>
     </div>

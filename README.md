@@ -1,8 +1,8 @@
-# 📊 PubliScore
+# ✓ Provly
 
-**Media Kits Profissionais para Criadores de Conteúdo**
+**Prove seu valor.**
 
-Gere Media Kits automatizados com métricas do YouTube, narrativas geradas por IA e páginas compartilháveis para fechar parcerias com marcas.
+Media kits profissionais que transformam métricas em parcerias. Crie seu Provly e mostre para marcas porque vale a pena trabalhar com você.
 
 ![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)
 ![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-3FCF8E?logo=supabase)
@@ -18,7 +18,7 @@ Gere Media Kits automatizados com métricas do YouTube, narrativas geradas por I
 - 👤 **Demografia** - Idade, gênero e localização da audiência (via YouTube Analytics)
 - 💰 **Tabela de Preços** - Pacotes de parceria editáveis
 - 📥 **Export PDF** - Media Kit pronto para enviar
-- 🔗 **URL Pública** - `publiscore.com/seu-nome`
+- 🔗 **URL Pública** - `provly.io/seu-nome`
 
 ---
 
@@ -34,8 +34,8 @@ Gere Media Kits automatizados com métricas do YouTube, narrativas geradas por I
 ### 1. Clone e Instale
 
 ```bash
-git clone https://github.com/molinainveste-star/plan-b.git
-cd plan-b
+git clone https://github.com/seu-usuario/provly.git
+cd provly
 npm install
 ```
 
@@ -68,8 +68,6 @@ supabase/migrations/002_video_performance.sql
 supabase/migrations/003_profile_extensions.sql
 ```
 
-Ou rode tudo de uma vez no SQL Editor do Supabase.
-
 ### 4. Rode o Projeto
 
 ```bash
@@ -83,7 +81,7 @@ Acesse [http://localhost:3000](http://localhost:3000)
 ## 📁 Estrutura do Projeto
 
 ```
-publiscore/
+provly/
 ├── src/
 │   ├── app/                    # Next.js App Router
 │   │   ├── [slug]/             # Página pública do Media Kit
@@ -147,14 +145,23 @@ npm run lint      # Linter ESLint
 
 ---
 
-## 🗄️ Schema do Banco
+## 🎨 Brand
 
-### Tabelas Principais
+### Cores
 
-- **profiles** - Dados do criador (nome, bio, avatar, nicho)
-- **metrics** - Métricas agregadas (inscritos, views, engajamento)
-- **video_performance** - Performance dos últimos vídeos
-- **social_accounts** - Links das redes sociais
+- **Primary:** `#00D4FF` (Electric Cyan)
+- **Secondary:** `#7C3AED` (Deep Purple)
+- **Background:** `#0D1117` (Deep Ocean)
+
+### Tipografia
+
+- **Display:** Outfit (700, 800, 900)
+- **Body:** Plus Jakarta Sans (400-700)
+- **Mono:** JetBrains Mono (métricas)
+
+### Tagline
+
+> "Prove seu valor."
 
 ---
 
@@ -166,17 +173,11 @@ npm run lint      # Linter ESLint
 2. Configure as variáveis de ambiente
 3. Deploy automático a cada push
 
-### Docker (Opcional)
-
-```dockerfile
-# Em breve
-```
-
 ---
 
 ## 📄 Licença
 
-MIT © 2025 PubliScore
+MIT © 2025 Provly
 
 ---
 
@@ -190,4 +191,4 @@ MIT © 2025 PubliScore
 
 ---
 
-**Feito com 💜 para criadores de conteúdo**
+**Prove seu valor. 🚀**

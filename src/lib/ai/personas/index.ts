@@ -1,5 +1,5 @@
 /**
- * Sistema de Personas do PubliScore
+ * Sistema de Personas do Provly
  * 
  * Módulo centralizado para gerenciamento de personas especializadas em IA.
  * Cada persona é otimizada para um aspecto específico do processo de

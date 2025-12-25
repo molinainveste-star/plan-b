@@ -1,5 +1,5 @@
 /**
- * Sistema de Personas para IA do PubliScore
+ * Sistema de Personas para IA do Provly
  * 
  * Cada persona é especializada em um aspecto do processo de
  * criação de Media Kits e estratégia para criadores de conteúdo.

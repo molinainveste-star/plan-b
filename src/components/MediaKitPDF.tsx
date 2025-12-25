@@ -710,7 +710,7 @@ const MediaKitDocument: React.FC<{ data: MediaKitData; avatarBase64?: string }> 
         <Text style={styles.footerText}>
           Gerado em {new Date().toLocaleDateString("pt-BR")}
         </Text>
-        <Text style={styles.footerBrand}>PubliScore</Text>
+        <Text style={styles.footerBrand}>Provly</Text>
       </View>
       <Text style={styles.pageNumber}>1</Text>
     </Page>
@@ -792,7 +792,7 @@ const MediaKitDocument: React.FC<{ data: MediaKitData; avatarBase64?: string }> 
           <Text style={styles.footerText}>
             Gerado em {new Date().toLocaleDateString("pt-BR")}
           </Text>
-          <Text style={styles.footerBrand}>PubliScore</Text>
+          <Text style={styles.footerBrand}>Provly</Text>
         </View>
         <Text style={styles.pageNumber}>2</Text>
       </Page>
