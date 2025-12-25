@@ -46,8 +46,13 @@ async function checkSupabase(): Promise<CheckResult> {
             return { status: 'error', message: 'Service role key missing' };
         }
         
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const queryPromise: Promise<any> = Promise.resolve(
+            supabaseAdmin.from('profiles').select('id').limit(1)
+        ).then(r => r);
+        
         const result = await withTimeout(
-            supabaseAdmin.from('profiles').select('id').limit(1),
+            queryPromise,
             TIMEOUT_MS,
             { error: { message: 'Timeout' } }
         );
