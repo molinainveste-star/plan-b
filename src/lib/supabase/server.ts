@@ -1,6 +1,9 @@
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+
 /**
  * Cliente Supabase para uso em Server Components/Actions
  * Gerencia cookies automaticamente para session
@@ -8,10 +11,11 @@ import { cookies } from 'next/headers';
 export async function createClient() {
     const cookieStore = await cookies();
 
-    return createServerClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-        {
+    if (!supabaseUrl || !supabaseAnonKey) {
+        throw new Error('Supabase environment variables are not configured');
+    }
+
+    return createServerClient(supabaseUrl, supabaseAnonKey, {
             cookies: {
                 getAll() {
                     return cookieStore.getAll();
