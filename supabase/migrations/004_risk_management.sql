@@ -91,3 +91,4 @@ COMMENT ON TABLE public.error_logs IS 'Logs estruturados para monitoramento e de
 COMMENT ON FUNCTION cleanup_old_data IS 'Limpa dados antigos de cache e logs. Executar via cron job.';
 
 
+

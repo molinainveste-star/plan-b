@@ -1,207 +1,297 @@
+"use client";
+
+import React from "react";
 import Link from "next/link";
 
-export const metadata = {
-    title: "Termos de Serviço | Provly",
-    description: "Termos de Serviço da plataforma Provly",
-};
-
 export default function TermosPage() {
-    return (
-        <main 
-            style={{ 
-                minHeight: '100vh',
-                background: 'linear-gradient(180deg, #0D1117 0%, #161B22 100%)',
-            }}
+  const lastUpdate = "27 de dezembro de 2024";
+
+  return (
+    <div
+      style={{
+        minHeight: "100vh",
+        background: "linear-gradient(180deg, #0A0E14 0%, #0D1117 100%)",
+        color: "#F0F6FC",
+      }}
+    >
+      {/* Header */}
+      <header
+        style={{
+          padding: "1.5rem 2rem",
+          borderBottom: "1px solid rgba(255,255,255,0.1)",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          maxWidth: "1200px",
+          margin: "0 auto",
+        }}
+      >
+        <Link
+          href="/"
+          style={{
+            textDecoration: "none",
+            display: "flex",
+            alignItems: "center",
+            gap: "0.5rem",
+          }}
         >
-            {/* Header */}
-            <header 
-                style={{ 
-                    borderBottom: '1px solid rgba(240, 246, 252, 0.1)',
-                    background: 'rgba(0, 0, 0, 0.3)',
-                    backdropFilter: 'blur(10px)',
-                }}
-            >
-                <div style={{ maxWidth: '900px', margin: '0 auto', padding: '16px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <Link href="/" style={{ fontSize: '24px', fontWeight: 'bold', color: '#F0F6FC', textDecoration: 'none' }}>
-                        Provly
-                    </Link>
-                    <nav style={{ display: 'flex', gap: '24px', fontSize: '14px' }}>
-                        <Link href="/privacidade" style={{ color: '#8B949E', textDecoration: 'none' }}>
-                            Privacidade
-                        </Link>
-                    </nav>
-                </div>
-            </header>
+          <span
+            style={{
+              fontSize: "1.75rem",
+              fontWeight: 800,
+              background: "linear-gradient(135deg, #00D4FF 0%, #7C3AED 100%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              letterSpacing: "-0.02em",
+            }}
+          >
+            Provly
+          </span>
+        </Link>
+        <nav style={{ display: "flex", gap: "2rem" }}>
+          <Link
+            href="/termos"
+            style={{
+              color: "#00D4FF",
+              textDecoration: "none",
+              fontSize: "0.9rem",
+              fontWeight: 500,
+            }}
+          >
+            Termos de Uso
+          </Link>
+          <Link
+            href="/privacidade"
+            style={{
+              color: "#8B949E",
+              textDecoration: "none",
+              fontSize: "0.9rem",
+              fontWeight: 500,
+            }}
+          >
+            Privacidade
+          </Link>
+        </nav>
+      </header>
 
-            {/* Content */}
-            <article style={{ maxWidth: '900px', margin: '0 auto', padding: '64px 24px' }}>
-                <div style={{ marginBottom: '48px' }}>
-                    <h1 style={{ fontSize: '42px', fontWeight: 'bold', color: '#F0F6FC', marginBottom: '16px' }}>
-                        Termos de Serviço
-                    </h1>
-                    <p style={{ color: '#8B949E' }}>Última atualização: 27 de dezembro de 2024</p>
-                </div>
+      {/* Content */}
+      <main
+        style={{
+          maxWidth: "800px",
+          margin: "0 auto",
+          padding: "3rem 2rem 4rem",
+        }}
+      >
+        <h1
+          style={{
+            fontSize: "2.5rem",
+            fontWeight: 800,
+            marginBottom: "0.5rem",
+            background: "linear-gradient(135deg, #F0F6FC 0%, #C9D1D9 100%)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+          }}
+        >
+          Termos e Condições de Uso
+        </h1>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-                    
-                    <Section title="1. Aceitação dos Termos">
-                        <p>
-                            Ao acessar e usar a plataforma Provly (&ldquo;Serviço&rdquo;), você concorda em cumprir e estar vinculado 
-                            a estes Termos de Serviço. Se você não concordar com qualquer parte destes termos, não poderá 
-                            acessar o Serviço.
-                        </p>
-                    </Section>
+        <p
+          style={{
+            color: "#8B949E",
+            marginBottom: "3rem",
+            fontSize: "0.95rem",
+          }}
+        >
+          Última atualização: {lastUpdate}
+        </p>
 
-                    <Section title="2. Descrição do Serviço">
-                        <p style={{ marginBottom: '16px' }}>
-                            O Provly é uma plataforma de Media Kit digital que permite a criadores de conteúdo:
-                        </p>
-                        <ul style={{ listStyle: 'disc', paddingLeft: '24px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                            <li>Criar portfólios profissionais para apresentação a marcas e anunciantes</li>
-                            <li>Conectar contas de redes sociais (YouTube, TikTok, Instagram, LinkedIn) para exibição de métricas</li>
-                            <li>Gerar relatórios de desempenho e engajamento</li>
-                            <li>Compartilhar seu Media Kit através de um link público personalizado</li>
-                        </ul>
-                    </Section>
+        <div
+          style={{
+            color: "#C9D1D9",
+            lineHeight: 1.8,
+            fontSize: "1rem",
+          }}
+        >
+          <p style={{ marginBottom: "1.5rem" }}>
+            Estes Termos e Condições de Uso (&quot;Termos&quot;) regulam o acesso e uso da
+            plataforma <strong style={{ color: "#00D4FF" }}>Provly</strong>{" "}
+            (&quot;Plataforma&quot;), desenvolvida e operada por Provly Tecnologia LTDA
+            (&quot;Provly&quot;, &quot;nós&quot; ou &quot;nosso&quot;). Ao acessar ou utilizar nossos
+            serviços, você concorda com estes Termos.
+          </p>
 
-                    <Section title="3. Conta do Usuário">
-                        <p style={{ marginBottom: '16px' }}>
-                            Para utilizar determinadas funcionalidades do Serviço, você deve criar uma conta. Ao criar uma conta, você concorda em:
-                        </p>
-                        <ul style={{ listStyle: 'disc', paddingLeft: '24px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                            <li>Fornecer informações verdadeiras, precisas e completas</li>
-                            <li>Manter a segurança de sua senha e conta</li>
-                            <li>Notificar-nos imediatamente sobre qualquer uso não autorizado</li>
-                            <li>Ser responsável por todas as atividades realizadas em sua conta</li>
-                        </ul>
-                    </Section>
+          <Section number={1} title="Aceite dos Termos">
+            <p>
+              Ao acessar a Plataforma, você declara ter lido, compreendido e
+              concordado com estes Termos. Se você não concordar com qualquer
+              disposição, não utilize nossos serviços.
+            </p>
+            <p style={{ marginTop: "1rem" }}>
+              Reservamo-nos o direito de modificar estes Termos a qualquer
+              momento. Alterações entrarão em vigor imediatamente após sua
+              publicação na Plataforma. O uso continuado após modificações
+              constitui aceitação das mudanças.
+            </p>
+          </Section>
 
-                    <Section title="4. Integrações com Terceiros">
-                        <p style={{ marginBottom: '16px' }}>
-                            O Serviço permite integração com plataformas de terceiros, incluindo mas não limitado a:
-                        </p>
-                        <ul style={{ listStyle: 'disc', paddingLeft: '24px', display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '16px' }}>
-                            <li><strong style={{ color: '#F0F6FC' }}>YouTube</strong> - Google LLC</li>
-                            <li><strong style={{ color: '#F0F6FC' }}>TikTok</strong> - ByteDance Ltd.</li>
-                            <li><strong style={{ color: '#F0F6FC' }}>Instagram/Facebook</strong> - Meta Platforms, Inc.</li>
-                            <li><strong style={{ color: '#F0F6FC' }}>LinkedIn</strong> - Microsoft Corporation</li>
-                        </ul>
-                        <p>
-                            Ao conectar suas contas dessas plataformas, você autoriza o Provly a acessar dados públicos 
-                            e métricas de acordo com as permissões concedidas. O uso dessas integrações está sujeito 
-                            aos termos de serviço de cada plataforma.
-                        </p>
-                    </Section>
+          <Section number={2} title="Descrição do Serviço">
+            <p>
+              O Provly é uma plataforma que permite a criadores de conteúdo:
+            </p>
+            <ul style={{ marginTop: "1rem", paddingLeft: "1.5rem" }}>
+              <li>Gerar Media Kits profissionais automatizados</li>
+              <li>Integrar métricas de plataformas como YouTube</li>
+              <li>Criar narrativas assistidas por Inteligência Artificial</li>
+              <li>Exportar documentos em formato PDF</li>
+              <li>Compartilhar páginas públicas com marcas e parceiros</li>
+            </ul>
+          </Section>
 
-                    <Section title="5. Uso Aceitável">
-                        <p style={{ marginBottom: '16px' }}>Você concorda em não usar o Serviço para:</p>
-                        <ul style={{ listStyle: 'disc', paddingLeft: '24px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                            <li>Violar qualquer lei ou regulamento aplicável</li>
-                            <li>Infringir direitos de propriedade intelectual de terceiros</li>
-                            <li>Transmitir conteúdo ilegal, ofensivo ou prejudicial</li>
-                            <li>Tentar acessar sistemas ou dados sem autorização</li>
-                            <li>Falsificar métricas ou informações de perfil</li>
-                            <li>Usar automação não autorizada ou bots</li>
-                        </ul>
-                    </Section>
+          <Section number={3} title="Cadastro e Conta">
+            <p>
+              Para utilizar determinadas funcionalidades, você deverá criar uma
+              conta fornecendo informações verdadeiras, completas e atualizadas.
+              Você é responsável por:
+            </p>
+            <ul style={{ marginTop: "1rem", paddingLeft: "1.5rem" }}>
+              <li>Manter a confidencialidade de suas credenciais</li>
+              <li>Todas as atividades realizadas em sua conta</li>
+              <li>Notificar imediatamente qualquer uso não autorizado</li>
+            </ul>
+          </Section>
 
-                    <Section title="6. Propriedade Intelectual">
-                        <p style={{ marginBottom: '16px' }}>
-                            O Serviço e seu conteúdo original, recursos e funcionalidades são e permanecerão propriedade 
-                            exclusiva do Provly e seus licenciadores. O Serviço é protegido por direitos autorais, marcas 
-                            registradas e outras leis.
-                        </p>
-                        <p>
-                            Você mantém todos os direitos sobre o conteúdo que você cria e compartilha através do Serviço.
-                        </p>
-                    </Section>
+          <Section number={4} title="Uso Permitido">
+            <p>Você concorda em utilizar a Plataforma apenas para fins lícitos e de acordo com estes Termos. É proibido:</p>
+            <ul style={{ marginTop: "1rem", paddingLeft: "1.5rem" }}>
+              <li>Violar leis ou regulamentos aplicáveis</li>
+              <li>Infringir direitos de propriedade intelectual de terceiros</li>
+              <li>Transmitir conteúdo ilegal, difamatório ou prejudicial</li>
+              <li>Tentar acessar sistemas não autorizados</li>
+              <li>Usar automação não autorizada ou sobrecarregar servidores</li>
+              <li>Revender ou sublicenciar o acesso à Plataforma</li>
+            </ul>
+          </Section>
 
-                    <Section title="7. Limitação de Responsabilidade">
-                        <p style={{ marginBottom: '16px' }}>
-                            O Serviço é fornecido &ldquo;como está&rdquo; e &ldquo;conforme disponível&rdquo;, sem garantias de qualquer tipo. 
-                            Em nenhuma circunstância o Provly será responsável por:
-                        </p>
-                        <ul style={{ listStyle: 'disc', paddingLeft: '24px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                            <li>Danos indiretos, incidentais ou consequenciais</li>
-                            <li>Perda de dados ou lucros</li>
-                            <li>Interrupções ou indisponibilidade do serviço</li>
-                            <li>Ações de terceiros ou plataformas integradas</li>
-                        </ul>
-                    </Section>
+          <Section number={5} title="Propriedade Intelectual">
+            <p>
+              Todo o conteúdo da Plataforma, incluindo mas não limitado a
+              logotipos, design, textos, gráficos, software e código-fonte, são
+              de propriedade exclusiva do Provly ou de seus licenciadores,
+              protegidos por leis de propriedade intelectual.
+            </p>
+            <p style={{ marginTop: "1rem" }}>
+              O conteúdo que você criar e enviar à Plataforma permanece de sua
+              propriedade. Ao utilizá-lo em nossos serviços, você nos concede
+              uma licença limitada para processá-lo conforme necessário para
+              prestação do serviço.
+            </p>
+          </Section>
 
-                    <Section title="8. Rescisão">
-                        <p>
-                            Podemos encerrar ou suspender sua conta imediatamente, sem aviso prévio, por qualquer motivo, 
-                            incluindo violação destes Termos. Você pode encerrar sua conta a qualquer momento entrando 
-                            em contato conosco. Após o encerramento, seu direito de usar o Serviço cessará imediatamente.
-                        </p>
-                    </Section>
+          <Section number={6} title="Integrações com Terceiros">
+            <p>
+              A Plataforma pode integrar-se a serviços de terceiros (como
+              YouTube, Google). O uso dessas integrações está sujeito aos termos
+              de serviço de cada plataforma. Não somos responsáveis por
+              alterações, indisponibilidade ou políticas desses serviços.
+            </p>
+          </Section>
 
-                    <Section title="9. Alterações nos Termos">
-                        <p>
-                            Reservamo-nos o direito de modificar estes termos a qualquer momento. Alterações significativas 
-                            serão notificadas por e-mail ou através do Serviço. O uso continuado após tais alterações 
-                            constitui aceitação dos novos termos.
-                        </p>
-                    </Section>
+          <Section number={7} title="Limitação de Responsabilidade">
+            <p>
+              A Plataforma é fornecida &quot;como está&quot;. Na máxima extensão permitida
+              por lei, o Provly não se responsabiliza por:
+            </p>
+            <ul style={{ marginTop: "1rem", paddingLeft: "1.5rem" }}>
+              <li>Danos indiretos, incidentais ou consequentes</li>
+              <li>Perda de dados, lucros ou oportunidades de negócio</li>
+              <li>Interrupções ou erros no serviço</li>
+              <li>Ações de terceiros ou conteúdo de usuários</li>
+            </ul>
+          </Section>
 
-                    <Section title="10. Lei Aplicável">
-                        <p>
-                            Estes Termos serão regidos e interpretados de acordo com as leis da República Federativa do Brasil, 
-                            em conformidade com o Marco Civil da Internet (Lei nº 12.965/2014) e a Lei Geral de Proteção de Dados 
-                            (Lei nº 13.709/2018 - LGPD). Qualquer disputa será resolvida nos tribunais competentes do Brasil.
-                        </p>
-                    </Section>
+          <Section number={8} title="Cancelamento">
+            <p>
+              Você pode cancelar sua conta a qualquer momento através das
+              configurações da Plataforma. Reservamo-nos o direito de suspender
+              ou encerrar contas que violem estes Termos, sem aviso prévio.
+            </p>
+          </Section>
 
-                    <Section title="11. Contato">
-                        <p>
-                            Se você tiver dúvidas sobre estes Termos de Serviço, entre em contato conosco:
-                        </p>
-                        <p style={{ color: '#00D4FF', fontWeight: '500', marginTop: '16px' }}>
-                            📧 contato@provly.io
-                        </p>
-                    </Section>
+          <Section number={9} title="Disposições Gerais">
+            <p>
+              Estes Termos são regidos pelas leis da República Federativa do
+              Brasil. Qualquer disputa será resolvida no foro da Comarca de São
+              Paulo, SP, com exclusão de qualquer outro.
+            </p>
+            <p style={{ marginTop: "1rem" }}>
+              A invalidade de qualquer disposição não afetará a validade das
+              demais. A omissão em exercer qualquer direito não constitui
+              renúncia.
+            </p>
+          </Section>
 
-                </div>
-            </article>
+          <Section number={10} title="Contato">
+            <p>
+              Para dúvidas sobre estes Termos, entre em contato:
+            </p>
+            <p style={{ marginTop: "1rem" }}>
+              <strong style={{ color: "#00D4FF" }}>Email:</strong>{" "}
+              contato@provly.io
+            </p>
+          </Section>
+        </div>
+      </main>
 
-            {/* Footer */}
-            <footer style={{ borderTop: '1px solid rgba(240, 246, 252, 0.1)', background: 'rgba(0, 0, 0, 0.2)' }}>
-                <div style={{ maxWidth: '900px', margin: '0 auto', padding: '32px 24px', display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '16px' }}>
-                    <p style={{ color: '#8B949E', fontSize: '14px' }}>
-                        © 2024 Provly. Todos os direitos reservados.
-                    </p>
-                    <div style={{ display: 'flex', gap: '24px', fontSize: '14px' }}>
-                        <Link href="/termos" style={{ color: '#00D4FF', textDecoration: 'none' }}>
-                            Termos
-                        </Link>
-                        <Link href="/privacidade" style={{ color: '#8B949E', textDecoration: 'none' }}>
-                            Privacidade
-                        </Link>
-                    </div>
-                </div>
-            </footer>
-        </main>
-    );
+      {/* Footer */}
+      <footer
+        style={{
+          padding: "2rem",
+          textAlign: "center",
+          borderTop: "1px solid rgba(255,255,255,0.1)",
+          color: "#8B949E",
+          fontSize: "0.875rem",
+        }}
+      >
+        © {new Date().getFullYear()} Provly • Prove seu valor
+      </footer>
+    </div>
+  );
 }
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
-    return (
-        <section 
-            className="glass-panel"
-            style={{ 
-                background: 'rgba(22, 27, 34, 0.8)',
-                border: '1px solid rgba(240, 246, 252, 0.1)',
-                borderRadius: '16px',
-                padding: '32px',
-            }}
+function Section({
+  number,
+  title,
+  children,
+}: {
+  number: number;
+  title: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <section style={{ marginBottom: "2.5rem" }}>
+      <h2
+        style={{
+          fontSize: "1.25rem",
+          fontWeight: 700,
+          color: "#F0F6FC",
+          marginBottom: "1rem",
+          display: "flex",
+          alignItems: "center",
+          gap: "0.75rem",
+        }}
+      >
+        <span
+          style={{
+            background: "linear-gradient(135deg, #00D4FF 0%, #7C3AED 100%)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+          }}
         >
-            <h2 style={{ fontSize: '20px', fontWeight: '600', color: '#F0F6FC', marginBottom: '16px' }}>
-                {title}
-            </h2>
-            <div style={{ color: '#C9D1D9', lineHeight: '1.7' }}>
-                {children}
-            </div>
-        </section>
-    );
+          {number}.
+        </span>
+        {title}
+      </h2>
+      <div>{children}</div>
+    </section>
+  );
 }

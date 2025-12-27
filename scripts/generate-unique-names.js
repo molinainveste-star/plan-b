@@ -186,3 +186,4 @@ console.log('\n' + '='.repeat(60));
 console.log('\n💡 DICA: Copie os nomes interessantes e verifique em namecheap.com\n');
 console.log('   Extensões sugeridas: .app, .so, .xyz, .kit, .studio\n');
 
+

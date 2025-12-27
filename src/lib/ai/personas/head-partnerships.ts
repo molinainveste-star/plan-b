@@ -213,3 +213,4 @@ Retorne um JSON:
 export default HEAD_PARTNERSHIPS;
 
 
+

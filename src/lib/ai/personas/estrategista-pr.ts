@@ -215,3 +215,4 @@ Retorne um JSON com a seguinte estrutura:
 export default ESTRATEGISTA_PR;
 
 
+
