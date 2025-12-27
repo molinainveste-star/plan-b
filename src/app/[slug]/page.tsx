@@ -16,8 +16,22 @@ import { BadgeCheck, Sparkles } from "lucide-react";
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
+// Rotas do sistema que NÃO são perfis de usuário
+const RESERVED_ROUTES = [
+    'dashboard', 'pricing', 'login', 'register', 
+    'api', 'auth', 'coming-soon', 'privacidade', 
+    'termos', 'test-db', '_next', 'favicon.ico',
+    'sitemap.xml', 'robots.txt'
+];
+
 export default async function MediaKitPage({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params;
+    
+    // Bloqueia rotas reservadas para deixar Next.js resolver corretamente
+    if (RESERVED_ROUTES.includes(slug.toLowerCase())) {
+        notFound();
+    }
+    
     let profile = await getProfileBySlug(slug);
 
     if (!profile) {
