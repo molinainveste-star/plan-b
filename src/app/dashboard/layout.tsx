@@ -133,9 +133,10 @@ export default function DashboardLayout({
           position: "fixed",
           top: 0,
           bottom: 0,
-          left: sidebarOpen ? 0 : "-240px",
+          left: 0,
           zIndex: 50,
-          transition: "left var(--transition-base)",
+          transform: sidebarOpen ? "translateX(0)" : undefined,
+          transition: "transform var(--transition-base)",
         }}
         className="sidebar"
       >
@@ -421,12 +422,9 @@ export default function DashboardLayout({
         </main>
       </div>
 
-      {/* Responsive Styles */}
+      {/* Responsive Styles - Static only, no interpolation */}
       <style jsx global>{`
         @media (max-width: 768px) {
-          .sidebar {
-            left: ${sidebarOpen ? "0" : "-240px"} !important;
-          }
           .main-content {
             margin-left: 0 !important;
           }
@@ -441,11 +439,6 @@ export default function DashboardLayout({
           }
           .hide-mobile {
             display: none;
-          }
-        }
-        @media (min-width: 769px) {
-          .sidebar {
-            left: 0 !important;
           }
         }
       `}</style>
