@@ -252,7 +252,7 @@ export default function TermosPage() {
           fontSize: "0.875rem",
         }}
       >
-        © 2024 Provly. Todos os direitos reservados.
+        © 2025 Provly. Todos os direitos reservados.
       </footer>
     </div>
   );

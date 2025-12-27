@@ -368,8 +368,8 @@ export default function PrivacidadePage() {
               </p>
               <p style={{ margin: "0.5rem 0 0" }}>
                 Email:{" "}
-                <a href="mailto:privacidade@provly.io" style={{ color: "#00D4FF" }}>
-                  privacidade@provly.io
+                <a href="mailto:contato@provly.io" style={{ color: "#00D4FF" }}>
+                  contato@provly.io
                 </a>
               </p>
             </div>
@@ -387,7 +387,7 @@ export default function PrivacidadePage() {
           fontSize: "0.875rem",
         }}
       >
-        © 2024 Provly. Todos os direitos reservados.
+        © 2025 Provly. Todos os direitos reservados.
       </footer>
     </div>
   );
