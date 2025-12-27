@@ -4,7 +4,7 @@ import React from "react";
 import Link from "next/link";
 
 export default function PrivacidadePage() {
-  const lastUpdate = "27 de dezembro de 2024";
+  const lastUpdate = "27 de dezembro de 2025";
 
   return (
     <div
@@ -387,6 +387,14 @@ export default function PrivacidadePage() {
           fontSize: "0.875rem",
         }}
       >
+        <div style={{ marginBottom: "1rem", display: "flex", justifyContent: "center", gap: "2rem" }}>
+          <Link href="/termos" style={{ color: "#8B949E", textDecoration: "none" }}>
+            Termos de Uso
+          </Link>
+          <Link href="/privacidade" style={{ color: "#8B949E", textDecoration: "none" }}>
+            Privacidade
+          </Link>
+        </div>
         © 2025 Provly. Todos os direitos reservados.
       </footer>
     </div>
