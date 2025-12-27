@@ -19,16 +19,61 @@ export async function POST(request: NextRequest) {
         }
 
         // Buscar perfil e subscription
-        const { data: profile } = await supabase
+        let { data: profile } = await supabase
             .from('profiles')
             .select('*, subscriptions(*)')
             .eq('user_id', user.id)
             .single();
 
+        // Se perfil não existe, criar (fallback para quando trigger não funciona)
+        if (!profile) {
+            const username = user.email?.split('@')[0]?.toLowerCase().replace(/[^a-z0-9]/g, '') || `user${Date.now()}`;
+            
+            const { data: newProfile, error: createError } = await supabase
+                .from('profiles')
+                .insert({
+                    user_id: user.id,
+                    email: user.email,
+                    full_name: user.user_metadata?.full_name || user.user_metadata?.name || username,
+                    username: username + Math.floor(Math.random() * 1000),
+                    subscription_status: 'trial',
+                })
+                .select('*')
+                .single();
+
+            if (createError) {
+                console.error('Error creating profile:', createError);
+                return NextResponse.json(
+                    { error: 'Erro ao criar perfil. Tente novamente.' },
+                    { status: 500 }
+                );
+            }
+
+            // Criar subscription para o novo usuário
+            await supabase
+                .from('subscriptions')
+                .insert({
+                    user_id: user.id,
+                    profile_id: newProfile.id,
+                    status: 'trial',
+                    plan_id: 'starter',
+                })
+                .single();
+
+            // Buscar novamente com subscription
+            const { data: refreshedProfile } = await supabase
+                .from('profiles')
+                .select('*, subscriptions(*)')
+                .eq('user_id', user.id)
+                .single();
+
+            profile = refreshedProfile;
+        }
+
         if (!profile) {
             return NextResponse.json(
-                { error: 'Perfil não encontrado' },
-                { status: 404 }
+                { error: 'Erro ao criar perfil' },
+                { status: 500 }
             );
         }
 
