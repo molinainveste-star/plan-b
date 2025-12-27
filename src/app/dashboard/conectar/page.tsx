@@ -88,7 +88,7 @@ const Icons = {
 interface Platform {
   id: string;
   name: string;
-  icon: () => JSX.Element;
+  icon: () => React.ReactNode;
   color: string;
   connected: boolean;
   username?: string;

@@ -131,6 +131,11 @@ async function handleSubscriptionCreated(subscription: Stripe.Subscription) {
     if (!userId) return;
 
     const status = subscription.status === 'trialing' ? 'trial' : 'active';
+    
+    // Acessar propriedades de forma segura (API Stripe pode variar)
+    const periodStart = (subscription as any).current_period_start;
+    const periodEnd = (subscription as any).current_period_end;
+    const trialEnd = (subscription as any).trial_end;
 
     await supabaseAdmin
         .from('subscriptions')
@@ -138,10 +143,10 @@ async function handleSubscriptionCreated(subscription: Stripe.Subscription) {
             stripe_subscription_id: subscription.id,
             plan_id: planId || 'starter',
             status,
-            current_period_start: new Date(subscription.current_period_start * 1000).toISOString(),
-            current_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
-            trial_ends_at: subscription.trial_end 
-                ? new Date(subscription.trial_end * 1000).toISOString() 
+            current_period_start: periodStart ? new Date(periodStart * 1000).toISOString() : null,
+            current_period_end: periodEnd ? new Date(periodEnd * 1000).toISOString() : null,
+            trial_ends_at: trialEnd 
+                ? new Date(trialEnd * 1000).toISOString() 
                 : null,
         })
         .eq('user_id', userId);
@@ -183,14 +188,19 @@ async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
             status = 'expired';
     }
 
+    // Acessar propriedades de forma segura
+    const periodStart = (subscription as any).current_period_start;
+    const periodEnd = (subscription as any).current_period_end;
+    const canceledAt = (subscription as any).canceled_at;
+
     await supabaseAdmin
         .from('subscriptions')
         .update({
             status,
-            current_period_start: new Date(subscription.current_period_start * 1000).toISOString(),
-            current_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
-            cancelled_at: subscription.canceled_at 
-                ? new Date(subscription.canceled_at * 1000).toISOString() 
+            current_period_start: periodStart ? new Date(periodStart * 1000).toISOString() : null,
+            current_period_end: periodEnd ? new Date(periodEnd * 1000).toISOString() : null,
+            cancelled_at: canceledAt 
+                ? new Date(canceledAt * 1000).toISOString() 
                 : null,
         })
         .eq('stripe_subscription_id', subscription.id);
@@ -226,7 +236,8 @@ async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
 }
 
 async function handlePaymentSucceeded(invoice: Stripe.Invoice) {
-    if (!invoice.subscription) return;
+    const subscriptionId = (invoice as any).subscription;
+    if (!subscriptionId) return;
 
     await supabaseAdmin
         .from('subscriptions')
@@ -234,11 +245,12 @@ async function handlePaymentSucceeded(invoice: Stripe.Invoice) {
             status: 'active',
             updated_at: new Date().toISOString(),
         })
-        .eq('stripe_subscription_id', invoice.subscription as string);
+        .eq('stripe_subscription_id', subscriptionId as string);
 }
 
 async function handlePaymentFailed(invoice: Stripe.Invoice) {
-    if (!invoice.subscription) return;
+    const subscriptionId = (invoice as any).subscription;
+    if (!subscriptionId) return;
 
     await supabaseAdmin
         .from('subscriptions')
@@ -246,6 +258,6 @@ async function handlePaymentFailed(invoice: Stripe.Invoice) {
             status: 'past_due',
             updated_at: new Date().toISOString(),
         })
-        .eq('stripe_subscription_id', invoice.subscription as string);
+        .eq('stripe_subscription_id', subscriptionId as string);
 }
 
