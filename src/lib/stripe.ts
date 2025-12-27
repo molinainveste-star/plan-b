@@ -1,10 +1,30 @@
 import Stripe from 'stripe';
 
-// Stripe server-side client
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-    apiVersion: '2025-12-15.clover',
-    typescript: true,
-});
+// Lazy initialization do Stripe - evita erro durante build
+let stripeInstance: Stripe | null = null;
+
+export function getStripe(): Stripe {
+    if (!stripeInstance) {
+        const secretKey = process.env.STRIPE_SECRET_KEY;
+        if (!secretKey) {
+            throw new Error('STRIPE_SECRET_KEY não configurada');
+        }
+        stripeInstance = new Stripe(secretKey, {
+            apiVersion: '2024-12-18.acacia',
+            typescript: true,
+        });
+    }
+    return stripeInstance;
+}
+
+// Manter export 'stripe' para compatibilidade, mas usar getter
+export const stripe = {
+    get checkout() { return getStripe().checkout; },
+    get customers() { return getStripe().customers; },
+    get subscriptions() { return getStripe().subscriptions; },
+    get billingPortal() { return getStripe().billingPortal; },
+    get webhooks() { return getStripe().webhooks; },
+};
 
 // Helpers para criar checkout session
 export async function createCheckoutSession({

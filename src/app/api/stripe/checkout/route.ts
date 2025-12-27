@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
-import { stripe, createStripeCustomer } from '@/lib/stripe';
+import { getStripe, createStripeCustomer } from '@/lib/stripe';
 import { PLANS, TRIAL_DAYS } from '@/lib/plans';
 
 export async function POST(request: NextRequest) {
@@ -82,7 +82,7 @@ export async function POST(request: NextRequest) {
         const cancelUrl = `${baseUrl}/pricing?cancelled=true`;
 
         // Criar Checkout Session
-        const session = await stripe.checkout.sessions.create({
+        const session = await getStripe().checkout.sessions.create({
             customer: customerId,
             mode: 'subscription',
             payment_method_types: ['card'],

@@ -1,13 +1,5 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
-
-// Só mostra warning em runtime, não durante build
-if (typeof window === 'undefined' && !supabaseServiceRoleKey && process.env.NODE_ENV !== 'production') {
-    console.warn("⚠️ SUPABASE_SERVICE_ROLE_KEY is missing. Admin operations will fail.");
-}
-
 /**
  * Cliente Admin Supabase (Service Role)
  * ⚠️ CUIDADO: Bypassa RLS completamente
@@ -15,14 +7,15 @@ if (typeof window === 'undefined' && !supabaseServiceRoleKey && process.env.NODE
  */
 let _supabaseAdmin: SupabaseClient | null = null;
 
-function getSupabaseAdmin(): SupabaseClient {
+export function getSupabaseAdmin(): SupabaseClient {
     if (!_supabaseAdmin) {
-        if (!supabaseUrl) {
-            // Durante build, retorna um cliente dummy que não será usado
-            return createClient('https://placeholder.supabase.co', 'placeholder-key', {
-                auth: { autoRefreshToken: false, persistSession: false }
-            });
+        const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+        const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+        
+        if (!supabaseUrl || !supabaseServiceRoleKey) {
+            throw new Error('Supabase admin não configurado: faltam NEXT_PUBLIC_SUPABASE_URL ou SUPABASE_SERVICE_ROLE_KEY');
         }
+        
         _supabaseAdmin = createClient(supabaseUrl, supabaseServiceRoleKey, {
             auth: { autoRefreshToken: false, persistSession: false }
         });
@@ -30,7 +23,12 @@ function getSupabaseAdmin(): SupabaseClient {
     return _supabaseAdmin;
 }
 
-export const supabaseAdmin = getSupabaseAdmin();
+// Proxy para lazy initialization - só inicializa quando usado
+export const supabaseAdmin = new Proxy({} as SupabaseClient, {
+    get(_, prop) {
+        return getSupabaseAdmin()[prop as keyof SupabaseClient];
+    }
+});
 
 /**
  * Verifica se o admin client está disponível
