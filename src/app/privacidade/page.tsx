@@ -387,7 +387,7 @@ export default function PrivacidadePage() {
           fontSize: "0.875rem",
         }}
       >
-        © {new Date().getFullYear()} Provly • Prove seu valor
+        © 2024 Provly. Todos os direitos reservados.
       </footer>
     </div>
   );
