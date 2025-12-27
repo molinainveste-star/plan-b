@@ -1,21 +1,48 @@
 "use client";
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useSubscription } from '@/hooks/useSubscription';
 import { PLANS, PLAN_LOSSES, FEATURE_LABELS, type Plan } from '@/lib/plans';
 import Link from 'next/link';
 
 export default function PricingPage() {
-    const { subscription, isTrial, daysRemaining, openCheckout, isLoading } = useSubscription();
+    const router = useRouter();
+    const { subscription, isTrial, daysRemaining, isLoading } = useSubscription();
     const [billingPeriod, setBillingPeriod] = useState<'monthly' | 'yearly'>('monthly');
     const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
+    const [error, setError] = useState<string | null>(null);
 
     const handleSelectPlan = async (planId: string) => {
         setLoadingPlan(planId);
+        setError(null);
+        
         try {
-            await openCheckout(planId);
-        } catch (err) {
-            console.error(err);
+            const response = await fetch('/api/stripe/checkout', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ planId, billingPeriod }),
+            });
+
+            const data = await response.json();
+
+            if (response.status === 401) {
+                // Não autenticado - redirecionar para login
+                router.push('/login?redirect=/pricing');
+                return;
+            }
+
+            if (!response.ok) {
+                throw new Error(data.error || 'Erro ao criar checkout');
+            }
+
+            // Redirecionar para o Stripe Checkout
+            if (data.url) {
+                window.location.href = data.url;
+            }
+        } catch (err: any) {
+            console.error('Checkout error:', err);
+            setError(err.message || 'Erro ao processar. Tente novamente.');
         } finally {
             setLoadingPlan(null);
         }
@@ -59,9 +86,23 @@ export default function PricingPage() {
                     )}
                     
                     <p style={{ color: '#94a3b8', maxWidth: '600px', margin: '0 auto' }}>
-                        Todos os planos incluem trial de 5 dias com todas as funcionalidades.
-                        Cancele a qualquer momento.
+                        Teste grátis por 5 dias com acesso completo ao plano Business.
+                        Após o trial, escolha o plano ideal para você. Cancele a qualquer momento.
                     </p>
+                    
+                    {error && (
+                        <div style={{
+                            marginTop: '1rem',
+                            padding: '0.75rem 1rem',
+                            background: 'rgba(239, 68, 68, 0.1)',
+                            border: '1px solid rgba(239, 68, 68, 0.3)',
+                            borderRadius: '0.5rem',
+                            color: '#f87171',
+                            fontSize: '0.9rem',
+                        }}>
+                            ❌ {error}
+                        </div>
+                    )}
                 </div>
 
                 {/* Billing Toggle */}
