@@ -36,6 +36,7 @@ export async function POST(request: NextRequest) {
             const { data: newProfile, error: createError } = await supabaseAdmin
                 .from('profiles')
                 .insert({
+                    id: crypto.randomUUID(),
                     user_id: user.id,
                     full_name: user.user_metadata?.full_name || user.user_metadata?.name || username,
                     username: uniqueUsername,
