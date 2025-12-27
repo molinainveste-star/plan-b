@@ -34,6 +34,6 @@ export const supabaseAdmin = new Proxy({} as SupabaseClient, {
  * Verifica se o admin client está disponível
  */
 export function isAdminAvailable(): boolean {
-    return !!supabaseServiceRoleKey;
+    return !!process.env.SUPABASE_SERVICE_ROLE_KEY;
 }
 
