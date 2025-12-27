@@ -52,22 +52,59 @@ export default function RegisterPage() {
 
     if (success) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
-                <div className="w-full max-w-md p-8 space-y-6 bg-slate-800/50 backdrop-blur-xl rounded-2xl border border-slate-700/50 shadow-2xl text-center">
-                    <div className="w-16 h-16 mx-auto bg-green-500/20 rounded-full flex items-center justify-center">
-                        <svg className="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            <div
+                style={{
+                    minHeight: "100vh",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    background: "var(--bg-void)",
+                    padding: "24px",
+                }}
+            >
+                <div
+                    style={{
+                        width: "100%",
+                        maxWidth: "400px",
+                        textAlign: "center",
+                    }}
+                    className="animate-fade-in"
+                >
+                    <div
+                        style={{
+                            width: "64px",
+                            height: "64px",
+                            margin: "0 auto 24px",
+                            background: "rgba(34, 197, 94, 0.15)",
+                            borderRadius: "50%",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                        }}
+                    >
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--success)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <polyline points="20,6 9,17 4,12" />
                         </svg>
                     </div>
-                    <h2 className="text-2xl font-bold text-white">Verifique seu email</h2>
-                    <p className="text-slate-400">
-                        Enviamos um link de confirmação para <span className="text-purple-400">{email}</span>
+                    <h2 style={{ margin: "0 0 12px", color: "var(--text-primary)", fontSize: "1.5rem", fontWeight: 600 }}>
+                        Verifique seu email
+                    </h2>
+                    <p style={{ margin: 0, color: "var(--text-muted)", fontSize: "0.9rem", lineHeight: 1.6 }}>
+                        Enviamos um link de confirmação para{" "}
+                        <span style={{ color: "var(--brand-primary)" }}>{email}</span>
                     </p>
                     <Link
                         href="/login"
-                        className="inline-block mt-4 text-purple-400 hover:text-purple-300"
+                        style={{
+                            display: "inline-block",
+                            marginTop: "24px",
+                            color: "var(--brand-primary)",
+                            textDecoration: "none",
+                            fontWeight: 500,
+                            fontSize: "0.875rem",
+                        }}
                     >
-                        Voltar para login
+                        ← Voltar para login
                     </Link>
                 </div>
             </div>
@@ -75,86 +112,301 @@ export default function RegisterPage() {
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
-            <div className="w-full max-w-md p-8 space-y-6 bg-slate-800/50 backdrop-blur-xl rounded-2xl border border-slate-700/50 shadow-2xl">
-                <div className="text-center">
-                    <h1 className="text-3xl font-bold text-white">
-                        Publi<span className="text-purple-400">Score</span>
-                    </h1>
-                    <p className="mt-2 text-slate-400">Crie sua conta</p>
-                </div>
+        <div
+            style={{
+                minHeight: "100vh",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                background: "var(--bg-void)",
+                padding: "24px",
+                position: "relative",
+                overflow: "hidden",
+            }}
+        >
+            {/* Background Effects */}
+            <div
+                style={{
+                    position: "absolute",
+                    top: "-20%",
+                    right: "-10%",
+                    width: "500px",
+                    height: "500px",
+                    background: "radial-gradient(circle, rgba(0, 212, 255, 0.1) 0%, transparent 60%)",
+                    filter: "blur(80px)",
+                    pointerEvents: "none",
+                }}
+            />
+            <div
+                style={{
+                    position: "absolute",
+                    bottom: "-20%",
+                    left: "-10%",
+                    width: "500px",
+                    height: "500px",
+                    background: "radial-gradient(circle, rgba(139, 92, 246, 0.12) 0%, transparent 60%)",
+                    filter: "blur(80px)",
+                    pointerEvents: "none",
+                }}
+            />
 
-                <form onSubmit={handleRegister} className="space-y-4">
-                    <div>
-                        <label htmlFor="email" className="block text-sm font-medium text-slate-300">
-                            Email
-                        </label>
-                        <input
-                            id="email"
-                            type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                            className="mt-1 w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
-                            placeholder="seu@email.com"
-                        />
-                    </div>
-
-                    <div>
-                        <label htmlFor="password" className="block text-sm font-medium text-slate-300">
-                            Senha
-                        </label>
-                        <input
-                            id="password"
-                            type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                            className="mt-1 w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
-                            placeholder="••••••••"
-                        />
-                    </div>
-
-                    <div>
-                        <label htmlFor="confirmPassword" className="block text-sm font-medium text-slate-300">
-                            Confirmar Senha
-                        </label>
-                        <input
-                            id="confirmPassword"
-                            type="password"
-                            value={confirmPassword}
-                            onChange={(e) => setConfirmPassword(e.target.value)}
-                            required
-                            className="mt-1 w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
-                            placeholder="••••••••"
-                        />
-                    </div>
-
-                    {error && (
-                        <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-lg">
-                            <p className="text-sm text-red-400">{error}</p>
-                        </div>
-                    )}
-
-                    <button
-                        type="submit"
-                        disabled={loading}
-                        className="w-full py-3 px-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold rounded-lg hover:from-purple-700 hover:to-pink-700 focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-slate-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            {/* Register Card */}
+            <div
+                style={{
+                    width: "100%",
+                    maxWidth: "400px",
+                    position: "relative",
+                    zIndex: 1,
+                }}
+                className="animate-fade-in"
+            >
+                {/* Logo */}
+                <div style={{ textAlign: "center", marginBottom: "32px" }}>
+                    <Link
+                        href="/"
+                        style={{
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: "10px",
+                            textDecoration: "none",
+                            marginBottom: "24px",
+                        }}
                     >
-                        {loading ? "Criando conta..." : "Criar conta"}
-                    </button>
-                </form>
-
-                <div className="text-center">
-                    <p className="text-slate-400">
-                        Já tem conta?{" "}
-                        <Link href="/login" className="text-purple-400 hover:text-purple-300 font-medium">
-                            Entrar
-                        </Link>
+                        <div
+                            style={{
+                                width: "36px",
+                                height: "36px",
+                                borderRadius: "10px",
+                                background: "var(--brand-gradient)",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                            }}
+                        >
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--bg-void)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <polyline points="20,6 9,17 4,12" />
+                            </svg>
+                        </div>
+                        <span
+                            style={{
+                                fontSize: "1.5rem",
+                                fontWeight: 700,
+                                color: "var(--text-primary)",
+                                letterSpacing: "-0.02em",
+                            }}
+                        >
+                            Provly
+                        </span>
+                    </Link>
+                    <h1
+                        style={{
+                            margin: 0,
+                            color: "var(--text-primary)",
+                            fontSize: "1.5rem",
+                            fontWeight: 600,
+                            letterSpacing: "-0.02em",
+                        }}
+                    >
+                        Crie sua conta
+                    </h1>
+                    <p style={{ margin: "8px 0 0", color: "var(--text-muted)", fontSize: "0.875rem" }}>
+                        Comece a provar seu valor hoje
                     </p>
                 </div>
+
+                {/* Form Card */}
+                <div
+                    style={{
+                        background: "var(--bg-elevated)",
+                        border: "1px solid var(--border-subtle)",
+                        borderRadius: "var(--radius-xl)",
+                        padding: "24px",
+                    }}
+                >
+                    <form onSubmit={handleRegister}>
+                        <div style={{ marginBottom: "16px" }}>
+                            <label
+                                htmlFor="email"
+                                style={{
+                                    display: "block",
+                                    color: "var(--text-secondary)",
+                                    fontSize: "0.8rem",
+                                    fontWeight: 500,
+                                    marginBottom: "6px",
+                                }}
+                            >
+                                Email
+                            </label>
+                            <input
+                                id="email"
+                                type="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
+                                placeholder="seu@email.com"
+                                style={{
+                                    width: "100%",
+                                    padding: "10px 12px",
+                                    background: "var(--bg-surface)",
+                                    border: "1px solid var(--border-default)",
+                                    borderRadius: "var(--radius-md)",
+                                    color: "var(--text-primary)",
+                                    fontSize: "0.875rem",
+                                    outline: "none",
+                                    transition: "border-color var(--transition-fast)",
+                                    boxSizing: "border-box",
+                                }}
+                            />
+                        </div>
+
+                        <div style={{ marginBottom: "16px" }}>
+                            <label
+                                htmlFor="password"
+                                style={{
+                                    display: "block",
+                                    color: "var(--text-secondary)",
+                                    fontSize: "0.8rem",
+                                    fontWeight: 500,
+                                    marginBottom: "6px",
+                                }}
+                            >
+                                Senha
+                            </label>
+                            <input
+                                id="password"
+                                type="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                                placeholder="Mínimo 6 caracteres"
+                                style={{
+                                    width: "100%",
+                                    padding: "10px 12px",
+                                    background: "var(--bg-surface)",
+                                    border: "1px solid var(--border-default)",
+                                    borderRadius: "var(--radius-md)",
+                                    color: "var(--text-primary)",
+                                    fontSize: "0.875rem",
+                                    outline: "none",
+                                    transition: "border-color var(--transition-fast)",
+                                    boxSizing: "border-box",
+                                }}
+                            />
+                        </div>
+
+                        <div style={{ marginBottom: "20px" }}>
+                            <label
+                                htmlFor="confirmPassword"
+                                style={{
+                                    display: "block",
+                                    color: "var(--text-secondary)",
+                                    fontSize: "0.8rem",
+                                    fontWeight: 500,
+                                    marginBottom: "6px",
+                                }}
+                            >
+                                Confirmar Senha
+                            </label>
+                            <input
+                                id="confirmPassword"
+                                type="password"
+                                value={confirmPassword}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
+                                required
+                                placeholder="••••••••"
+                                style={{
+                                    width: "100%",
+                                    padding: "10px 12px",
+                                    background: "var(--bg-surface)",
+                                    border: "1px solid var(--border-default)",
+                                    borderRadius: "var(--radius-md)",
+                                    color: "var(--text-primary)",
+                                    fontSize: "0.875rem",
+                                    outline: "none",
+                                    transition: "border-color var(--transition-fast)",
+                                    boxSizing: "border-box",
+                                }}
+                            />
+                        </div>
+
+                        {error && (
+                            <div
+                                style={{
+                                    padding: "10px 12px",
+                                    background: "rgba(239, 68, 68, 0.1)",
+                                    border: "1px solid rgba(239, 68, 68, 0.2)",
+                                    borderRadius: "var(--radius-md)",
+                                    marginBottom: "16px",
+                                }}
+                            >
+                                <p style={{ margin: 0, color: "var(--error)", fontSize: "0.8rem" }}>{error}</p>
+                            </div>
+                        )}
+
+                        <button
+                            type="submit"
+                            disabled={loading}
+                            style={{
+                                width: "100%",
+                                padding: "12px 16px",
+                                background: "var(--brand-gradient)",
+                                border: "none",
+                                borderRadius: "var(--radius-md)",
+                                color: "var(--bg-void)",
+                                fontSize: "0.875rem",
+                                fontWeight: 600,
+                                cursor: loading ? "not-allowed" : "pointer",
+                                opacity: loading ? 0.7 : 1,
+                                transition: "opacity var(--transition-fast)",
+                            }}
+                        >
+                            {loading ? "Criando conta..." : "Criar conta"}
+                        </button>
+                    </form>
+                </div>
+
+                {/* Footer */}
+                <p
+                    style={{
+                        textAlign: "center",
+                        marginTop: "20px",
+                        color: "var(--text-muted)",
+                        fontSize: "0.8rem",
+                    }}
+                >
+                    Já tem conta?{" "}
+                    <Link
+                        href="/login"
+                        style={{
+                            color: "var(--brand-primary)",
+                            textDecoration: "none",
+                            fontWeight: 500,
+                        }}
+                    >
+                        Entrar
+                    </Link>
+                </p>
+
+                {/* Terms */}
+                <p
+                    style={{
+                        textAlign: "center",
+                        marginTop: "24px",
+                        color: "var(--text-dimmed)",
+                        fontSize: "0.7rem",
+                        lineHeight: 1.5,
+                    }}
+                >
+                    Ao criar conta, você concorda com os{" "}
+                    <Link href="/termos" style={{ color: "var(--text-muted)", textDecoration: "underline" }}>
+                        Termos de Uso
+                    </Link>{" "}
+                    e{" "}
+                    <Link href="/privacidade" style={{ color: "var(--text-muted)", textDecoration: "underline" }}>
+                        Política de Privacidade
+                    </Link>
+                </p>
             </div>
         </div>
     );
 }
-
