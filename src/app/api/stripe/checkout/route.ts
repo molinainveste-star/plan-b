@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
+import { supabaseAdmin } from '@/lib/supabase/admin';
 import { getStripe, createStripeCustomer } from '@/lib/stripe';
 import { PLANS, TRIAL_DAYS } from '@/lib/plans';
 
@@ -25,17 +26,20 @@ export async function POST(request: NextRequest) {
             .eq('user_id', user.id)
             .single();
 
-        // Se perfil não existe, criar (fallback para quando trigger não funciona)
+        // Se perfil não existe, criar usando admin client (bypassa RLS)
         if (!profile) {
             const username = user.email?.split('@')[0]?.toLowerCase().replace(/[^a-z0-9]/g, '') || `user${Date.now()}`;
+            const uniqueUsername = username + Math.floor(Math.random() * 10000);
             
-            const { data: newProfile, error: createError } = await supabase
+            console.log('Creating profile for user:', user.id, 'username:', uniqueUsername);
+            
+            const { data: newProfile, error: createError } = await supabaseAdmin
                 .from('profiles')
                 .insert({
                     user_id: user.id,
                     email: user.email,
                     full_name: user.user_metadata?.full_name || user.user_metadata?.name || username,
-                    username: username + Math.floor(Math.random() * 1000),
+                    username: uniqueUsername,
                     subscription_status: 'trial',
                 })
                 .select('*')
@@ -44,24 +48,29 @@ export async function POST(request: NextRequest) {
             if (createError) {
                 console.error('Error creating profile:', createError);
                 return NextResponse.json(
-                    { error: 'Erro ao criar perfil. Tente novamente.' },
+                    { error: `Erro ao criar perfil: ${createError.message}` },
                     { status: 500 }
                 );
             }
 
+            console.log('Profile created:', newProfile.id);
+
             // Criar subscription para o novo usuário
-            await supabase
+            const { error: subError } = await supabaseAdmin
                 .from('subscriptions')
                 .insert({
                     user_id: user.id,
                     profile_id: newProfile.id,
                     status: 'trial',
                     plan_id: 'starter',
-                })
-                .single();
+                });
+
+            if (subError) {
+                console.error('Error creating subscription:', subError);
+            }
 
             // Buscar novamente com subscription
-            const { data: refreshedProfile } = await supabase
+            const { data: refreshedProfile } = await supabaseAdmin
                 .from('profiles')
                 .select('*, subscriptions(*)')
                 .eq('user_id', user.id)
