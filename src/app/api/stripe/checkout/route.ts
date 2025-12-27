@@ -37,10 +37,8 @@ export async function POST(request: NextRequest) {
                 .from('profiles')
                 .insert({
                     user_id: user.id,
-                    email: user.email,
                     full_name: user.user_metadata?.full_name || user.user_metadata?.name || username,
                     username: uniqueUsername,
-                    subscription_status: 'trial',
                 })
                 .select('*')
                 .single();
