@@ -28,16 +28,18 @@ CREATE TABLE IF NOT EXISTS public.plans (
 );
 
 -- 3. Inserir planos padrão
-INSERT INTO public.plans (id, name, description, price_monthly, price_yearly, max_platforms, max_media_kits, features) VALUES
-('starter', 'Starter', 'Ideal para começar', 1900, 19000, 1, 1, '["analytics_basic", "pdf_watermark", "url_generic"]'),
-('pro', 'Pro', 'Para criadores profissionais', 3900, 39000, 2, 3, '["analytics_full", "pdf_clean", "url_custom", "priority_support"]'),
-('business', 'Business', 'Para agências e grandes criadores', 9900, 99000, 999, 999, '["analytics_full", "pdf_clean", "url_custom", "api_access", "white_label", "priority_support"]')
+INSERT INTO public.plans (id, name, description, price_monthly, price_yearly, max_platforms, max_media_kits, features, stripe_price_id_monthly, stripe_price_id_yearly) VALUES
+('starter', 'Starter', 'Ideal para começar', 1900, 19000, 1, 1, '["analytics_basic", "pdf_watermark", "url_generic"]', 'price_1Sj2jhJI9mI9qeGAWBj97g34', 'price_1Sj2jhJI9mI9qeGAw1x78V6S'),
+('pro', 'Pro', 'Para criadores profissionais', 3900, 39000, 2, 3, '["analytics_full", "pdf_clean", "url_custom", "priority_support"]', 'price_1Sj2mWJI9mI9qeGArogz1fc9', 'price_1Sj2mWJI9mI9qeGAppdBQcVe'),
+('business', 'Business', 'Para agências e grandes criadores', 9900, 99000, 999, 999, '["analytics_full", "pdf_clean", "url_custom", "api_access", "white_label", "priority_support"]', 'price_1Sj2cZJI9mI9qeGA8Wqo69Ig', 'price_1Sj2cZJI9mI9qeGAJPfbwjmF')
 ON CONFLICT (id) DO UPDATE SET
     price_monthly = EXCLUDED.price_monthly,
     price_yearly = EXCLUDED.price_yearly,
     max_platforms = EXCLUDED.max_platforms,
     max_media_kits = EXCLUDED.max_media_kits,
-    features = EXCLUDED.features;
+    features = EXCLUDED.features,
+    stripe_price_id_monthly = EXCLUDED.stripe_price_id_monthly,
+    stripe_price_id_yearly = EXCLUDED.stripe_price_id_yearly;
 
 -- 4. Criar tabela de subscriptions
 CREATE TABLE IF NOT EXISTS public.subscriptions (

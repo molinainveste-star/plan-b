@@ -37,6 +37,8 @@ export const PLANS: Record<string, Plan> = {
         maxPlatforms: 1,
         maxMediaKits: 1,
         features: ['analytics_basic', 'pdf_watermark', 'url_generic'],
+        stripePriceIdMonthly: 'price_1Sj2jhJI9mI9qeGAWBj97g34',
+        stripePriceIdYearly: 'price_1Sj2jhJI9mI9qeGAw1x78V6S',
     },
     pro: {
         id: 'pro',
@@ -47,6 +49,8 @@ export const PLANS: Record<string, Plan> = {
         maxPlatforms: 2,
         maxMediaKits: 3,
         features: ['analytics_full', 'pdf_clean', 'url_custom', 'priority_support'],
+        stripePriceIdMonthly: 'price_1Sj2mWJI9mI9qeGArogz1fc9',
+        stripePriceIdYearly: 'price_1Sj2mWJI9mI9qeGAppdBQcVe',
         isPopular: true,
     },
     business: {
@@ -58,6 +62,8 @@ export const PLANS: Record<string, Plan> = {
         maxPlatforms: 999, // Ilimitado
         maxMediaKits: 999, // Ilimitado
         features: ['analytics_full', 'pdf_clean', 'url_custom', 'api_access', 'white_label', 'priority_support'],
+        stripePriceIdMonthly: 'price_1Sj2cZJI9mI9qeGA8Wqo69Ig',
+        stripePriceIdYearly: 'price_1Sj2cZJI9mI9qeGAJPfbwjmF',
     },
 };
 

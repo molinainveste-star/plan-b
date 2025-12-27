@@ -64,36 +64,16 @@ export async function POST(request: NextRequest) {
         const isNewUser = !subscription || subscription.status === 'trial';
         const trialDays = isNewUser ? TRIAL_DAYS : 0;
 
-        // Criar preço no Stripe (ou usar existente)
-        // Por enquanto, criamos dinamicamente - em produção, usar preços pré-cadastrados
-        const priceAmount = billingPeriod === 'yearly' 
-            ? plan.priceYearly * 100 // centavos
-            : plan.priceMonthly * 100;
-
-        const priceInterval = billingPeriod === 'yearly' ? 'year' : 'month';
-
-        // Buscar ou criar produto/preço
-        let priceId = billingPeriod === 'yearly' 
+        // Usar Price ID pré-cadastrado no Stripe
+        const priceId = billingPeriod === 'yearly' 
             ? plan.stripePriceIdYearly 
             : plan.stripePriceIdMonthly;
 
         if (!priceId) {
-            // Criar produto e preço dinamicamente
-            const product = await stripe.products.create({
-                name: `Provly ${plan.name}`,
-                description: plan.description,
-                metadata: { planId },
-            });
-
-            const price = await stripe.prices.create({
-                product: product.id,
-                unit_amount: priceAmount,
-                currency: 'brl',
-                recurring: { interval: priceInterval },
-                metadata: { planId, billingPeriod },
-            });
-
-            priceId = price.id;
+            return NextResponse.json(
+                { error: 'Preço não configurado para este plano' },
+                { status: 400 }
+            );
         }
 
         // URLs de callback
