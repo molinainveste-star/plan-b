@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
 
 // Data de lançamento - 29 de Janeiro de 2026
 const LAUNCH_DATE = new Date("2026-01-29T00:00:00");
@@ -349,8 +350,20 @@ export default function Home() {
           marginTop: "32px",
           color: "#484F58",
           fontSize: "0.8rem",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: "12px",
         }}>
-          © 2025 Provly • Prove seu valor
+          <div style={{ display: "flex", gap: "24px" }}>
+            <Link href="/termos" style={{ color: "#8B949E", textDecoration: "none", fontSize: "0.85rem" }}>
+              Termos de Uso
+            </Link>
+            <Link href="/privacidade" style={{ color: "#8B949E", textDecoration: "none", fontSize: "0.85rem" }}>
+              Privacidade
+            </Link>
+          </div>
+          © 2025 Provly. Todos os direitos reservados.
         </footer>
       </main>
 
