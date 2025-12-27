@@ -1,0 +1,504 @@
+"use client";
+
+import React, { useState } from "react";
+
+// Ícones das plataformas
+const PlatformIcons = {
+  YouTube: () => (
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+    </svg>
+  ),
+  TikTok: () => (
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z" />
+    </svg>
+  ),
+  Instagram: () => (
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+    </svg>
+  ),
+  Twitter: () => (
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+    </svg>
+  ),
+  Twitch: () => (
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714z" />
+    </svg>
+  ),
+  Spotify: () => (
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z" />
+    </svg>
+  ),
+};
+
+const Icons = {
+  Check: () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+      <polyline points="20,6 9,17 4,12" />
+    </svg>
+  ),
+  RefreshCw: () => (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <polyline points="23,4 23,10 17,10" />
+      <polyline points="1,20 1,14 7,14" />
+      <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" />
+    </svg>
+  ),
+  AlertCircle: () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <circle cx="12" cy="12" r="10" />
+      <line x1="12" y1="8" x2="12" y2="12" />
+      <line x1="12" y1="16" x2="12.01" y2="16" />
+    </svg>
+  ),
+  ExternalLink: () => (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" />
+      <polyline points="15,3 21,3 21,9" />
+      <line x1="10" y1="14" x2="21" y2="3" />
+    </svg>
+  ),
+  Unlink: () => (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M18.84 12.25l1.72-1.71h-.02a5.004 5.004 0 00-.12-7.07 5.006 5.006 0 00-6.95 0l-1.72 1.71" />
+      <path d="M5.17 11.75l-1.71 1.71a5.004 5.004 0 00.12 7.07 5.006 5.006 0 006.95 0l1.71-1.71" />
+      <line x1="8" y1="2" x2="8" y2="5" />
+      <line x1="2" y1="8" x2="5" y2="8" />
+      <line x1="16" y1="19" x2="16" y2="22" />
+      <line x1="19" y1="16" x2="22" y2="16" />
+    </svg>
+  ),
+};
+
+interface Platform {
+  id: string;
+  name: string;
+  icon: () => JSX.Element;
+  color: string;
+  connected: boolean;
+  username?: string;
+  followers?: string;
+  lastSync?: string;
+  available: boolean;
+}
+
+const platforms: Platform[] = [
+  {
+    id: "youtube",
+    name: "YouTube",
+    icon: PlatformIcons.YouTube,
+    color: "#FF0000",
+    connected: true,
+    username: "@manatech",
+    followers: "45.2K inscritos",
+    lastSync: "Há 2 horas",
+    available: true,
+  },
+  {
+    id: "instagram",
+    name: "Instagram",
+    icon: PlatformIcons.Instagram,
+    color: "#E4405F",
+    connected: false,
+    available: true,
+  },
+  {
+    id: "tiktok",
+    name: "TikTok",
+    icon: PlatformIcons.TikTok,
+    color: "#000000",
+    connected: false,
+    available: true,
+  },
+  {
+    id: "twitter",
+    name: "X (Twitter)",
+    icon: PlatformIcons.Twitter,
+    color: "#000000",
+    connected: false,
+    available: false,
+  },
+  {
+    id: "twitch",
+    name: "Twitch",
+    icon: PlatformIcons.Twitch,
+    color: "#9146FF",
+    connected: false,
+    available: false,
+  },
+  {
+    id: "spotify",
+    name: "Spotify",
+    icon: PlatformIcons.Spotify,
+    color: "#1DB954",
+    connected: false,
+    available: false,
+  },
+];
+
+export default function ConectarPage() {
+  const [connectingPlatform, setConnectingPlatform] = useState<string | null>(null);
+
+  const connectedPlatforms = platforms.filter((p) => p.connected);
+  const availablePlatforms = platforms.filter((p) => !p.connected && p.available);
+  const comingSoonPlatforms = platforms.filter((p) => !p.available);
+
+  const handleConnect = (platformId: string) => {
+    setConnectingPlatform(platformId);
+    // Simula conexão
+    setTimeout(() => {
+      setConnectingPlatform(null);
+      // Aqui abriria o OAuth
+      alert(`Redirecionando para autenticação do ${platformId}...`);
+    }, 1000);
+  };
+
+  return (
+    <div style={{ maxWidth: "1000px", margin: "0 auto" }}>
+      {/* Header */}
+      <div style={{ marginBottom: "32px" }}>
+        <h2 style={{ margin: 0, color: "#F0F6FC", fontSize: "1.75rem", fontWeight: 700 }}>
+          Conectar Canais
+        </h2>
+        <p style={{ margin: "8px 0 0", color: "#8B949E", fontSize: "1rem" }}>
+          Conecte suas redes sociais para importar métricas automaticamente.
+        </p>
+      </div>
+
+      {/* Connected Platforms */}
+      {connectedPlatforms.length > 0 && (
+        <section style={{ marginBottom: "40px" }}>
+          <h3 style={{ color: "#F0F6FC", fontSize: "1.1rem", fontWeight: 600, marginBottom: "16px" }}>
+            Canais Conectados
+          </h3>
+          <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+            {connectedPlatforms.map((platform) => (
+              <ConnectedPlatformCard key={platform.id} platform={platform} />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Available Platforms */}
+      <section style={{ marginBottom: "40px" }}>
+        <h3 style={{ color: "#F0F6FC", fontSize: "1.1rem", fontWeight: 600, marginBottom: "16px" }}>
+          Disponíveis para Conectar
+        </h3>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+            gap: "16px",
+          }}
+        >
+          {availablePlatforms.map((platform) => (
+            <AvailablePlatformCard
+              key={platform.id}
+              platform={platform}
+              connecting={connectingPlatform === platform.id}
+              onConnect={() => handleConnect(platform.id)}
+            />
+          ))}
+        </div>
+      </section>
+
+      {/* Coming Soon */}
+      <section>
+        <h3 style={{ color: "#F0F6FC", fontSize: "1.1rem", fontWeight: 600, marginBottom: "16px" }}>
+          Em Breve
+        </h3>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+            gap: "16px",
+          }}
+        >
+          {comingSoonPlatforms.map((platform) => (
+            <ComingSoonCard key={platform.id} platform={platform} />
+          ))}
+        </div>
+      </section>
+
+      {/* Info Box */}
+      <div
+        style={{
+          marginTop: "40px",
+          padding: "20px",
+          background: "rgba(0, 212, 255, 0.05)",
+          border: "1px solid rgba(0, 212, 255, 0.2)",
+          borderRadius: "12px",
+          display: "flex",
+          gap: "16px",
+        }}
+      >
+        <div style={{ color: "#00D4FF", flexShrink: 0 }}>
+          <Icons.AlertCircle />
+        </div>
+        <div>
+          <p style={{ margin: 0, color: "#F0F6FC", fontWeight: 600, fontSize: "0.95rem" }}>
+            Sobre a conexão de canais
+          </p>
+          <p style={{ margin: "8px 0 0", color: "#8B949E", fontSize: "0.9rem", lineHeight: 1.6 }}>
+            Usamos autenticação OAuth oficial de cada plataforma. Nunca armazenamos suas senhas.
+            Você pode desconectar a qualquer momento. As métricas são sincronizadas automaticamente
+            a cada 6 horas.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ConnectedPlatformCard({ platform }: { platform: Platform }) {
+  const Icon = platform.icon;
+
+  return (
+    <div
+      style={{
+        background: "#161B22",
+        borderRadius: "16px",
+        padding: "24px",
+        border: "1px solid rgba(255,255,255,0.06)",
+        display: "flex",
+        alignItems: "center",
+        gap: "20px",
+      }}
+    >
+      {/* Icon */}
+      <div
+        style={{
+          width: "64px",
+          height: "64px",
+          borderRadius: "16px",
+          background: `${platform.color}15`,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          color: platform.color,
+          flexShrink: 0,
+        }}
+      >
+        <Icon />
+      </div>
+
+      {/* Info */}
+      <div style={{ flex: 1 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <h4 style={{ margin: 0, color: "#F0F6FC", fontSize: "1.1rem", fontWeight: 600 }}>
+            {platform.name}
+          </h4>
+          <span
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "4px",
+              padding: "4px 10px",
+              background: "rgba(16, 185, 129, 0.15)",
+              borderRadius: "100px",
+              color: "#10B981",
+              fontSize: "0.75rem",
+              fontWeight: 600,
+            }}
+          >
+            <Icons.Check />
+            Conectado
+          </span>
+        </div>
+        <p style={{ margin: "6px 0 0", color: "#C9D1D9", fontSize: "0.95rem" }}>
+          {platform.username}
+        </p>
+        <div style={{ display: "flex", gap: "16px", marginTop: "8px" }}>
+          <span style={{ color: "#8B949E", fontSize: "0.85rem" }}>{platform.followers}</span>
+          <span style={{ color: "#8B949E", fontSize: "0.85rem" }}>Sync: {platform.lastSync}</span>
+        </div>
+      </div>
+
+      {/* Actions */}
+      <div style={{ display: "flex", gap: "12px" }}>
+        <button
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "6px",
+            padding: "10px 16px",
+            background: "rgba(255,255,255,0.05)",
+            border: "1px solid rgba(255,255,255,0.1)",
+            borderRadius: "10px",
+            color: "#C9D1D9",
+            fontSize: "0.85rem",
+            fontWeight: 500,
+            cursor: "pointer",
+          }}
+        >
+          <Icons.RefreshCw />
+          Sincronizar
+        </button>
+        <button
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "6px",
+            padding: "10px 16px",
+            background: "rgba(255, 107, 107, 0.1)",
+            border: "1px solid rgba(255, 107, 107, 0.2)",
+            borderRadius: "10px",
+            color: "#FF6B6B",
+            fontSize: "0.85rem",
+            fontWeight: 500,
+            cursor: "pointer",
+          }}
+        >
+          <Icons.Unlink />
+          Desconectar
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function AvailablePlatformCard({
+  platform,
+  connecting,
+  onConnect,
+}: {
+  platform: Platform;
+  connecting: boolean;
+  onConnect: () => void;
+}) {
+  const Icon = platform.icon;
+
+  return (
+    <div
+      style={{
+        background: "#161B22",
+        borderRadius: "16px",
+        padding: "24px",
+        border: "1px solid rgba(255,255,255,0.06)",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        textAlign: "center",
+        gap: "16px",
+      }}
+    >
+      <div
+        style={{
+          width: "72px",
+          height: "72px",
+          borderRadius: "18px",
+          background: `${platform.color}15`,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          color: platform.color,
+        }}
+      >
+        <Icon />
+      </div>
+      <div>
+        <h4 style={{ margin: 0, color: "#F0F6FC", fontSize: "1.1rem", fontWeight: 600 }}>
+          {platform.name}
+        </h4>
+        <p style={{ margin: "8px 0 0", color: "#8B949E", fontSize: "0.85rem" }}>
+          Importe seguidores, engajamento e métricas
+        </p>
+      </div>
+      <button
+        onClick={onConnect}
+        disabled={connecting}
+        style={{
+          width: "100%",
+          padding: "12px",
+          background: connecting ? "rgba(255,255,255,0.1)" : `${platform.color}`,
+          border: "none",
+          borderRadius: "10px",
+          color: "#fff",
+          fontWeight: 600,
+          fontSize: "0.9rem",
+          cursor: connecting ? "not-allowed" : "pointer",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: "8px",
+        }}
+      >
+        {connecting ? (
+          <>
+            <Icons.RefreshCw />
+            Conectando...
+          </>
+        ) : (
+          <>
+            Conectar
+            <Icons.ExternalLink />
+          </>
+        )}
+      </button>
+    </div>
+  );
+}
+
+function ComingSoonCard({ platform }: { platform: Platform }) {
+  const Icon = platform.icon;
+
+  return (
+    <div
+      style={{
+        background: "#161B22",
+        borderRadius: "16px",
+        padding: "24px",
+        border: "1px solid rgba(255,255,255,0.06)",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        textAlign: "center",
+        gap: "16px",
+        opacity: 0.6,
+      }}
+    >
+      <div
+        style={{
+          width: "72px",
+          height: "72px",
+          borderRadius: "18px",
+          background: "rgba(255,255,255,0.05)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          color: "#8B949E",
+        }}
+      >
+        <Icon />
+      </div>
+      <div>
+        <h4 style={{ margin: 0, color: "#F0F6FC", fontSize: "1.1rem", fontWeight: 600 }}>
+          {platform.name}
+        </h4>
+        <p style={{ margin: "8px 0 0", color: "#8B949E", fontSize: "0.85rem" }}>
+          Em desenvolvimento
+        </p>
+      </div>
+      <div
+        style={{
+          width: "100%",
+          padding: "12px",
+          background: "rgba(255,255,255,0.05)",
+          border: "1px solid rgba(255,255,255,0.1)",
+          borderRadius: "10px",
+          color: "#8B949E",
+          fontWeight: 600,
+          fontSize: "0.9rem",
+        }}
+      >
+        Em Breve
+      </div>
+    </div>
+  );
+}
+
